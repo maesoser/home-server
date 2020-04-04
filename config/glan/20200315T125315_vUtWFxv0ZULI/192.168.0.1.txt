@@ -1,0 +1,88 @@
+# Nmap 7.80 scan initiated Sun Mar 15 12:53:15 2020 as: nmap -sV -oX /scans/20200315T125315_vUtWFxv0ZULI/192.168.0.1.xml -oN - -v1 --script=vulners/vulners.nse 192.168.0.1
+Increasing send delay for 192.168.0.1 from 0 to 5 due to 20 out of 65 dropped probes since last increase.
+WARNING: Service 192.168.0.1:5000 had already soft-matched upnp, but now soft-matched rtsp; ignoring second valueWARNING: Service 192.168.0.1:5000 had already soft-matched upnp, but now soft-matched rtsp; ignoring second value
+
+WARNING: Service 192.168.0.1:5000 had already soft-matched upnp, but now soft-matched sip; ignoring second valueWARNING: Service 192.168.0.1:5000 had already soft-matched upnp, but now soft-matched sip; ignoring second value
+
+Nmap scan report for 192.168.0.1
+Host is up (0.0027s latency).
+Not shown: 995 closed ports
+PORT     STATE    SERVICE         VERSION
+80/tcp   open     http            lighttpd
+443/tcp  open     ssl/http        lighttpd
+5000/tcp open     upnp            MiniUPnP 1.9 (UPnP 1.1)
+| fingerprint-strings: 
+|   FourOhFourRequest, GetRequest: 
+|     HTTP/1.0 404 Not Found
+|     Content-Type: text/html
+|     Connection: close
+|     Content-Length: 134
+|     Server: RedHatEnterpriseServer/6.10 UPnP/1.1 MiniUPnPd/1.9
+|     Ext:
+|     <HTML><HEAD><TITLE>404 Not Found</TITLE></HEAD><BODY><H1>Not Found</H1>The requested URL was not found on this server.</BODY></HTML>
+|   GenericLines: 
+|     501 Not Implemented
+|     Content-Type: text/html
+|     Connection: close
+|     Content-Length: 149
+|     Server: RedHatEnterpriseServer/6.10 UPnP/1.1 MiniUPnPd/1.9
+|     Ext:
+|     <HTML><HEAD><TITLE>501 Not Implemented</TITLE></HEAD><BODY><H1>Not Implemented</H1>The HTTP Method is not implemented by this server.</BODY></HTML>
+|   HTTPOptions: 
+|     HTTP/1.0 501 Not Implemented
+|     Content-Type: text/html
+|     Connection: close
+|     Content-Length: 149
+|     Server: RedHatEnterpriseServer/6.10 UPnP/1.1 MiniUPnPd/1.9
+|     Ext:
+|     <HTML><HEAD><TITLE>501 Not Implemented</TITLE></HEAD><BODY><H1>Not Implemented</H1>The HTTP Method is not implemented by this server.</BODY></HTML>
+|   RTSPRequest: 
+|     RTSP/1.0 501 Not Implemented
+|     Content-Type: text/html
+|     Connection: close
+|     Content-Length: 149
+|     Server: RedHatEnterpriseServer/6.10 UPnP/1.1 MiniUPnPd/1.9
+|     Ext:
+|_    <HTML><HEAD><TITLE>501 Not Implemented</TITLE></HEAD><BODY><H1>Not Implemented</H1>The HTTP Method is not implemented by this server.</BODY></HTML>
+| vulners: 
+|   cpe:/a:miniupnp_project:miniupnpd:1.9: 
+|     	CVE-2017-8798	7.5	https://vulners.com/cve/CVE-2017-8798
+|     	CVE-2014-3985	5.0	https://vulners.com/cve/CVE-2014-3985
+|_    	CVE-2017-1000494	4.6	https://vulners.com/cve/CVE-2017-1000494
+8081/tcp filtered blackice-icecap
+8082/tcp filtered blackice-alerts
+1 service unrecognized despite returning data. If you know the service/version, please submit the following fingerprint at https://nmap.org/cgi-bin/submit.cgi?new-service :
+SF-Port5000-TCP:V=7.80%I=7%D=3/15%Time=5E6E258B%P=armv6-alpine-linux-musle
+SF:abihf%r(GenericLines,130,"\x20501\x20Not\x20Implemented\r\nContent-Type
+SF::\x20text/html\r\nConnection:\x20close\r\nContent-Length:\x20149\r\nSer
+SF:ver:\x20RedHatEnterpriseServer/6\.10\x20UPnP/1\.1\x20MiniUPnPd/1\.9\r\n
+SF:Ext:\r\n\r\n<HTML><HEAD><TITLE>501\x20Not\x20Implemented</TITLE></HEAD>
+SF:<BODY><H1>Not\x20Implemented</H1>The\x20HTTP\x20Method\x20is\x20not\x20
+SF:implemented\x20by\x20this\x20server\.</BODY></HTML>\r\n")%r(GetRequest,
+SF:123,"HTTP/1\.0\x20404\x20Not\x20Found\r\nContent-Type:\x20text/html\r\n
+SF:Connection:\x20close\r\nContent-Length:\x20134\r\nServer:\x20RedHatEnte
+SF:rpriseServer/6\.10\x20UPnP/1\.1\x20MiniUPnPd/1\.9\r\nExt:\r\n\r\n<HTML>
+SF:<HEAD><TITLE>404\x20Not\x20Found</TITLE></HEAD><BODY><H1>Not\x20Found</
+SF:H1>The\x20requested\x20URL\x20was\x20not\x20found\x20on\x20this\x20serv
+SF:er\.</BODY></HTML>\r\n")%r(RTSPRequest,138,"RTSP/1\.0\x20501\x20Not\x20
+SF:Implemented\r\nContent-Type:\x20text/html\r\nConnection:\x20close\r\nCo
+SF:ntent-Length:\x20149\r\nServer:\x20RedHatEnterpriseServer/6\.10\x20UPnP
+SF:/1\.1\x20MiniUPnPd/1\.9\r\nExt:\r\n\r\n<HTML><HEAD><TITLE>501\x20Not\x2
+SF:0Implemented</TITLE></HEAD><BODY><H1>Not\x20Implemented</H1>The\x20HTTP
+SF:\x20Method\x20is\x20not\x20implemented\x20by\x20this\x20server\.</BODY>
+SF:</HTML>\r\n")%r(HTTPOptions,138,"HTTP/1\.0\x20501\x20Not\x20Implemented
+SF:\r\nContent-Type:\x20text/html\r\nConnection:\x20close\r\nContent-Lengt
+SF:h:\x20149\r\nServer:\x20RedHatEnterpriseServer/6\.10\x20UPnP/1\.1\x20Mi
+SF:niUPnPd/1\.9\r\nExt:\r\n\r\n<HTML><HEAD><TITLE>501\x20Not\x20Implemente
+SF:d</TITLE></HEAD><BODY><H1>Not\x20Implemented</H1>The\x20HTTP\x20Method\
+SF:x20is\x20not\x20implemented\x20by\x20this\x20server\.</BODY></HTML>\r\n
+SF:")%r(FourOhFourRequest,123,"HTTP/1\.0\x20404\x20Not\x20Found\r\nContent
+SF:-Type:\x20text/html\r\nConnection:\x20close\r\nContent-Length:\x20134\r
+SF:\nServer:\x20RedHatEnterpriseServer/6\.10\x20UPnP/1\.1\x20MiniUPnPd/1\.
+SF:9\r\nExt:\r\n\r\n<HTML><HEAD><TITLE>404\x20Not\x20Found</TITLE></HEAD><
+SF:BODY><H1>Not\x20Found</H1>The\x20requested\x20URL\x20was\x20not\x20foun
+SF:d\x20on\x20this\x20server\.</BODY></HTML>\r\n");
+
+Read data files from: /usr/bin/../share/nmap
+Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+# Nmap done at Sun Mar 15 12:54:52 2020 -- 1 IP address (1 host up) scanned in 97.44 seconds

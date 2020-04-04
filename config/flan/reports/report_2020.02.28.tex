@@ -1,0 +1,144 @@
+\documentclass{article}
+\usepackage{enumitem}
+\usepackage[margin=1in]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage[table,xcdraw]{xcolor}
+\usepackage{placeins}
+\usepackage{hyperref}
+\usepackage{fontawesome}
+\usepackage{listings}
+\lstset{
+basicstyle=\small\ttfamily,
+columns=flexible,
+breaklines=true
+}
+\title{Flan Scan Report\\}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section*{Summary}
+Flan Scan ran a network vulnerability scan with the following Nmap command on Fri Feb 28 14:30:20 2020UTC.
+\begin{lstlisting}
+nmap -sV -oX <output-file> -oN - -v1 --script=vulners/vulners.nse
+\end{lstlisting}
+To find out what IPs were scanned see the end of this report.
+\section*{Services with Vulnerabilities}\begin{enumerate}[wide, labelwidth=!, labelindent=0pt,
+                        label=\textbf{\large \arabic{enumi} \large}]
+\item \textbf{\large MiniUPnP 1.9 (cpe:/a:miniupnp_project:miniupnpd:1.9)  \large}\begin{figure}[h!]
+\begin{tabular}{|p{16cm}|}\rowcolor[HTML]{FD6864} \begin{tabular}{@{}p{15cm}>{\raggedleft\arraybackslash}
+                           p{0.5cm}@{}}\textbf{CVE-2017-8798 High (7.5)} & \href{https://nvd.nist.gov/vuln/detail/CVE-2017-8798}{\large \faicon{link}}\end{tabular}\\
+ Summary:Integer signedness error in MiniUPnP MiniUPnPc v1.4.20101221 through v2.0 allows remote attackers to cause a denial of service or possibly have unspecified other impact.\\ \hline \end{tabular}  \end{figure}
+\begin{figure}[h!]
+\begin{tabular}{|p{16cm}|}\rowcolor[HTML]{F8A102} \begin{tabular}{@{}p{15cm}>{\raggedleft\arraybackslash}
+                           p{0.5cm}@{}}\textbf{CVE-2014-3985 Medium (5.0)} & \href{https://nvd.nist.gov/vuln/detail/CVE-2014-3985}{\large \faicon{link}}\end{tabular}\\
+ Summary:The getHTTPResponse function in miniwget.c in MiniUPnP 1.9 allows remote attackers to cause a denial of service (crash) via crafted headers that trigger an out-of-bounds read.\\ \hline \end{tabular}  \end{figure}
+\begin{figure}[h!]
+\begin{tabular}{|p{16cm}|}\rowcolor[HTML]{F8A102} \begin{tabular}{@{}p{15cm}>{\raggedleft\arraybackslash}
+                           p{0.5cm}@{}}\textbf{CVE-2017-1000494 Medium (4.6)} & \href{https://nvd.nist.gov/vuln/detail/CVE-2017-1000494}{\large \faicon{link}}\end{tabular}\\
+ Summary:Uninitialized stack variable vulnerability in NameValueParserEndElt (upnpreplyparse.c) in miniupnpd < 2.0 allows an attacker to cause Denial of Service (Segmentation fault and Memory Corruption) or possibly have unspecified other impact\\ \hline \end{tabular}  \end{figure}
+\FloatBarrier
+\textbf{The above 3 vulnerabilities apply to these network locations:}
+
+                         \begin{itemize}
+\item 192.168.0.1 Ports: ['5000']
+\\ \\ 
+ \end{itemize}
+\item \textbf{\large MySQL 5.5.5-10.1.43-MariaDB-0ubuntu0.18.04.1 (cpe:/a:mysql:mysql:5.5.5-10.1.43-mariadb-0ubuntu0.18.04.1)  \large}\begin{figure}[h!]
+\begin{tabular}{|p{16cm}|}\rowcolor[HTML]{34CDF9} \begin{tabular}{@{}p{15cm}>{\raggedleft\arraybackslash}
+                           p{0.5cm}@{}}\textbf{NODEJS:602 Low (0.0)} & \href{https://nvd.nist.gov/vuln/detail/NODEJS:602}{\large \faicon{link}}\end{tabular}\\
+ Summary:\\ \hline \end{tabular}  \end{figure}
+\FloatBarrier
+\textbf{The above 1 vulnerabilities apply to these network locations:}
+
+                         \begin{itemize}
+\item 192.168.0.10 Ports: ['3306']
+\\ \\ 
+ \end{itemize}
+\item \textbf{\large lighttpd 1.4.45 (cpe:/a:lighttpd:lighttpd:1.4.45)  \large}\begin{figure}[h!]
+\begin{tabular}{|p{16cm}|}\rowcolor[HTML]{F8A102} \begin{tabular}{@{}p{15cm}>{\raggedleft\arraybackslash}
+                           p{0.5cm}@{}}\textbf{CVE-2018-19052 Medium (5.0)} & \href{https://nvd.nist.gov/vuln/detail/CVE-2018-19052}{\large \faicon{link}}\end{tabular}\\
+ Summary:An issue was discovered in mod_alias_physical_handler in mod_alias.c in lighttpd before 1.4.50. There is potential ../ path traversal of a single directory above an alias target, with a specific mod_alias configuration where the matched alias lacks a trailing '/' character, but the alias target filesystem path does have a trailing '/' character.\\ \hline \end{tabular}  \end{figure}
+\FloatBarrier
+\textbf{The above 1 vulnerabilities apply to these network locations:}
+
+                         \begin{itemize}
+\item 192.168.0.10 Ports: ['8080']
+\\ \\ 
+ \end{itemize}
+\item \textbf{\large Boa HTTPd 0.94.14rc21 (cpe:/a:boa:boa:0.94.14rc21)  \large}\begin{figure}[h!]
+\begin{tabular}{|p{16cm}|}\rowcolor[HTML]{F8A102} \begin{tabular}{@{}p{15cm}>{\raggedleft\arraybackslash}
+                           p{0.5cm}@{}}\textbf{CVE-2009-4496 Medium (5.0)} & \href{https://nvd.nist.gov/vuln/detail/CVE-2009-4496}{\large \faicon{link}}\end{tabular}\\
+ Summary:Boa 0.94.14rc21 writes data to a log file without sanitizing non-printable characters, which might allow remote attackers to modify a window's title, or possibly execute arbitrary commands or overwrite files, via an HTTP request containing an escape sequence for a terminal emulator.\\ \hline \end{tabular}  \end{figure}
+\FloatBarrier
+\textbf{The above 1 vulnerabilities apply to these network locations:}
+
+                         \begin{itemize}
+\item 192.168.0.11 Ports: ['80']
+\\ \\ 
+ \end{itemize}
+\end{enumerate}
+\section*{Services With No Known Vulnerabilities}\begin{enumerate}[wide, labelwidth=!, labelindent=0pt,
+        label=\textbf{\large \arabic{enumi} \large}]
+\item \textbf{\large blackice-icecap  \large}
+\begin{itemize}
+\item 192.168.0.1 Ports: ['8081']
+\end{itemize}
+\item \textbf{\large http  \large}
+\begin{itemize}
+\item 192.168.0.10 Ports: ['80']
+\end{itemize}
+\item \textbf{\large lighttpd (cpe:/a:lighttpd:lighttpd)  \large}
+\begin{itemize}
+\item 192.168.0.1 Ports: ['80', '443']
+\end{itemize}
+\item \textbf{\large jetdirect  \large}
+\begin{itemize}
+\item 192.168.0.10 Ports: ['9100']
+\end{itemize}
+\item \textbf{\large tcpwrapped  \large}
+\begin{itemize}
+\item 192.168.0.10 Ports: ['443', '5900']
+\item 192.168.0.54 Ports: ['62078']
+\item 192.168.0.56 Ports: ['62078']
+\end{itemize}
+\item \textbf{\large ppp  \large}
+\begin{itemize}
+\item 192.168.0.10 Ports: ['3000']
+\end{itemize}
+\item \textbf{\large blackice-alerts  \large}
+\begin{itemize}
+\item 192.168.0.1 Ports: ['8082']
+\end{itemize}
+\item \textbf{\large dnsmasq pi-hole-2.80 (cpe:/a:thekelleys:dnsmasq:pi-hole-2.80)  \large}
+\begin{itemize}
+\item 192.168.0.10 Ports: ['53']
+\end{itemize}
+\item \textbf{\large Golang net/http server (cpe:/a:protocol_labs:go-ipfs)  \large}
+\begin{itemize}
+\item 192.168.0.10 Ports: ['9090']
+\end{itemize}
+\item \textbf{\large Postfix smtpd (cpe:/a:postfix:postfix)  \large}
+\begin{itemize}
+\item 192.168.0.10 Ports: ['25']
+\end{itemize}
+\item \textbf{\large axhttpd/1.4.9  \large}
+\begin{itemize}
+\item 192.168.0.11 Ports: ['443']
+\end{itemize}
+\item \textbf{\large Jetty 9.4.8.v20180619 (cpe:/a:mortbay:jetty:9.4.8.v20180619)  \large}
+\begin{itemize}
+\item 192.168.0.10 Ports: ['4444']
+\end{itemize}
+\item \textbf{\large nginx 1.16.1 (cpe:/a:igor_sysoev:nginx:1.16.1)  \large}
+\begin{itemize}
+\item 192.168.0.10 Ports: ['9080']
+\end{itemize}
+\end{enumerate}
+\section*{List of IPs Scanned}\begin{itemize}
+\item 192.168.0.1/24
+
+\end{itemize}
+\end{document}

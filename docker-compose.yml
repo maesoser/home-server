@@ -1,0 +1,380 @@
+version: "2.4"
+
+services:
+
+  hugo:
+    container_name: hugo
+    restart: unless-stopped
+    mem_limit: 128m
+    build:
+      context: ./containers/hugo
+      dockerfile: Dockerfile
+    environment:
+      - HUGO_BASEURL=https://blog.souvlaki.cf
+      - HUGO_SOURCE=/hugo
+      - HUGO_THEME=pure
+    volumes:
+      - ./config/hugo:/hugo
+    ports:
+      - "1313:1313"
+
+  promrelay:
+    container_name: promrelay
+    restart: "no"
+    mem_limit: 32m
+    build:
+     context: ./containers/promrelay
+     dockerfile: Dockerfile
+    env_file:
+      - ./secrets.env
+    volumes:
+      - ./data/promrelay:/data
+    environment:
+      - EXPOSED_PORT=9797
+      - LISTEN_PORT=8080
+      - OUTPUT_FILE=/data/promrelay.debug
+
+  httpecho:
+    container_name: httpecho
+    restart: unless-stopped
+    mem_limit: 128m
+    build:
+      context: ./containers/echo
+      dockerfile: Dockerfile
+    volumes:
+      - ./config/echo/:/data/
+    environment:
+      - SERVER_KEY=/data/serverkey.pem
+      - SERVER_CERT=/data/certificate.pem
+
+  cloudflared:
+    container_name: cloudflared
+    restart: unless-stopped
+    mem_limit: 128m
+    build:
+      context: ./containers/cloudflared
+      dockerfile: Dockerfile
+    ports:
+      - "5053:5053/udp"
+    volumes:
+      - ./config/cloudflared/cert.pem:/etc/cloudflared/cert.pem
+    environment:
+      - TUNNEL_METRICS=0.0.0.0:4933
+      - TUNNEL_METRICS_UPDATE_FREQ=5s
+      - TUNNEL_DNS=true
+      - TUNNEL_DNS_PORT=5053
+      - TUNNEL_DNS_ADDRESS=0.0.0.0
+      - NO_AUTOUPDATE=true
+      - TUNNEL_LOGLEVEL=info
+      - TUNNEL_TRANSPORT_LOGLEVEL=error
+      - TUNNEL_HOSTNAME=souvlaki.cf
+      - TUNNEL_URL=http://nginx:80
+      - TUNNEL_ORIGIN_CERT=/etc/cloudflared/cert.pem
+      - TUNNEL_COMPRESSION_LEVEL=3
+    ports:
+      - '5053:5053/udp'
+    depends_on:
+      - nginx
+
+  nginx:
+    image: nginx
+    container_name: nginx
+    mem_limit: 64m
+    cpu_count: 2
+    volumes:
+     - ./config/nginx/nginx.conf:/etc/nginx/nginx.conf
+     - ./data/nginx/:/data/
+    ports:
+     - "9191:80"
+    command:
+     - "nginx"
+     - "-g"
+     - "daemon off;"
+
+  # glan:
+  #   restart: "no"
+  #   container_name: glan
+  #   build:
+  #     context: ./containers/glan
+  #     dockerfile: Dockerfile
+  #   volumes:
+  #     - "./config/glan:/scans"
+
+#  flanscan:
+#    restart: "no"
+#    container_name: flanscan
+#    mem_limit: 256m
+#    cpu_count: 1
+#    ports:
+#      - "9999:9999"
+#    build:
+#      context: ./containers/flan
+#      dockerfile: Dockerfile
+#    volumes:
+#      - "./config/flan/:/shared/"
+#      #- "./config/flan/ips.txt:/shared/ips.txt"
+#      #- "./config/flan/xml_files/:/shared/xml_files/"
+#      #- "./config/flan/reports/:/shared/reports/"
+
+  selenium-hub:
+    restart: always
+    container_name: selenium-hub
+    image: deinchristian/rpi-selenium-hub
+    mem_limit: 256m
+    cpu_count: 1
+    ports:
+      - "4444:4444"
+
+  selenium-chrome:
+    restart: always
+    container_name: selenium-chrome
+    image: deinchristian/rpi-selenium-node-chrome
+    mem_limit: 1024m
+    cpu_count: 2
+    ports:
+      - "5900:5900"
+      - "9515:9515"
+    shm_size: 128M
+    depends_on:
+      - selenium-hub
+    environment:
+      - HUB_PORT_4444_TCP_ADDR=selenium-hub
+      - HUB_PORT_4444_TCP_PORT=4444
+
+#  expedia:
+#    container_name: expedia
+#    build:
+#      context: ./containers/flights_scrapper
+#      dockerfile: Dockerfile
+
+  stocks:
+    container_name: stocks
+    mem_limit: 16m
+    cpu_count: 1
+    restart: unless-stopped
+    build:
+      context: ./containers/stocks
+      dockerfile: Dockerfile
+    volumes:
+      - "./config/stocks/config.json:/stocks/config.json"
+      - "./config/stocks/stocks.db:/stocks/stocks.db"
+
+  docker_exporter:
+    container_name: docker_exporter
+    mem_limit: 16m
+    cpu_count: 1
+    restart: unless-stopped
+    build:
+      context: ./containers/docker_exporter
+      dockerfile: Dockerfile
+    ports:
+      - "9134:9134/tcp"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+
+  mariadb:
+    image: linuxserver/mariadb
+    container_name: mariadb
+    restart: unless-stopped
+    mem_limit: 256m
+    cpu_count: 2
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/London
+    env_file:
+      - ./secrets.env
+    volumes:
+      - ./config/mariadb:/config
+      - ./data/mariadb/databases/:/config/databases/
+      - ./data/mariadb/log/:/config/log/
+    ports:
+      - 3306:3306
+
+  lychee:
+    image: linuxserver/lychee
+    container_name: lychee
+    restart: unless-stopped
+    mem_limit: 512m
+    cpu_count: 2
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/London
+      - VIRTUAL_HOST=lychee.souvlaki.cf
+    volumes:
+      - ./config/lychee:/config
+      - ./data/lychee/log:/config/log
+      - ./data/lychee/pictures:/pictures
+    #ports:
+    #  - 9080:80
+    depends_on:
+            - mariadb
+
+  ping_exporter:
+    container_name: ping_exporter
+    mem_limit: 8m
+    cpu_count: 2
+    restart: unless-stopped
+    build:
+      context: ./containers/ping_exporter
+      dockerfile: Dockerfile
+    ports:
+      - "9400:9400/tcp"
+
+#  jupyter:
+#    container_name: jupyter
+#    restart: unless-stopped
+#    cpu_count: 4
+#    mem_limit: 1024m
+#    build:
+#      context: ./containers/jupyter
+#      dockerfile: Dockerfile
+#    ports:
+#      - "8888:8888/tcp"
+#    volumes:
+#      - ./data/jupyter:/jupyter
+
+  trex:
+    container_name: trex
+    restart: unless-stopped
+    cpu_count: 1
+    mem_limit: 16m
+    build:
+      context: ./containers/trex
+      dockerfile: Dockerfile
+    env_file:
+      - ./secrets.env
+
+  webindex:
+    container_name: webindex
+    restart: unless-stopped
+    cpu_count: 1
+    mem_limit: 8m
+    build:
+      context: ./containers/webindex
+      dockerfile: Dockerfile
+    ports:
+     - '80:80/tcp'
+    cap_add:
+     - NET_ADMIN
+
+  prometheus:
+    container_name: prometheus
+    image: prom/prometheus
+    mem_limit: 256m
+    cpu_count: 4
+    restart: unless-stopped
+    environment:
+      - VIRTUAL_HOST=prometheus.loc
+    #ports:
+    #  - '9090:9090/tcp'
+    volumes:
+      - './config/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml'
+      - './data/prometheus/:/prometheus/'
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus/'
+      - '--storage.tsdb.retention=93d'
+      - '--web.enable-lifecycle'
+      - '--web.enable-admin-api'
+    depends_on:
+      - pihole_exporter
+
+  virgin_exporter:
+    container_name: virgin_exporter
+    restart: unless-stopped
+    cpu_count: 1
+    mem_limit: 16m
+    build:
+      context: ./containers/virgin_exporter
+      dockerfile: Dockerfile
+    #ports:
+    # - "9300:9300"
+    environment:
+     - VIRGIN_PORT=9300
+    env_file:
+     - ./secrets.env
+
+  pihole_exporter:
+    container_name: pihole_exporter
+    restart: unless-stopped
+    cpu_count: 1
+    mem_limit: 8m
+    build:
+      context: ./containers/pihole_exporter
+      dockerfile: Dockerfile
+    #ports:
+    # - "9333:9333/tcp"
+    depends_on:
+     - pihole
+
+  cotibot:
+    container_name: cotibot
+    restart: unless-stopped
+    cpu_count: 1
+    mem_limit: 2024m
+    build:
+      context: ./containers/cotibot
+      dockerfile: Dockerfile
+    env_file:
+      - ./secrets.env
+    volumes:
+     - "./data/cotibot/temp/:/tmp/"
+     - "./data/cotibot/tgdatabase.db:/app/tgdatabase.db"
+    entrypoint:
+     - '/usr/bin/python3'
+     - '/app/cotibot.py'
+
+  pihole:
+    container_name: pihole
+    image: pihole/pihole:latest
+    mem_limit: 96m
+    cpu_count: 4
+    restart: unless-stopped
+    ports:
+      - "53:53/tcp"
+      - "53:53/udp"
+      - "67:67/udp"
+      - "8080:80/tcp"
+      - "443:443/tcp"
+    environment:
+      TZ: 'Europe/Madrid'
+      # DNS1: '192.168.0.10#5053'
+      # DNS2: '192.168.0.10#5053'
+      VIRTUAL_HOST: 'pihole.souvlaki.cf'
+    env_file:
+      - ./secrets.env
+    volumes:
+       - './data/pihole/etc-pihole/:/etc/pihole/'
+       - './data/pihole/etc-dnsmasq.d/:/etc/dnsmasq.d/'
+    cap_add:
+       - NET_ADMIN
+    depends_on:
+       - cloudflared
+
+  grafana:
+    container_name: grafana
+    image: grafana/grafana:latest
+    mem_limit: 64m
+    cpu_count: 4
+    restart: unless-stopped
+    healthcheck:
+      test: curl --fail -s http://localhost:3000/ || exit 1
+      interval: 10min
+      timeout: 10s
+      retries: 3
+    volumes:
+      - "./config/grafana/:/etc/grafana/provisioning/"
+      - "./data/grafana/:/var/lib/grafana/"
+    environment:
+      - VIRTUAL_HOST=grafana.souvlaki.cf
+      - GF_SERVER_DOMAIN=grafana.souvlaki.cf
+      - GF_SERVER_ROOT_URL=http://grafana.souvlaki.cf
+      - GF_INSTALL_PLUGINS=grafana-clock-panel,cloudflare-app,grafana-simple-json-datasource,grafana-piechart-panel
+    env_file:
+      - ./secrets.env
+    ports:
+      - "3000:3000"
+    depends_on:
+      - prometheus

@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+go vet
+go fmt 
+go build
+chmod 775 ping_exporter
+sudo setcap cap_net_raw=ep ping_exporter
+sudo ./ping_exporter

@@ -1,0 +1,934 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE nmaprun>
+<?xml-stylesheet href="file:///usr/bin/../share/nmap/nmap.xsl" type="text/xsl"?>
+<!-- Nmap 7.80 scan initiated Wed Feb 26 21:53:03 2020 as: nmap -sV -oX /shared/xml_files/2020.02.26/192.168.0.1-24.xml -oN - -v1 -&#45;script=vulners/vulners.nse 192.168.0.1/24 -->
+<nmaprun scanner="nmap" args="nmap -sV -oX /shared/xml_files/2020.02.26/192.168.0.1-24.xml -oN - -v1 -&#45;script=vulners/vulners.nse 192.168.0.1/24" start="1582753983" startstr="Wed Feb 26 21:53:03 2020" version="7.80" xmloutputversion="1.04">
+<scaninfo type="syn" protocol="tcp" numservices="1000" services="1,3-4,6-7,9,13,17,19-26,30,32-33,37,42-43,49,53,70,79-85,88-90,99-100,106,109-111,113,119,125,135,139,143-144,146,161,163,179,199,211-212,222,254-256,259,264,280,301,306,311,340,366,389,406-407,416-417,425,427,443-445,458,464-465,481,497,500,512-515,524,541,543-545,548,554-555,563,587,593,616-617,625,631,636,646,648,666-668,683,687,691,700,705,711,714,720,722,726,749,765,777,783,787,800-801,808,843,873,880,888,898,900-903,911-912,981,987,990,992-993,995,999-1002,1007,1009-1011,1021-1100,1102,1104-1108,1110-1114,1117,1119,1121-1124,1126,1130-1132,1137-1138,1141,1145,1147-1149,1151-1152,1154,1163-1166,1169,1174-1175,1183,1185-1187,1192,1198-1199,1201,1213,1216-1218,1233-1234,1236,1244,1247-1248,1259,1271-1272,1277,1287,1296,1300-1301,1309-1311,1322,1328,1334,1352,1417,1433-1434,1443,1455,1461,1494,1500-1501,1503,1521,1524,1533,1556,1580,1583,1594,1600,1641,1658,1666,1687-1688,1700,1717-1721,1723,1755,1761,1782-1783,1801,1805,1812,1839-1840,1862-1864,1875,1900,1914,1935,1947,1971-1972,1974,1984,1998-2010,2013,2020-2022,2030,2033-2035,2038,2040-2043,2045-2049,2065,2068,2099-2100,2103,2105-2107,2111,2119,2121,2126,2135,2144,2160-2161,2170,2179,2190-2191,2196,2200,2222,2251,2260,2288,2301,2323,2366,2381-2383,2393-2394,2399,2401,2492,2500,2522,2525,2557,2601-2602,2604-2605,2607-2608,2638,2701-2702,2710,2717-2718,2725,2800,2809,2811,2869,2875,2909-2910,2920,2967-2968,2998,3000-3001,3003,3005-3007,3011,3013,3017,3030-3031,3052,3071,3077,3128,3168,3211,3221,3260-3261,3268-3269,3283,3300-3301,3306,3322-3325,3333,3351,3367,3369-3372,3389-3390,3404,3476,3493,3517,3527,3546,3551,3580,3659,3689-3690,3703,3737,3766,3784,3800-3801,3809,3814,3826-3828,3851,3869,3871,3878,3880,3889,3905,3914,3918,3920,3945,3971,3986,3995,3998,4000-4006,4045,4111,4125-4126,4129,4224,4242,4279,4321,4343,4443-4446,4449,4550,4567,4662,4848,4899-4900,4998,5000-5004,5009,5030,5033,5050-5051,5054,5060-5061,5080,5087,5100-5102,5120,5190,5200,5214,5221-5222,5225-5226,5269,5280,5298,5357,5405,5414,5431-5432,5440,5500,5510,5544,5550,5555,5560,5566,5631,5633,5666,5678-5679,5718,5730,5800-5802,5810-5811,5815,5822,5825,5850,5859,5862,5877,5900-5904,5906-5907,5910-5911,5915,5922,5925,5950,5952,5959-5963,5987-5989,5998-6007,6009,6025,6059,6100-6101,6106,6112,6123,6129,6156,6346,6389,6502,6510,6543,6547,6565-6567,6580,6646,6666-6669,6689,6692,6699,6779,6788-6789,6792,6839,6881,6901,6969,7000-7002,7004,7007,7019,7025,7070,7100,7103,7106,7200-7201,7402,7435,7443,7496,7512,7625,7627,7676,7741,7777-7778,7800,7911,7920-7921,7937-7938,7999-8002,8007-8011,8021-8022,8031,8042,8045,8080-8090,8093,8099-8100,8180-8181,8192-8194,8200,8222,8254,8290-8292,8300,8333,8383,8400,8402,8443,8500,8600,8649,8651-8652,8654,8701,8800,8873,8888,8899,8994,9000-9003,9009-9011,9040,9050,9071,9080-9081,9090-9091,9099-9103,9110-9111,9200,9207,9220,9290,9415,9418,9485,9500,9502-9503,9535,9575,9593-9595,9618,9666,9876-9878,9898,9900,9917,9929,9943-9944,9968,9998-10004,10009-10010,10012,10024-10025,10082,10180,10215,10243,10566,10616-10617,10621,10626,10628-10629,10778,11110-11111,11967,12000,12174,12265,12345,13456,13722,13782-13783,14000,14238,14441-14442,15000,15002-15004,15660,15742,16000-16001,16012,16016,16018,16080,16113,16992-16993,17877,17988,18040,18101,18988,19101,19283,19315,19350,19780,19801,19842,20000,20005,20031,20221-20222,20828,21571,22939,23502,24444,24800,25734-25735,26214,27000,27352-27353,27355-27356,27715,28201,30000,30718,30951,31038,31337,32768-32785,33354,33899,34571-34573,35500,38292,40193,40911,41511,42510,44176,44442-44443,44501,45100,48080,49152-49161,49163,49165,49167,49175-49176,49400,49999-50003,50006,50300,50389,50500,50636,50800,51103,51493,52673,52822,52848,52869,54045,54328,55055-55056,55555,55600,56737-56738,57294,57797,58080,60020,60443,61532,61900,62078,63331,64623,64680,65000,65129,65389"/>
+<verbose level="1"/>
+<debugging level="0"/>
+<taskbegin task="NSE" time="1582753983"/>
+<taskend task="NSE" time="1582753983"/>
+<taskbegin task="NSE" time="1582753983"/>
+<taskend task="NSE" time="1582753983"/>
+<taskbegin task="Ping Scan" time="1582753984"/>
+<taskend task="Ping Scan" time="1582754025" extrainfo="256 total hosts"/>
+<taskbegin task="Parallel DNS resolution of 256 hosts." time="1582754025"/>
+<taskend task="Parallel DNS resolution of 256 hosts." time="1582754026"/>
+<host><status state="down" reason="no-response" reason_ttl="0"/>
+<address addr="192.168.0.0" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.2" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.3" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.4" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.5" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.6" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.7" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.8" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.9" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.12" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.15" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="no-response" reason_ttl="0"/>
+<address addr="192.168.0.16" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.17" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.18" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.19" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.20" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.21" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.22" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.23" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.24" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.25" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.26" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.27" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.28" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.29" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.30" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.31" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.32" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.33" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.34" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.35" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.36" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.37" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.38" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.39" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.40" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.41" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.42" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.43" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.44" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.45" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.46" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.47" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.48" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.49" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.50" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.53" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.54" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.55" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="no-response" reason_ttl="0"/>
+<address addr="192.168.0.56" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.57" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.58" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.59" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.60" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.61" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.62" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.63" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.64" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.65" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.66" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.67" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.68" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.69" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.70" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.71" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.72" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.73" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.74" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.75" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.76" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.77" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.78" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.79" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.80" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.81" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.82" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.83" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.84" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.85" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.86" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.87" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.88" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.89" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.90" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.91" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.92" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.93" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.94" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.95" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.96" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.97" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.98" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.99" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.100" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.101" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.102" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.103" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.104" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.105" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.106" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.107" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.108" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.109" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.110" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.111" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.112" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.113" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.114" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.115" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.116" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.117" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.118" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.119" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.120" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.121" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.122" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.123" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.124" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.125" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.126" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.127" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.128" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.129" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.130" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.131" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.132" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.133" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.134" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.135" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.136" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.137" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.138" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.139" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.140" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.141" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.142" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.143" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.144" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.145" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.146" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.147" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.148" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.149" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.150" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.151" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.152" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.153" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.154" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.155" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.156" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.157" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.158" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.159" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.160" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.161" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.162" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.163" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.164" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.165" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.166" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.167" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.168" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.169" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.170" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.171" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.172" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.173" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.174" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.175" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.176" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.177" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.178" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.179" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.180" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.181" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.182" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.183" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.184" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.185" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.186" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.187" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.188" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.189" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.190" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.191" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.192" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.193" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.194" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.195" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.196" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.197" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.198" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.199" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.200" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.201" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.202" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.203" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.204" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.205" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.206" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.207" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.208" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.209" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.210" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.211" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.212" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.213" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.214" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.215" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.216" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.217" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.218" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.219" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.220" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.221" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.222" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.223" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.224" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.225" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.226" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.227" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.228" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.229" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.230" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.231" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.232" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.233" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.234" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.235" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.236" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.237" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.238" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.239" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.240" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.241" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.242" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.243" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.244" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.245" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.246" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.247" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.248" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.249" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.250" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.251" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.252" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.253" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="host-unreach" reason_ttl="64"/>
+<address addr="192.168.0.254" addrtype="ipv4"/>
+</host>
+<host><status state="down" reason="no-response" reason_ttl="0"/>
+<address addr="192.168.0.255" addrtype="ipv4"/>
+</host>
+<taskbegin task="SYN Stealth Scan" time="1582754026"/>
+<taskend task="SYN Stealth Scan" time="1582754102" extrainfo="7000 total ports"/>
+<taskbegin task="Service scan" time="1582754102"/>
+<taskend task="Service scan" time="1582754238" extrainfo="22 services on 7 hosts"/>
+<taskbegin task="NSE" time="1582754238"/>
+<taskend task="NSE" time="1582754248"/>
+<taskbegin task="NSE" time="1582754248"/>
+<taskend task="NSE" time="1582754249"/>
+<host starttime="1582753984" endtime="1582754248"><status state="up" reason="echo-reply" reason_ttl="63"/>
+<address addr="192.168.0.1" addrtype="ipv4"/>
+<hostnames>
+</hostnames>
+<ports><extraports state="closed" count="995">
+<extrareasons reason="resets" count="995"/>
+</extraports>
+<port protocol="tcp" portid="80"><state state="open" reason="syn-ack" reason_ttl="63"/><service name="http" product="lighttpd" method="probed" conf="10"><cpe>cpe:/a:lighttpd:lighttpd</cpe></service></port>
+<port protocol="tcp" portid="443"><state state="open" reason="syn-ack" reason_ttl="63"/><service name="http" product="lighttpd" tunnel="ssl" method="probed" conf="10"><cpe>cpe:/a:lighttpd:lighttpd</cpe></service></port>
+<port protocol="tcp" portid="5000"><state state="open" reason="syn-ack" reason_ttl="63"/><service name="upnp" product="MiniUPnP" version="1.9" extrainfo="UPnP 1.1" servicefp="SF-Port5000-TCP:V=7.80%I=7%D=2/26%Time=5E56E93C%P=armv6-alpine-linux-musleabihf%r(GenericLines,130,&quot;\x20501\x20Not\x20Implemented\r\nContent-Type:\x20text/html\r\nConnection:\x20close\r\nContent-Length:\x20149\r\nServer:\x20RedHatEnterpriseServer/6\.10\x20UPnP/1\.1\x20MiniUPnPd/1\.9\r\nExt:\r\n\r\n&lt;HTML&gt;&lt;HEAD&gt;&lt;TITLE&gt;501\x20Not\x20Implemented&lt;/TITLE&gt;&lt;/HEAD&gt;&lt;BODY&gt;&lt;H1&gt;Not\x20Implemented&lt;/H1&gt;The\x20HTTP\x20Method\x20is\x20not\x20implemented\x20by\x20this\x20server\.&lt;/BODY&gt;&lt;/HTML&gt;\r\n&quot;)%r(GetRequest,123,&quot;HTTP/1\.0\x20404\x20Not\x20Found\r\nContent-Type:\x20text/html\r\nConnection:\x20close\r\nContent-Length:\x20134\r\nServer:\x20RedHatEnterpriseServer/6\.10\x20UPnP/1\.1\x20MiniUPnPd/1\.9\r\nExt:\r\n\r\n&lt;HTML&gt;&lt;HEAD&gt;&lt;TITLE&gt;404\x20Not\x20Found&lt;/TITLE&gt;&lt;/HEAD&gt;&lt;BODY&gt;&lt;H1&gt;Not\x20Found&lt;/H1&gt;The\x20requested\x20URL\x20was\x20not\x20found\x20on\x20this\x20server\.&lt;/BODY&gt;&lt;/HTML&gt;\r\n&quot;)%r(RTSPRequest,138,&quot;RTSP/1\.0\x20501\x20Not\x20Implemented\r\nContent-Type:\x20text/html\r\nConnection:\x20close\r\nContent-Length:\x20149\r\nServer:\x20RedHatEnterpriseServer/6\.10\x20UPnP/1\.1\x20MiniUPnPd/1\.9\r\nExt:\r\n\r\n&lt;HTML&gt;&lt;HEAD&gt;&lt;TITLE&gt;501\x20Not\x20Implemented&lt;/TITLE&gt;&lt;/HEAD&gt;&lt;BODY&gt;&lt;H1&gt;Not\x20Implemented&lt;/H1&gt;The\x20HTTP\x20Method\x20is\x20not\x20implemented\x20by\x20this\x20server\.&lt;/BODY&gt;&lt;/HTML&gt;\r\n&quot;)%r(HTTPOptions,138,&quot;HTTP/1\.0\x20501\x20Not\x20Implemented\r\nContent-Type:\x20text/html\r\nConnection:\x20close\r\nContent-Length:\x20149\r\nServer:\x20RedHatEnterpriseServer/6\.10\x20UPnP/1\.1\x20MiniUPnPd/1\.9\r\nExt:\r\n\r\n&lt;HTML&gt;&lt;HEAD&gt;&lt;TITLE&gt;501\x20Not\x20Implemented&lt;/TITLE&gt;&lt;/HEAD&gt;&lt;BODY&gt;&lt;H1&gt;Not\x20Implemented&lt;/H1&gt;The\x20HTTP\x20Method\x20is\x20not\x20implemented\x20by\x20this\x20server\.&lt;/BODY&gt;&lt;/HTML&gt;\r\n&quot;)%r(FourOhFourRequest,123,&quot;HTTP/1\.0\x20404\x20Not\x20Found\r\nContent-Type:\x20text/html\r\nConnection:\x20close\r\nContent-Length:\x20134\r\nServer:\x20RedHatEnterpriseServer/6\.10\x20UPnP/1\.1\x20MiniUPnPd/1\.9\r\nExt:\r\n\r\n&lt;HTML&gt;&lt;HEAD&gt;&lt;TITLE&gt;404\x20Not\x20Found&lt;/TITLE&gt;&lt;/HEAD&gt;&lt;BODY&gt;&lt;H1&gt;Not\x20Found&lt;/H1&gt;The\x20requested\x20URL\x20was\x20not\x20found\x20on\x20this\x20server\.&lt;/BODY&gt;&lt;/HTML&gt;\r\n&quot;);" method="probed" conf="10"><cpe>cpe:/a:miniupnp_project:miniupnpd:1.9</cpe></service><script id="fingerprint-strings" output="&#xa;  FourOhFourRequest, GetRequest: &#xa;    HTTP/1.0 404 Not Found&#xa;    Content-Type: text/html&#xa;    Connection: close&#xa;    Content-Length: 134&#xa;    Server: RedHatEnterpriseServer/6.10 UPnP/1.1 MiniUPnPd/1.9&#xa;    Ext:&#xa;    &lt;HTML&gt;&lt;HEAD&gt;&lt;TITLE&gt;404 Not Found&lt;/TITLE&gt;&lt;/HEAD&gt;&lt;BODY&gt;&lt;H1&gt;Not Found&lt;/H1&gt;The requested URL was not found on this server.&lt;/BODY&gt;&lt;/HTML&gt;&#xa;  GenericLines: &#xa;    501 Not Implemented&#xa;    Content-Type: text/html&#xa;    Connection: close&#xa;    Content-Length: 149&#xa;    Server: RedHatEnterpriseServer/6.10 UPnP/1.1 MiniUPnPd/1.9&#xa;    Ext:&#xa;    &lt;HTML&gt;&lt;HEAD&gt;&lt;TITLE&gt;501 Not Implemented&lt;/TITLE&gt;&lt;/HEAD&gt;&lt;BODY&gt;&lt;H1&gt;Not Implemented&lt;/H1&gt;The HTTP Method is not implemented by this server.&lt;/BODY&gt;&lt;/HTML&gt;&#xa;  HTTPOptions: &#xa;    HTTP/1.0 501 Not Implemented&#xa;    Content-Type: text/html&#xa;    Connection: close&#xa;    Content-Length: 149&#xa;    Server: RedHatEnterpriseServer/6.10 UPnP/1.1 MiniUPnPd/1.9&#xa;    Ext:&#xa;    &lt;HTML&gt;&lt;HEAD&gt;&lt;TITLE&gt;501 Not Implemented&lt;/TITLE&gt;&lt;/HEAD&gt;&lt;BODY&gt;&lt;H1&gt;Not Implemented&lt;/H1&gt;The HTTP Method is not implemented by this server.&lt;/BODY&gt;&lt;/HTML&gt;&#xa;  RTSPRequest: &#xa;    RTSP/1.0 501 Not Implemented&#xa;    Content-Type: text/html&#xa;    Connection: close&#xa;    Content-Length: 149&#xa;    Server: RedHatEnterpriseServer/6.10 UPnP/1.1 MiniUPnPd/1.9&#xa;    Ext:&#xa;    &lt;HTML&gt;&lt;HEAD&gt;&lt;TITLE&gt;501 Not Implemented&lt;/TITLE&gt;&lt;/HEAD&gt;&lt;BODY&gt;&lt;H1&gt;Not Implemented&lt;/H1&gt;The HTTP Method is not implemented by this server.&lt;/BODY&gt;&lt;/HTML&gt;"><elem key="FourOhFourRequest, GetRequest">&#xa;    HTTP/1.0 404 Not Found&#xa;    Content-Type: text/html&#xa;    Connection: close&#xa;    Content-Length: 134&#xa;    Server: RedHatEnterpriseServer/6.10 UPnP/1.1 MiniUPnPd/1.9&#xa;    Ext:&#xa;    &lt;HTML&gt;&lt;HEAD&gt;&lt;TITLE&gt;404 Not Found&lt;/TITLE&gt;&lt;/HEAD&gt;&lt;BODY&gt;&lt;H1&gt;Not Found&lt;/H1&gt;The requested URL was not found on this server.&lt;/BODY&gt;&lt;/HTML&gt;</elem>
+<elem key="GenericLines">&#xa;    501 Not Implemented&#xa;    Content-Type: text/html&#xa;    Connection: close&#xa;    Content-Length: 149&#xa;    Server: RedHatEnterpriseServer/6.10 UPnP/1.1 MiniUPnPd/1.9&#xa;    Ext:&#xa;    &lt;HTML&gt;&lt;HEAD&gt;&lt;TITLE&gt;501 Not Implemented&lt;/TITLE&gt;&lt;/HEAD&gt;&lt;BODY&gt;&lt;H1&gt;Not Implemented&lt;/H1&gt;The HTTP Method is not implemented by this server.&lt;/BODY&gt;&lt;/HTML&gt;</elem>
+<elem key="HTTPOptions">&#xa;    HTTP/1.0 501 Not Implemented&#xa;    Content-Type: text/html&#xa;    Connection: close&#xa;    Content-Length: 149&#xa;    Server: RedHatEnterpriseServer/6.10 UPnP/1.1 MiniUPnPd/1.9&#xa;    Ext:&#xa;    &lt;HTML&gt;&lt;HEAD&gt;&lt;TITLE&gt;501 Not Implemented&lt;/TITLE&gt;&lt;/HEAD&gt;&lt;BODY&gt;&lt;H1&gt;Not Implemented&lt;/H1&gt;The HTTP Method is not implemented by this server.&lt;/BODY&gt;&lt;/HTML&gt;</elem>
+<elem key="RTSPRequest">&#xa;    RTSP/1.0 501 Not Implemented&#xa;    Content-Type: text/html&#xa;    Connection: close&#xa;    Content-Length: 149&#xa;    Server: RedHatEnterpriseServer/6.10 UPnP/1.1 MiniUPnPd/1.9&#xa;    Ext:&#xa;    &lt;HTML&gt;&lt;HEAD&gt;&lt;TITLE&gt;501 Not Implemented&lt;/TITLE&gt;&lt;/HEAD&gt;&lt;BODY&gt;&lt;H1&gt;Not Implemented&lt;/H1&gt;The HTTP Method is not implemented by this server.&lt;/BODY&gt;&lt;/HTML&gt;</elem>
+</script><script id="vulners" output="&#xa;  cpe:/a:miniupnp_project:miniupnpd:1.9: &#xa;    &#x9;CVE-2017-8798&#x9;7.5&#x9;https://vulners.com/cve/CVE-2017-8798&#xa;    &#x9;CVE-2014-3985&#x9;5.0&#x9;https://vulners.com/cve/CVE-2014-3985&#xa;    &#x9;CVE-2017-1000494&#x9;4.6&#x9;https://vulners.com/cve/CVE-2017-1000494"><table key="cpe:/a:miniupnp_project:miniupnpd:1.9">
+<table>
+<elem key="cvss">7.5</elem>
+<elem key="is_exploit">false</elem>
+<elem key="type">cve</elem>
+<elem key="id">CVE-2017-8798</elem>
+</table>
+<table>
+<elem key="cvss">5.0</elem>
+<elem key="is_exploit">false</elem>
+<elem key="type">cve</elem>
+<elem key="id">CVE-2014-3985</elem>
+</table>
+<table>
+<elem key="cvss">4.6</elem>
+<elem key="is_exploit">false</elem>
+<elem key="type">cve</elem>
+<elem key="id">CVE-2017-1000494</elem>
+</table>
+</table>
+</script></port>
+<port protocol="tcp" portid="8081"><state state="filtered" reason="no-response" reason_ttl="0"/><service name="blackice-icecap" method="table" conf="3"/></port>
+<port protocol="tcp" portid="8082"><state state="filtered" reason="no-response" reason_ttl="0"/><service name="blackice-alerts" method="table" conf="3"/></port>
+</ports>
+<times srtt="2727" rttvar="414" to="100000"/>
+</host>
+<host starttime="1582753984" endtime="1582754249"><status state="up" reason="echo-reply" reason_ttl="64"/>
+<address addr="192.168.0.10" addrtype="ipv4"/>
+<hostnames>
+</hostnames>
+<ports><extraports state="closed" count="988">
+<extrareasons reason="resets" count="988"/>
+</extraports>
+<port protocol="tcp" portid="25"><state state="open" reason="syn-ack" reason_ttl="64"/><service name="smtp" product="Postfix smtpd" hostname=" hecuba.home" method="probed" conf="10"><cpe>cpe:/a:postfix:postfix</cpe></service></port>
+<port protocol="tcp" portid="53"><state state="open" reason="syn-ack" reason_ttl="64"/><service name="domain" product="dnsmasq" version="pi-hole-2.80" method="probed" conf="10"><cpe>cpe:/a:thekelleys:dnsmasq:pi-hole-2.80</cpe></service></port>
+<port protocol="tcp" portid="80"><state state="open" reason="syn-ack" reason_ttl="64"/><service name="http" servicefp="SF-Port80-TCP:V=7.80%I=7%D=2/26%Time=5E56E93C%P=armv6-alpine-linux-musleabihf%r(GetRequest,7D8,&quot;HTTP/1\.0\x20200\x20OK\r\nDate:\x20Wed,\x2026\x20Feb\x202020\x2021:55:08\x20GMT\r\nContent-Length:\x201890\r\nContent-Type:\x20text/html;\x20charset=utf-8\r\n\r\n&lt;!DOCTYPE\x20html&gt;\n&lt;html&gt;\n&lt;meta\x20name=\&quot;viewport\&quot;\x20content=\&quot;width=device-width,\x20initial-scale=1\.0\&quot;&gt;\x20\n&lt;head&gt;\n\t&lt;title&gt;//&lt;/title&gt;\n\t&lt;style&gt;\n\t\tbody\x20{\n\t\t\tbackground-color:\x20#242424;\n\t\t\tfont-family:\x20&apos;Roboto&apos;,\x20sans-serif\n\t\t}\n\n\t\ta\x20{\n\t\t\ttext-decoration:\x20none;\n\t\t\tcolor:\x20#e2e2e2\n\t\t}\n\n\t\ta:hover\x20{\n\t\t\tcolor:\x20#fff\n\t\t}\n\n\t\ttable\x20{\n\t\t\tcolor:\x20#999;\n\t\t\ttext-align:\x20center;\n\t\t\tmargin:\x20auto;\n\t\t\tpadding-top:\x2015vh\n\t\t}\n\n\t\ttd\x20{\n\t\t\tpadding:\x2010px\x2035px\n\t\t}\n\n\t\tth\x20{\n\t\t\tpadding:\x2030px\n\t\t}\n\n\t\tp\x20{\n\t\t\tcolor:\x20#999;\n\t\t\tposition:\x20absolute;\n\t\t\tbottom:\x200;\n\t\t\tright:\x200;\n\t\t\tpadding:\x205px;\n\t\t\tmargin:\x200\n\t\t}\n\n\t\tinput\x20{\n\t\t\twidth:\x20100%!;\(MISSING\)\n\t\t\theight:\x20100%!;\(MISSING\)\n\t\t\tcolor:\x20#999;\n\t\t\tbackground-color:\x20#242424;\n\t\t\tborder:\x20none;\n\t\t\tfont-size:\x2016px;\n\t\t\tfont-family:\x20&apos;Roboto&apos;,\x20sans-serif;\n\t\t\ttext-align:\x20center\n\t\t}\n\t&lt;/style&gt;\n&lt;/&quot;)%r(HTTPOptions,7D8,&quot;HTTP/1\.0\x20200\x20OK\r\nDate:\x20Wed,\x2026\x20Feb\x202020\x2021:55:08\x20GMT\r\nContent-Length:\x201890\r\nContent-Type:\x20text/html;\x20charset=utf-8\r\n\r\n&lt;!DOCTYPE\x20html&gt;\n&lt;html&gt;\n&lt;meta\x20name=\&quot;viewport\&quot;\x20content=\&quot;width=device-width,\x20initial-scale=1\.0\&quot;&gt;\x20\n&lt;head&gt;\n\t&lt;title&gt;//&lt;/title&gt;\n\t&lt;style&gt;\n\t\tbody\x20{\n\t\t\tbackground-color:\x20#242424;\n\t\t\tfont-family:\x20&apos;Roboto&apos;,\x20sans-serif\n\t\t}\n\n\t\ta\x20{\n\t\t\ttext-decoration:\x20none;\n\t\t\tcolor:\x20#e2e2e2\n\t\t}\n\n\t\ta:hover\x20{\n\t\t\tcolor:\x20#fff\n\t\t}\n\n\t\ttable\x20{\n\t\t\tcolor:\x20#999;\n\t\t\ttext-align:\x20center;\n\t\t\tmargin:\x20auto;\n\t\t\tpadding-top:\x2015vh\n\t\t}\n\n\t\ttd\x20{\n\t\t\tpadding:\x2010px\x2035px\n\t\t}\n\n\t\tth\x20{\n\t\t\tpadding:\x2030px\n\t\t}\n\n\t\tp\x20{\n\t\t\tcolor:\x20#999;\n\t\t\tposition:\x20absolute;\n\t\t\tbottom:\x200;\n\t\t\tright:\x200;\n\t\t\tpadding:\x205px;\n\t\t\tmargin:\x200\n\t\t}\n\n\t\tinput\x20{\n\t\t\twidth:\x20100%!;\(MISSING\)\n\t\t\theight:\x20100%!;\(MISSING\)\n\t\t\tcolor:\x20#999;\n\t\t\tbackground-color:\x20#242424;\n\t\t\tborder:\x20none;\n\t\t\tfont-size:\x2016px;\n\t\t\tfont-family:\x20&apos;Roboto&apos;,\x20sans-serif;\n\t\t\ttext-align:\x20center\n\t\t}\n\t&lt;/style&gt;\n&lt;/&quot;);" method="probed" conf="10"/><script id="fingerprint-strings" output="&#xa;  GetRequest, HTTPOptions: &#xa;    HTTP/1.0 200 OK&#xa;    Date: Wed, 26 Feb 2020 21:55:08 GMT&#xa;    Content-Length: 1890&#xa;    Content-Type: text/html; charset=utf-8&#xa;    &lt;!DOCTYPE html&gt;&#xa;    &lt;html&gt;&#xa;    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt; &#xa;    &lt;head&gt;&#xa;    &lt;title&gt;//&lt;/title&gt;&#xa;    &lt;style&gt;&#xa;    body {&#xa;    background-color: #242424;&#xa;    font-family: &apos;Roboto&apos;, sans-serif&#xa;    text-decoration: none;&#xa;    color: #e2e2e2&#xa;    a:hover {&#xa;    color: #fff&#xa;    table {&#xa;    color: #999;&#xa;    text-align: center;&#xa;    margin: auto;&#xa;    padding-top: 15vh&#xa;    padding: 10px 35px&#xa;    padding: 30px&#xa;    color: #999;&#xa;    position: absolute;&#xa;    bottom: 0;&#xa;    right: 0;&#xa;    padding: 5px;&#xa;    margin: 0&#xa;    input {&#xa;    width: 100%!;(MISSING)&#xa;    height: 100%!;(MISSING)&#xa;    color: #999;&#xa;    background-color: #242424;&#xa;    border: none;&#xa;    font-size: 16px;&#xa;    font-family: &apos;Roboto&apos;, sans-serif;&#xa;    text-align: center&#xa;    &lt;/style&gt;"><elem key="GetRequest, HTTPOptions">&#xa;    HTTP/1.0 200 OK&#xa;    Date: Wed, 26 Feb 2020 21:55:08 GMT&#xa;    Content-Length: 1890&#xa;    Content-Type: text/html; charset=utf-8&#xa;    &lt;!DOCTYPE html&gt;&#xa;    &lt;html&gt;&#xa;    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt; &#xa;    &lt;head&gt;&#xa;    &lt;title&gt;//&lt;/title&gt;&#xa;    &lt;style&gt;&#xa;    body {&#xa;    background-color: #242424;&#xa;    font-family: &apos;Roboto&apos;, sans-serif&#xa;    text-decoration: none;&#xa;    color: #e2e2e2&#xa;    a:hover {&#xa;    color: #fff&#xa;    table {&#xa;    color: #999;&#xa;    text-align: center;&#xa;    margin: auto;&#xa;    padding-top: 15vh&#xa;    padding: 10px 35px&#xa;    padding: 30px&#xa;    color: #999;&#xa;    position: absolute;&#xa;    bottom: 0;&#xa;    right: 0;&#xa;    padding: 5px;&#xa;    margin: 0&#xa;    input {&#xa;    width: 100%!;(MISSING)&#xa;    height: 100%!;(MISSING)&#xa;    color: #999;&#xa;    background-color: #242424;&#xa;    border: none;&#xa;    font-size: 16px;&#xa;    font-family: &apos;Roboto&apos;, sans-serif;&#xa;    text-align: center&#xa;    &lt;/style&gt;</elem>
+</script></port>
+<port protocol="tcp" portid="443"><state state="open" reason="syn-ack" reason_ttl="64"/><service name="tcpwrapped" method="probed" conf="8"/></port>
+<port protocol="tcp" portid="3000"><state state="open" reason="syn-ack" reason_ttl="64"/><service name="ppp" servicefp="SF-Port3000-TCP:V=7.80%I=7%D=2/26%Time=5E56E93C%P=armv6-alpine-linux-musleabihf%r(GenericLines,67,&quot;HTTP/1\.1\x20400\x20Bad\x20Request\r\nContent-Type:\x20text/plain;\x20charset=utf-8\r\nConnection:\x20close\r\n\r\n400\x20Bad\x20Request&quot;)%r(GetRequest,132,&quot;HTTP/1\.0\x20302\x20Found\r\nCache-Control:\x20no-cache\r\nContent-Type:\x20text/html;\x20charset=utf-8\r\nExpires:\x20-1\r\nLocation:\x20/login\r\nPragma:\x20no-cache\r\nSet-Cookie:\x20redirect_to=%2F;\x20Path=/;\x20HttpOnly;\x20SameSite=Lax\r\nX-Frame-Options:\x20deny\r\nDate:\x20Wed,\x2026\x20Feb\x202020\x2021:55:08\x20GMT\r\nContent-Length:\x2029\r\n\r\n&lt;a\x20href=\&quot;/login\&quot;&gt;Found&lt;/a&gt;\.\n\n&quot;)%r(Help,67,&quot;HTTP/1\.1\x20400\x20Bad\x20Request\r\nContent-Type:\x20text/plain;\x20charset=utf-8\r\nConnection:\x20close\r\n\r\n400\x20Bad\x20Request&quot;)%r(HTTPOptions,66C1,&quot;HTTP/1\.0\x20404\x20Not\x20Found\r\nCache-Control:\x20no-cache\r\nContent-Type:\x20text/html;\x20charset=UTF-8\r\nExpires:\x20-1\r\nPragma:\x20no-cache\r\nX-Frame-Options:\x20deny\r\nDate:\x20Wed,\x2026\x20Feb\x202020\x2021:55:13\x20GMT\r\n\r\n&lt;!DOCTYPE\x20html&gt;\n&lt;html\x20lang=\&quot;en\&quot;&gt;\n\x20\x20&lt;head&gt;\n\x20\x20\x20\x20&lt;script&gt;\n\x20\x20\x20\x20\x20\x20\n\x20\x20\x20\x20\x20\x20!\(function\(\)\x20{\n\x20\x20\x20\x20\x20\x20\x20\x20if\x20\(&apos;PerformanceLongTaskTiming&apos;\x20in\x20window\)\x20{\n\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20var\x20g\x20=\x20\(window\.__tti\x20=\x20{\x20e:\x20\[\]\x20}\);\n\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20g\.o\x20=\x20new\x20PerformanceObserver\(function\(l\)\x20{\n\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20g\.e\x20=\x20g\.e\.concat\(l\.getEntries\(\)\);\n\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20}\);\n\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20g\.o\.observe\({\x20entryTypes:\x20\[&apos;longtask&apos;\]\x20}\);\n\x20\x20\x20\x20\x20\x20\x20\x20}\n\x20\x20\x20\x20\x20\x20}\)\(\);\n\n\x20\x20\x20\x20&lt;/script&gt;\n\x20\x20\x20\x20&lt;meta\x20charset=\&quot;utf-8\&quot;\x20/&gt;\n\x20\x20\x20\x20&lt;meta\x20http-equiv=\&quot;X-UA-Compatible\&quot;\x20content=\&quot;IE=edge,chrome=1\&quot;\x20/&gt;\n\x20\x20\x20\x20&lt;meta\x20name=\&quot;viewport\&quot;\x20content=\&quot;width=device-width\&quot;\x20/&gt;\n\x20\x20\x20\x20&lt;meta\x20name=\&quot;theme-color\&quot;\x20content=\&quot;#000\&quot;\x20/&gt;\n\n\x20\x20\x20\x20&lt;title&gt;Grafana&lt;/title&gt;\n\n\x20\x20\x20\x20&lt;base\x20href=\&quot;/\&quot;\x20/&gt;\n\n\x20\x20\x20\x20&lt;link\n\x20\x20\x20\x20\x20\x20rel=\&quot;preload\&quot;\n\x20\x20\x20\x20\x20\x20href=\&quot;public/fonts/roboto/RxZJdnzeo3R5zSe&quot;);" method="table" conf="3"/><script id="fingerprint-strings" output="&#xa;  GenericLines, Help: &#xa;    HTTP/1.1 400 Bad Request&#xa;    Content-Type: text/plain; charset=utf-8&#xa;    Connection: close&#xa;    Request&#xa;  GetRequest: &#xa;    HTTP/1.0 302 Found&#xa;    Cache-Control: no-cache&#xa;    Content-Type: text/html; charset=utf-8&#xa;    Expires: -1&#xa;    Location: /login&#xa;    Pragma: no-cache&#xa;    Set-Cookie: redirect_to=%2F; Path=/; HttpOnly; SameSite=Lax&#xa;    X-Frame-Options: deny&#xa;    Date: Wed, 26 Feb 2020 21:55:08 GMT&#xa;    Content-Length: 29&#xa;    href=&quot;/login&quot;&gt;Found&lt;/a&gt;.&#xa;  HTTPOptions: &#xa;    HTTP/1.0 404 Not Found&#xa;    Cache-Control: no-cache&#xa;    Content-Type: text/html; charset=UTF-8&#xa;    Expires: -1&#xa;    Pragma: no-cache&#xa;    X-Frame-Options: deny&#xa;    Date: Wed, 26 Feb 2020 21:55:13 GMT&#xa;    &lt;!DOCTYPE html&gt;&#xa;    &lt;html lang=&quot;en&quot;&gt;&#xa;    &lt;head&gt;&#xa;    &lt;script&gt;&#xa;    !(function() {&#xa;    (&apos;PerformanceLongTaskTiming&apos; in window) {&#xa;    (window.__tti = { e: [] });&#xa;    PerformanceObserver(function(l) {&#xa;    g.e.concat(l.getEntries());&#xa;    g.o.observe({ entryTypes: [&apos;longtask&apos;] });&#xa;    })();&#xa;    &lt;/script&gt;&#xa;    &lt;meta charset=&quot;utf-8&quot; /&gt;&#xa;    &lt;meta http-equiv=&quot;X-UA-Compatible&quot; content=&quot;IE=edge,chrome=1&quot; /&gt;&#xa;    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width&quot; /&gt;&#xa;    &lt;meta name=&quot;theme-color&quot; content=&quot;#000&quot; /&gt;&#xa;    &lt;title&gt;Grafana&lt;/title&gt;&#xa;    &lt;base href=&quot;/&quot; /&gt;&#xa;    &lt;link&#xa;    rel=&quot;preload&quot;&#xa;    href=&quot;public/fonts/roboto/RxZJdnzeo3R5zSe"><elem key="GenericLines, Help">&#xa;    HTTP/1.1 400 Bad Request&#xa;    Content-Type: text/plain; charset=utf-8&#xa;    Connection: close&#xa;    Request</elem>
+<elem key="GetRequest">&#xa;    HTTP/1.0 302 Found&#xa;    Cache-Control: no-cache&#xa;    Content-Type: text/html; charset=utf-8&#xa;    Expires: -1&#xa;    Location: /login&#xa;    Pragma: no-cache&#xa;    Set-Cookie: redirect_to=%2F; Path=/; HttpOnly; SameSite=Lax&#xa;    X-Frame-Options: deny&#xa;    Date: Wed, 26 Feb 2020 21:55:08 GMT&#xa;    Content-Length: 29&#xa;    href=&quot;/login&quot;&gt;Found&lt;/a&gt;.</elem>
+<elem key="HTTPOptions">&#xa;    HTTP/1.0 404 Not Found&#xa;    Cache-Control: no-cache&#xa;    Content-Type: text/html; charset=UTF-8&#xa;    Expires: -1&#xa;    Pragma: no-cache&#xa;    X-Frame-Options: deny&#xa;    Date: Wed, 26 Feb 2020 21:55:13 GMT&#xa;    &lt;!DOCTYPE html&gt;&#xa;    &lt;html lang=&quot;en&quot;&gt;&#xa;    &lt;head&gt;&#xa;    &lt;script&gt;&#xa;    !(function() {&#xa;    (&apos;PerformanceLongTaskTiming&apos; in window) {&#xa;    (window.__tti = { e: [] });&#xa;    PerformanceObserver(function(l) {&#xa;    g.e.concat(l.getEntries());&#xa;    g.o.observe({ entryTypes: [&apos;longtask&apos;] });&#xa;    })();&#xa;    &lt;/script&gt;&#xa;    &lt;meta charset=&quot;utf-8&quot; /&gt;&#xa;    &lt;meta http-equiv=&quot;X-UA-Compatible&quot; content=&quot;IE=edge,chrome=1&quot; /&gt;&#xa;    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width&quot; /&gt;&#xa;    &lt;meta name=&quot;theme-color&quot; content=&quot;#000&quot; /&gt;&#xa;    &lt;title&gt;Grafana&lt;/title&gt;&#xa;    &lt;base href=&quot;/&quot; /&gt;&#xa;    &lt;link&#xa;    rel=&quot;preload&quot;&#xa;    href=&quot;public/fonts/roboto/RxZJdnzeo3R5zSe</elem>
+</script></port>
+<port protocol="tcp" portid="3306"><state state="open" reason="syn-ack" reason_ttl="64"/><service name="mysql" product="MySQL" version="5.5.5-10.1.43-MariaDB-0ubuntu0.18.04.1" method="probed" conf="10"><cpe>cpe:/a:mysql:mysql:5.5.5-10.1.43-mariadb-0ubuntu0.18.04.1</cpe></service><script id="vulners" output="&#xa;  MySQL 5.5.5-10.1.43-MariaDB-0ubuntu0.18.04.1: &#xa;    &#x9;NODEJS:602&#x9;0.0&#x9;https://vulners.com/nodejs/NODEJS:602"><table key="MySQL 5.5.5-10.1.43-MariaDB-0ubuntu0.18.04.1">
+<table>
+<elem key="cvss">0.0</elem>
+<elem key="is_exploit">false</elem>
+<elem key="type">nodejs</elem>
+<elem key="id">NODEJS:602</elem>
+</table>
+</table>
+</script></port>
+<port protocol="tcp" portid="4444"><state state="open" reason="syn-ack" reason_ttl="64"/><service name="http" product="Jetty" version="9.4.8.v20180619" method="probed" conf="10"><cpe>cpe:/a:mortbay:jetty:9.4.8.v20180619</cpe></service><script id="http-server-header" output="Jetty(9.4.8.v20180619)"><elem>Jetty(9.4.8.v20180619)</elem>
+</script></port>
+<port protocol="tcp" portid="5900"><state state="open" reason="syn-ack" reason_ttl="64"/><service name="tcpwrapped" method="probed" conf="8"/></port>
+<port protocol="tcp" portid="8080"><state state="open" reason="syn-ack" reason_ttl="64"/><service name="http" product="lighttpd" version="1.4.45" method="probed" conf="10"><cpe>cpe:/a:lighttpd:lighttpd:1.4.45</cpe></service><script id="http-server-header" output="lighttpd/1.4.45"><elem>lighttpd/1.4.45</elem>
+</script><script id="vulners" output="&#xa;  cpe:/a:lighttpd:lighttpd:1.4.45: &#xa;    &#x9;CVE-2018-19052&#x9;5.0&#x9;https://vulners.com/cve/CVE-2018-19052"><table key="cpe:/a:lighttpd:lighttpd:1.4.45">
+<table>
+<elem key="cvss">5.0</elem>
+<elem key="is_exploit">false</elem>
+<elem key="type">cve</elem>
+<elem key="id">CVE-2018-19052</elem>
+</table>
+</table>
+</script></port>
+<port protocol="tcp" portid="9080"><state state="open" reason="syn-ack" reason_ttl="64"/><service name="http" product="nginx" version="1.16.1" method="probed" conf="10"><cpe>cpe:/a:igor_sysoev:nginx:1.16.1</cpe></service><script id="http-server-header" output="nginx/1.16.1"><elem>nginx/1.16.1</elem>
+</script></port>
+<port protocol="tcp" portid="9090"><state state="open" reason="syn-ack" reason_ttl="64"/><service name="http" product="Golang net/http server" extrainfo="Go-IPFS json-rpc or InfluxDB API" method="probed" conf="10"><cpe>cpe:/a:protocol_labs:go-ipfs</cpe></service></port>
+<port protocol="tcp" portid="9100"><state state="open" reason="syn-ack" reason_ttl="64"/><service name="jetdirect" method="table" conf="3"/></port>
+</ports>
+<times srtt="57" rttvar="9" to="100000"/>
+</host>
+<host starttime="1582753988" endtime="1582754249"><status state="up" reason="echo-reply" reason_ttl="63"/>
+<address addr="192.168.0.11" addrtype="ipv4"/>
+<hostnames>
+</hostnames>
+<ports><extraports state="closed" count="998">
+<extrareasons reason="resets" count="998"/>
+</extraports>
+<port protocol="tcp" portid="80"><state state="open" reason="syn-ack" reason_ttl="63"/><service name="http" product="Boa HTTPd" version="0.94.14rc21" method="probed" conf="10"><cpe>cpe:/a:boa:boa:0.94.14rc21</cpe></service><script id="http-server-header" output="Boa/0.94.14rc21"><elem>Boa/0.94.14rc21</elem>
+</script><script id="vulners" output="&#xa;  cpe:/a:boa:boa:0.94.14rc21: &#xa;    &#x9;CVE-2009-4496&#x9;5.0&#x9;https://vulners.com/cve/CVE-2009-4496"><table key="cpe:/a:boa:boa:0.94.14rc21">
+<table>
+<elem key="cvss">5.0</elem>
+<elem key="is_exploit">false</elem>
+<elem key="type">cve</elem>
+<elem key="id">CVE-2009-4496</elem>
+</table>
+</table>
+</script></port>
+<port protocol="tcp" portid="443"><state state="open" reason="syn-ack" reason_ttl="63"/><service name="https" product="axhttpd/1.4.9" servicefp="SF-Port443-TCP:V=7.80%T=SSL%I=7%D=2/26%Time=5E56E942%P=armv6-alpine-linux-musleabihf%r(GetRequest,10A,&quot;HTTP/1\.1\x20200\x20OK\nServer:\x20axhttpd/1\.4\.9\nContent-Type:\x20text/html\nContent-Length:\x2064\nDate:\x20Thu,\x2001\x20Jan\x201970\x2010:35:25\x20GMT\nLast-Modified:\x20Thu,\x2001\x20Jan\x201970\x2000:00:19\x20GMT\nExpires:\x20Thu,\x2001\x20Jan\x201970\x2010:40:25\x20GMT\n\n&lt;meta\x20http-equiv=\&quot;refresh\&quot;\x20content=\&quot;0;url=http://belkin\.range\&quot;&gt;\n&quot;)%r(HTTPOptions,10A,&quot;HTTP/1\.1\x20200\x20OK\nServer:\x20axhttpd/1\.4\.9\nContent-Type:\x20text/html\nContent-Length:\x2064\nDate:\x20Thu,\x2001\x20Jan\x201970\x2010:35:25\x20GMT\nLast-Modified:\x20Thu,\x2001\x20Jan\x201970\x2000:00:19\x20GMT\nExpires:\x20Thu,\x2001\x20Jan\x201970\x2010:40:25\x20GMT\n\n&lt;meta\x20http-equiv=\&quot;refresh\&quot;\x20content=\&quot;0;url=http://belkin\.range\&quot;&gt;\n&quot;)%r(FourOhFourRequest,9B,&quot;HTTP/1\.1\x20200\x20OK\nContent-Type:\x20text/html\n\n&lt;html&gt;&lt;head&gt;&lt;meta\x20HTTP-EQUIV=\&quot;REFRESH\&quot;\x20content=\&quot;0;\x20url=/index\.html\&quot;&gt;&lt;/head&gt;\n&lt;body&gt;\n&lt;title&gt;&lt;/title&gt;\n&lt;/body&gt;&lt;/html&gt;\n&quot;)%r(GenericLines,10A,&quot;HTTP/1\.1\x20200\x20OK\nServer:\x20axhttpd/1\.4\.9\nContent-Type:\x20text/html\nContent-Length:\x2064\nDate:\x20Thu,\x2001\x20Jan\x201970\x2010:35:31\x20GMT\nLast-Modified:\x20Thu,\x2001\x20Jan\x201970\x2000:00:19\x20GMT\nExpires:\x20Thu,\x2001\x20Jan\x201970\x2010:40:31\x20GMT\n\n&lt;meta\x20http-equiv=\&quot;refresh\&quot;\x20content=\&quot;0;url=http://belkin\.range\&quot;&gt;\n&quot;)%r(RTSPRequest,10A,&quot;HTTP/1\.1\x20200\x20OK\nServer:\x20axhttpd/1\.4\.9\nContent-Type:\x20text/html\nContent-Length:\x2064\nDate:\x20Thu,\x2001\x20Jan\x201970\x2010:35:31\x20GMT\nLast-Modified:\x20Thu,\x2001\x20Jan\x201970\x2000:00:19\x20GMT\nExpires:\x20Thu,\x2001\x20Jan\x201970\x2010:40:31\x20GMT\n\n&lt;meta\x20http-equiv=\&quot;refresh\&quot;\x20content=\&quot;0;url=http://belkin\.range\&quot;&gt;\n&quot;)%r(SIPOptions,10A,&quot;HTTP/1\.1\x20200\x20OK\nServer:\x20axhttpd/1\.4\.9\nContent-Type:\x20text/html\nContent-Length:\x2064\nDate:\x20Thu,\x2001\x20Jan\x201970\x2010:36:39\x20GMT\nLast-Modified:\x20Thu,\x2001\x20Jan\x201970\x2000:00:19\x20GMT\nExpires:\x20Thu,\x2001\x20Jan\x201970\x2010:41:39\x20GMT\n\n&lt;meta\x20http-equiv=\&quot;refresh\&quot;\x20content=\&quot;0;url=http://belkin\.range\&quot;&gt;\n&quot;);" tunnel="ssl" method="probed" conf="10"/><script id="fingerprint-strings" output="&#xa;  FourOhFourRequest: &#xa;    HTTP/1.1 200 OK&#xa;    Content-Type: text/html&#xa;    &lt;html&gt;&lt;head&gt;&lt;meta HTTP-EQUIV=&quot;REFRESH&quot; content=&quot;0; url=/index.html&quot;&gt;&lt;/head&gt;&#xa;    &lt;body&gt;&#xa;    &lt;title&gt;&lt;/title&gt;&#xa;    &lt;/body&gt;&lt;/html&gt;&#xa;  GenericLines, RTSPRequest: &#xa;    HTTP/1.1 200 OK&#xa;    Server: axhttpd/1.4.9&#xa;    Content-Type: text/html&#xa;    Content-Length: 64&#xa;    Date: Thu, 01 Jan 1970 10:35:31 GMT&#xa;    Last-Modified: Thu, 01 Jan 1970 00:00:19 GMT&#xa;    Expires: Thu, 01 Jan 1970 10:40:31 GMT&#xa;    &lt;meta http-equiv=&quot;refresh&quot; content=&quot;0;url=http://belkin.range&quot;&gt;&#xa;  GetRequest, HTTPOptions: &#xa;    HTTP/1.1 200 OK&#xa;    Server: axhttpd/1.4.9&#xa;    Content-Type: text/html&#xa;    Content-Length: 64&#xa;    Date: Thu, 01 Jan 1970 10:35:25 GMT&#xa;    Last-Modified: Thu, 01 Jan 1970 00:00:19 GMT&#xa;    Expires: Thu, 01 Jan 1970 10:40:25 GMT&#xa;    &lt;meta http-equiv=&quot;refresh&quot; content=&quot;0;url=http://belkin.range&quot;&gt;&#xa;  SIPOptions: &#xa;    HTTP/1.1 200 OK&#xa;    Server: axhttpd/1.4.9&#xa;    Content-Type: text/html&#xa;    Content-Length: 64&#xa;    Date: Thu, 01 Jan 1970 10:36:39 GMT&#xa;    Last-Modified: Thu, 01 Jan 1970 00:00:19 GMT&#xa;    Expires: Thu, 01 Jan 1970 10:41:39 GMT&#xa;    &lt;meta http-equiv=&quot;refresh&quot; content=&quot;0;url=http://belkin.range&quot;&gt;"><elem key="FourOhFourRequest">&#xa;    HTTP/1.1 200 OK&#xa;    Content-Type: text/html&#xa;    &lt;html&gt;&lt;head&gt;&lt;meta HTTP-EQUIV=&quot;REFRESH&quot; content=&quot;0; url=/index.html&quot;&gt;&lt;/head&gt;&#xa;    &lt;body&gt;&#xa;    &lt;title&gt;&lt;/title&gt;&#xa;    &lt;/body&gt;&lt;/html&gt;</elem>
+<elem key="GenericLines, RTSPRequest">&#xa;    HTTP/1.1 200 OK&#xa;    Server: axhttpd/1.4.9&#xa;    Content-Type: text/html&#xa;    Content-Length: 64&#xa;    Date: Thu, 01 Jan 1970 10:35:31 GMT&#xa;    Last-Modified: Thu, 01 Jan 1970 00:00:19 GMT&#xa;    Expires: Thu, 01 Jan 1970 10:40:31 GMT&#xa;    &lt;meta http-equiv=&quot;refresh&quot; content=&quot;0;url=http://belkin.range&quot;&gt;</elem>
+<elem key="GetRequest, HTTPOptions">&#xa;    HTTP/1.1 200 OK&#xa;    Server: axhttpd/1.4.9&#xa;    Content-Type: text/html&#xa;    Content-Length: 64&#xa;    Date: Thu, 01 Jan 1970 10:35:25 GMT&#xa;    Last-Modified: Thu, 01 Jan 1970 00:00:19 GMT&#xa;    Expires: Thu, 01 Jan 1970 10:40:25 GMT&#xa;    &lt;meta http-equiv=&quot;refresh&quot; content=&quot;0;url=http://belkin.range&quot;&gt;</elem>
+<elem key="SIPOptions">&#xa;    HTTP/1.1 200 OK&#xa;    Server: axhttpd/1.4.9&#xa;    Content-Type: text/html&#xa;    Content-Length: 64&#xa;    Date: Thu, 01 Jan 1970 10:36:39 GMT&#xa;    Last-Modified: Thu, 01 Jan 1970 00:00:19 GMT&#xa;    Expires: Thu, 01 Jan 1970 10:41:39 GMT&#xa;    &lt;meta http-equiv=&quot;refresh&quot; content=&quot;0;url=http://belkin.range&quot;&gt;</elem>
+</script><script id="http-server-header" output="axhttpd/1.4.9"><elem>axhttpd/1.4.9</elem>
+</script></port>
+</ports>
+<times srtt="7208" rttvar="2348" to="100000"/>
+</host>
+<host starttime="1582753984" endtime="1582754027"><status state="up" reason="echo-reply" reason_ttl="63"/>
+<address addr="192.168.0.13" addrtype="ipv4"/>
+<hostnames>
+</hostnames>
+<ports><extraports state="closed" count="1000">
+<extrareasons reason="resets" count="1000"/>
+</extraports>
+</ports>
+<times srtt="8416" rttvar="2208" to="100000"/>
+</host>
+<host starttime="1582753984" endtime="1582754248"><status state="up" reason="echo-reply" reason_ttl="63"/>
+<address addr="192.168.0.14" addrtype="ipv4"/>
+<hostnames>
+</hostnames>
+<ports><extraports state="closed" count="997">
+<extrareasons reason="resets" count="997"/>
+</extraports>
+<port protocol="tcp" portid="5555"><state state="open" reason="syn-ack" reason_ttl="63"/><service name="freeciv" servicefp="SF-Port5555-TCP:V=7.80%I=7%D=2/26%Time=5E56E946%P=armv6-alpine-linux-musleabihf%r(adbConnect,2C,&quot;AUTH\x01\0\0\0\0\0\0\0\x14\0\0\x008\n\0\0\xbe\xaa\xab\xb7\xd8I_\xf2\xf9R\xe6Jr\xa7\x19\x9a\x9d\x13\xc4\x04Y\xb3\x06\xf5&quot;);" method="table" conf="3"/><script id="fingerprint-strings" output="&#xa;  adbConnect: &#xa;    AUTH"><elem key="adbConnect">&#xa;    AUTH</elem>
+</script></port>
+<port protocol="tcp" portid="6881"><state state="open" reason="syn-ack" reason_ttl="63"/><service name="tcpwrapped" method="probed" conf="8"/></port>
+<port protocol="tcp" portid="8009"><state state="open" reason="syn-ack" reason_ttl="63"/><service name="http" product="Amazon Whisperplay DIAL REST service" devicetype="media device" method="probed" conf="10"><cpe>cpe:/a:amazon:whisperplay</cpe></service></port>
+</ports>
+<times srtt="7606" rttvar="975" to="100000"/>
+</host>
+<host starttime="1582753984" endtime="1582754248"><status state="up" reason="echo-reply" reason_ttl="63"/>
+<address addr="192.168.0.51" addrtype="ipv4"/>
+<hostnames>
+</hostnames>
+<ports><extraports state="closed" count="999">
+<extrareasons reason="resets" count="999"/>
+</extraports>
+<port protocol="tcp" portid="62078"><state state="open" reason="syn-ack" reason_ttl="63"/><service name="tcpwrapped" method="probed" conf="8"/></port>
+</ports>
+<times srtt="5593" rttvar="951" to="100000"/>
+</host>
+<host starttime="1582753984" endtime="1582754248"><status state="up" reason="echo-reply" reason_ttl="63"/>
+<address addr="192.168.0.52" addrtype="ipv4"/>
+<hostnames>
+</hostnames>
+<ports><extraports state="closed" count="999">
+<extrareasons reason="resets" count="999"/>
+</extraports>
+<port protocol="tcp" portid="22"><state state="open" reason="syn-ack" reason_ttl="63"/><service name="ssh" product="OpenSSH" version="7.6p1 Ubuntu 4ubuntu0.3" extrainfo="Ubuntu Linux; protocol 2.0" ostype="Linux" method="probed" conf="10"><cpe>cpe:/a:openbsd:openssh:7.6p1</cpe><cpe>cpe:/o:linux:linux_kernel</cpe></service></port>
+</ports>
+<times srtt="5394" rttvar="1053" to="100000"/>
+</host>
+<taskbegin task="NSE" time="1582754249"/>
+<taskend task="NSE" time="1582754249"/>
+<taskbegin task="NSE" time="1582754249"/>
+<taskend task="NSE" time="1582754249"/>
+<runstats><finished time="1582754249" timestr="Wed Feb 26 21:57:29 2020" elapsed="266.10" summary="Nmap done at Wed Feb 26 21:57:29 2020; 256 IP addresses (7 hosts up) scanned in 266.10 seconds" exit="success"/><hosts up="7" down="249" total="256"/>
+</runstats>
+</nmaprun>

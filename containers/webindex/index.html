@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+<head>
+	<title>//</title>
+	<style>
+		body {
+			background-color: #242424;
+			font-family: 'Roboto', sans-serif
+		}
+
+		a {
+			text-decoration: none;
+			color: #e2e2e2
+		}
+
+		a:hover {
+			color: #fff
+		}
+
+		table {
+			color: #999;
+			text-align: center;
+			margin: auto;
+			padding-top: 15vh
+		}
+
+		td {
+			padding: 10px 35px
+		}
+
+		th {
+			padding: 30px
+		}
+
+		p {
+			color: #999;
+			position: absolute;
+			bottom: 0;
+			right: 0;
+			padding: 5px;
+			margin: 0
+		}
+
+		input {
+			width: 100%;
+			height: 100%;
+			color: #999;
+			background-color: #242424;
+			border: none;
+			font-size: 16px;
+			font-family: 'Roboto', sans-serif;
+			text-align: center
+		}
+	</style>
+</head>
+
+<body>
+	<table>
+		<tr>
+			<th>Inicio</th>
+			<td colspan="2" id="colspan">
+				<form method="get" action="https://www.google.com/search" target="_blank">
+					<div id="searchBar">
+						<input type="text" name="q" maxlength="255" value="Google" autofocus onfocus="this.value='';" onblur="this.value=this.defaultValue;" />
+					</div>
+				</form>
+			</td>
+		</tr>
+		<tr>
+			<td><a href="http://192.168.0.7:3000" target="_blank">Grafana</a></td>
+			<td><a href="http://192.168.0.7:9000" target="_blank">Portainer</a></td>
+			<td><a href="http://192.168.0.7:8080/admin/" target="_blank">PiHole</a></td>
+		</tr>
+		<tr>
+			<td><a href="http://192.168.0.6:9090" target="_blank">Cockpit</a></td>
+			<td><a href="http://192.168.0.6:9091" target="_blank">Transmission</a></td>
+			<td><a href="http://192.168.0.6:32400/web/index.html" target="_blank">Plex</a></td>
+		</tr>
+		<tr>
+			<td><a href="http://192.168.0.6:8888" target="_blank">Jupyter</a></td>
+                        <td><a href="http://192.168.0.7:9080" target="_blank">Lychee</a></td>
+		</tr>
+		<tr>
+			<td></td>
+		</tr>
+	</table>
+</body>
+
+</html>

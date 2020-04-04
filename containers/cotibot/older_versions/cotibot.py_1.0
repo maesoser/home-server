@@ -1,0 +1,549 @@
+#!/usr/bin/env python3
+
+# coding=utf-8
+import warnings
+warnings.filterwarnings("ignore")
+
+import matplotlib
+matplotlib.use("Agg")
+
+from telegram.ext import Updater
+from telegram.ext import CommandHandler
+import coloredlogs, logging
+from telegram.ext import MessageHandler, Filters
+from telegram.ext.dispatcher import run_async
+
+from matplotlib.dates import DateFormatter
+import matplotlib.pyplot as plt
+import matplotlib.patches as mpatches
+import matplotlib.dates as md
+
+from pylab import plot_date,show,xticks,date2num
+from pylab import figure,hist,num2date
+from datetime import datetime, timedelta
+
+import numpy as np
+from PIL import Image
+import seaborn as sb
+
+import pandas as pd
+import sys, argparse, re, os, time
+from collections import defaultdict
+from itertools import groupby
+from operator import itemgetter
+import requests
+from bs4 import BeautifulSoup
+
+import sqlite3
+
+bottoken = "398585452:AAFUlxuaeBHzicyLj-SKntVK4A-kA25z8wA"
+
+days = 'Lun Mar Mie Jue Vie Sab Dom'.split()
+
+colors = ['#a6cee3','#1f78b4','#b2df8a','#33a02c','#fb9a99','#e31a1c','#fdbf6f','#ff7f00','#cab2d6','#6a3d9a','#ffff99','#b15928',
+         '#a6cee3','#1f78b4','#b2df8a','#33a02c','#fb9a99','#e31a1c','#fdbf6f','#ff7f00','#cab2d6','#6a3d9a','#ffff99','#b15928',
+         '#a6cee3','#1f78b4','#b2df8a','#33a02c','#fb9a99','#e31a1c','#fdbf6f','#ff7f00','#cab2d6','#6a3d9a','#ffff99','#b15928',
+         '#a6cee3','#1f78b4','#b2df8a','#33a02c','#fb9a99','#e31a1c','#fdbf6f','#ff7f00','#cab2d6','#6a3d9a','#ffff99','#b15928',
+         '#a6cee3','#1f78b4','#b2df8a','#33a02c','#fb9a99','#e31a1c','#fdbf6f','#ff7f00','#cab2d6','#6a3d9a','#ffff99','#b15928'
+         ]
+
+def memory():
+    with open('/proc/meminfo', 'r') as mem:
+        ret = {}
+        tmp = 0
+        for i in mem:
+            sline = i.split()
+            if str(sline[0]) == 'MemTotal:':
+                ret['total'] = int(int(sline[1])/1024)
+            elif str(sline[0]) in ('MemFree:', 'Buffers:', 'Cached:'):
+                tmp += int(sline[1])
+        ret['free'] = int(tmp/1024)
+        ret['used'] = int(ret['total']) - int(ret['free'])
+    return ret
+
+def start(bot, update):
+    bot.send_message(chat_id=update.message.chat_id, text="Hi! I am CotiBot and I will take a look to your interactions in this group!")
+    bot.send_message(chat_id=update.message.chat_id, text="Stay cool, I won't keep ANYTHING of what you talked about, trust me.")
+    bot.send_message(chat_id=update.message.chat_id, text="You can take a look at my graphics by using \gstats")
+    
+def lookFor(lines,u1,u2):
+    output = 0
+    for i in range(0,len(lines)-1):
+        user1 = lines[i].split(",")[3]
+        user2 = lines[i+1].split(",")[3]
+        if user1 == u1 and user2 == u2:
+            output += 1
+    return output
+
+def getUsers(lines):
+    users = []
+    rnames = []
+    for line in lines:
+        userid = line.split(",")[3]
+        username = line.split(",")[4]
+        if userid not in users:
+            users.append(userid)
+            rnames.append(username)
+    return users, rnames
+
+def getConnections(cid,lines):
+    users,realnames = getUsers(lines)
+    connections = np.zeros((len(users), len(users)))
+    for u1 in range(0,len(users)):
+        for u2 in range(0,len(users)):
+            n = lookFor(lines,users[u1],users[u2])
+            connections[u1][u2] = n
+
+    maxc = np.matrix(connections).max()
+    meanc = 100*np.matrix(connections).mean()/maxc
+    stdc = 100*np.matrix(connections).std()/maxc
+    #print(meanc)
+    #print(stdc)
+    for u1 in range(0,len(users)):
+        for u2 in range(0,len(users)):
+            connections[u1][u2] = 100.0*connections[u1][u2]/maxc
+            if connections[u1][u2] < meanc or u1==u2:
+                connections[u1][u2] = 0
+    sb.set()
+    pdata = pd.DataFrame(data=connections, index=realnames,columns=realnames)  # 1st row as the column names
+    ax = sb.heatmap(pdata, annot=True, linewidths=.2)
+    ax.set(xlabel='Origen', ylabel='Destino')
+    plt.savefig("/tmp/"+cid+"_conn.jpg", format='jpg')
+    plt.close()
+
+def getMessageVectorPerUser(lines,target,md):
+    mlist = []
+    base = datetime.now().date()
+    date_list = [base - timedelta(days=x) for x in range(0, md)]
+    date_list = list(reversed(date_list))
+    for x in date_list:
+        mlist.append([x,0])
+    for line in lines:
+        userid = line.split(",")[3]
+        date = datetime.strptime(line.split(",")[1].split(" ")[0].replace("-"," "), '%Y %m %d').date()
+        if int(userid)==int(target):
+            for item in mlist:
+                if item[0] == date:
+                    item[1] = item[1]+1
+    return mlist
+
+def echo(bot, update):
+    message = update.message
+    if message.text!=None:
+        of = open(str(update.message.chat_id).replace("-","G")+".log","a")
+        reply = "0"
+        name = str(message.from_user.id)
+        if message.from_user.username != None:
+            name = message.from_user.username
+        elif message.from_user.first_name != None:
+            name = message.from_user.first_name
+        if(message.reply_to_message!=None):
+            reply = message.reply_to_message.message_id
+        mstr = str(message.message_id)+","+str(message.date)+","+str(len(message.text))+","+str(message.from_user.id)+","+str(name)+","+str(reply)
+        of.write(mstr+"\n")
+        of.flush()
+        of.close()
+    else:
+        sticker(update.message.chat_id,message)
+
+def updateList(userid, mlist,chars):
+    for item in mlist:
+        if(item[0]==userid):
+            item[1] = item[1]+chars
+            return True
+    return False
+
+def getMessagesPerUser(lines):
+    mlist = []
+    for line in lines:
+        userid = line.split(",")[3]
+        username = line.split(",")[4]
+        if updateList(userid,mlist,1)==False:
+            mitem = [userid,1,username]
+            mlist.append(mitem)
+    return mlist
+
+def getCharactersPerUser(lines):
+    mlist = []
+    for line in lines:
+        userid = line.split(",")[3]
+        username = line.split(",")[4]
+        chars = int(line.split(",")[2])
+        if updateList(userid,mlist,chars)==False:
+            mitem = [userid,chars,username]
+            mlist.append(mitem)
+    return mlist
+
+def getMessagesPerDay(lines):
+    datearr = []
+    datecum = []
+    lastweek = datetime.today() - timedelta(days=7)
+    for line in lines:
+        strdate = line.split(",")[1]
+        strdate = strdate.split(":")
+        strdate = strdate[0]+":"+strdate[1]
+        #dtobj = datetime.strptime(strdate, '%Y-%m-%d %H:%M:%S')
+        dtobj = datetime.strptime(strdate, '%Y-%m-%d %H:%M')
+        #print(dtobj)
+        if dtobj > lastweek and dtobj <= datetime.today():
+            datearr.append(dtobj)
+            if updateList(dtobj,datecum,1)==False:
+                datecum.append([dtobj,1])
+
+    datel = []
+    values = []
+    for item in datecum:
+        datel.append(item[0])
+        values.append(item[1])
+    plt.xticks(rotation=0)
+    ax=plt.gca()
+    xfmt = md.DateFormatter('%d-%b\n%H:%M')
+    ax.xaxis.set_major_formatter(xfmt)
+    plt.plot(datel,values)
+    plt.savefig("/tmp/tg_img.jpg", format='jpg')
+    plt.close()
+
+def sticker(chat_id,message):
+    if(message.sticker == None):
+        return
+    of = open(str(chat_id).replace("-","G")+".log","a")
+    reply = "0"
+    name = str(message.from_user.id)
+    if message.from_user.username != None:
+        name = message.from_user.username
+    elif message.from_user.first_name != None:
+        name = message.from_user.first_name
+
+    if(message.reply_to_message!=None):
+        reply = message.reply_to_message.message_id
+    mstr = str(message.message_id)+","+str(message.date)+","+str(-1)+","+str(message.from_user.id)+","+str(name)+","+str(reply)+","+str(message.sticker.emoji)
+    #print(mstr)
+    of.write(mstr+"\n")
+    of.flush()
+    of.close()
+    #bot.send_message(chat_id=, text=update.message.text)
+
+def getPie(cid,mlist):
+    colorm = [colors[i%len(colors)] for i in range(0, len(mlist))]
+
+    mlist.sort(key=itemgetter(1))
+    labels = []
+    sizes = []
+    for item in mlist:
+        labels.append(item[2])
+        sizes.append(item[1])
+    fig1, ax1 = plt.subplots()
+    ax1.pie(sizes, labels=labels, colors = colorm, autopct='%1.1f%%')
+    ax1.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
+    #plt.tight_layout()
+    plt.savefig("/tmp/"+cid+"_pie.jpg", format='jpg')
+    plt.close()
+
+def findChats(uid):
+    chatlist = []
+    lognames = [f for f in os.listdir() if os.path.isfile(f)]
+    lognames = [f for f in lognames if f.find(".log")!=-1]
+    for logname in lognames:
+        of = open(logname.replace("-","G"),"r")
+        lines = of.readlines()
+        of.close()
+        users,realnames = getUsers(lines)
+        if str(uid) in users:
+            chatlist.append(logname.replace(".log",""))
+    #print(chatlist)
+    return chatlist
+
+def generateStats(bot, fromChat, toChat):
+    cid = str(fromChat).replace("-","G")
+    days = 31
+    of = open(cid+".log","r")
+    lines = of.readlines()
+    of.close()
+
+    mlist = getMessagesPerUser(lines)
+    clist = getCharactersPerUser(lines)
+    getPie(cid,mlist)
+    bot.send_photo(chat_id=toChat, text="Mesages sent by user:",photo=open("/tmp/"+cid+"_pie.jpg","rb"))
+    
+    '''
+    strts = "Mensajes:\n"
+    for item in mlist:
+        strts = strts + str(item[2])+": "+str(item[1])+" mensajes\n"
+    bot.send_message(chat_id=update.message.chat_id, text=strts)
+
+    
+    bot.send_message(chat_id=update.message.chat_id, text="Frecuencia de mensajes los últimos 7 días:")
+    bio = getMessagesPerDay(update.message.chat_id)
+    bio.seek(0)
+    bot.send_photo(chat_id=update.message.chat_id, photo=bio)
+    bio.close()
+
+    bio = getFreqPerUser(update.message.chat_id)
+    bio.seek(0)
+    bot.send_photo(chat_id=update.message.chat_id, photo=bio)
+    bio.close()
+    '''
+
+    bot.send_message(chat_id=toChat, text="Messages/chars")
+    getLengthPerUser(cid,mlist,clist,lines)
+    bot.send_photo(chat_id=toChat, photo=open("/tmp/"+cid+"_length.jpg","rb"))
+
+    bot.send_message(chat_id=toChat, text="Friendship:")
+    getConnections(cid,lines)
+    bot.send_photo(chat_id=toChat, photo=open("/tmp/"+cid+"_conn.jpg","rb"))
+
+    bot.send_message(chat_id=toChat, text="Message Frequency:")
+    gen_plot(cid,lines)
+    bot.send_photo(chat_id=toChat, photo=open("/tmp/"+cid+"_freq.jpg","rb"))
+
+    bot.send_message(chat_id=toChat, text="Message traffic in the last "+str(days)+" days:")
+    getMessagesOverTime(cid,lines,days)
+    bot.send_photo(chat_id=toChat, photo=open("/tmp/"+cid+"_tl.jpg","rb"))
+
+@run_async
+def stats(bot,update):
+    logging.info("Generating graphs on chat"+str(update.message.chat_id))
+    bot.send_message(chat_id=update.message.chat_id, text="Let me do some numbers, "+update.message.from_user.first_name)
+    
+    if update.message.chat.type=='private':
+        chats = findChats(update.message.from_user.id)
+        for chat in chats:
+            generateStats(bot,chat,update.message.chat_id)
+    else:
+        generateStats(bot,update.message.chat_id,update.message.chat_id)
+
+def getFreqPerUser(lines):
+    datearr = []
+    lastweek = datetime.today() - timedelta(days=7)
+    datecum = []
+    users,realnames = getUsers(lines)
+    for i in range(0,len(users)):
+        for line in lines:
+            strdate = line.split(",")[1]
+            uid = line.split(",")[3]
+            if users[i]==uid:
+                strdate = strdate.split(":")
+                strdate = strdate[0]+":"+strdate[1]
+                dtobj = datetime.strptime(strdate, '%Y-%m-%d %H:%M')
+                #dtobj = datetime.strptime(strdate, '%Y-%m-%d %H:%M:%S')
+                if dtobj > lastweek and dtobj <= datetime.today():
+                    datearr.append(dtobj)
+                    if updateList(dtobj,datecum,1)==False:
+                        datecum.append([dtobj,1])
+        datel = []
+        values = []
+        for item in datecum:
+            datel.append(item[0])
+            values.append(item[1])
+        plt.xticks(rotation=0)
+        ax=plt.gca()
+        xfmt = md.DateFormatter('%H:%M\n%d-%b')
+        ax.xaxis.set_major_formatter(xfmt)
+        plt.plot(datel,values,label=realnames[i],marker='.')
+    #plt.tight_layout()
+    plt.legend()
+    plt.savefig("/tmp/tg_img.jpg", format='jpg')
+    plt.close()
+
+def unknown(bot, update):
+    bot.send_message(chat_id=update.message.chat_id, text="Oops, mi poquito español")
+
+def aliveresp(bot,update):
+
+    mem = memory()
+    load = os.getloadavg()
+
+    with open('/proc/uptime', 'r') as f:
+        uptime_seconds = float(f.readline().split()[0])
+        uptime_string = str(timedelta(seconds = uptime_seconds))
+
+    lognames = [f for f in os.listdir() if os.path.isfile(f)]
+    lognames = [f for f in lognames if f.find(".log")!=-1]
+    
+    timestr = uptime_string.split(".")[0].replace("days","días")
+    texttosend = "I\'m here!"+ \
+    "\nUptime: "+timestr+ \
+    "\nLoad: "+str(load[0])+" "+str(load[1])+" "+str(load[2])+ \
+    "\nRAM: "+str(mem["used"])+" of "+str(mem["total"])+" Mb\n" \
+    +str(len(lognames))+ " chats." 
+    bot.send_message(chat_id=update.message.chat_id, text=texttosend)
+
+    
+def stickstats(bot, update):
+    bot.send_message(chat_id=update.message.chat_id, text="I'm not yet prepared'")
+
+def getMessagesOverTime(cid,lines,md):
+    fig, ax = plt.subplots()
+    vects = []
+    dates = []
+    users,realnames = getUsers(lines)
+    for x in range(0,len(users)):
+        vect = getMessageVectorPerUser(lines,users[x],md)
+        vects.append([item[1] for item in vect])
+        dates = [item[0] for item in vect]
+
+    plt.stackplot(dates,vects,colors=colors[0:len(realnames)])
+    ax.set(xlabel='Date',ylabel='Messages')
+    plt.legend([mpatches.Patch(color=colors[x%len(colors)]) for x in range(0,len(realnames))],realnames)
+    ax.legend(loc=2)
+
+    ax.xaxis.set_major_locator(matplotlib.dates.DayLocator(interval=1))  
+    ax.xaxis.set_major_formatter(DateFormatter('%d\n%b'))  
+
+    plt.savefig("/tmp/"+cid+"_tl.jpg", format='jpg')
+    plt.close()
+    
+def getLengthPerUser(cid,mlist,clist,lines):
+    data = []
+    names = []
+    scatterdata = []
+    users,realnames = getUsers(lines)
+    for i in range(0,len(users)):
+        for mitem in mlist:
+            if(mitem[0]== users[i]):
+                for citem in clist:
+                    if(citem[0]== users[i]):
+                        #print(mitem[1]," msg\t",citem[1]," chars\t",realnames[i])
+                        diff = (1.0*citem[1])/(1.0*mitem[1])
+                        data.append(diff)
+                        scatterdata.append((mitem[1], diff, realnames[i]))
+                        names.append(realnames[i])
+
+    fig, ax = plt.subplots()
+    for item in scatterdata:
+        ax.scatter(item[0],item[1])
+        ax.annotate(item[2], (item[0],item[1]))
+    ax.set_xlabel('Messages')
+    ax.set_ylabel('Message length')
+    plt.savefig("/tmp/"+cid+"_length.jpg", format='jpg')
+    plt.close()
+
+def bash_history_map(lines):
+    otlist = []
+    for line in lines:
+        strdate = line.split(",")[1]
+        tm = time.strptime(strdate, '%Y-%m-%d %H:%M:%S')
+        otlist.append((tm.tm_wday, tm.tm_hour))
+    return otlist
+
+def time_count_reduce(time_list):
+    h = defaultdict(lambda: 0)
+    # return sparse dict of  key - (day, hour) tuples  value - count of tuples
+    for k, g in groupby(sorted(time_list)):
+        h[k] += sum(1 for _ in g)
+    return h
+
+def gen_plot(cid,lines):
+    title = None
+    h = time_count_reduce(bash_history_map(lines))
+
+    data = [[h[x,y] for y in range(24)] for x in range(7)]
+
+    maxvalue = max(max(i) for i in data)
+    maxrender = 325 # seems good enough
+    xs, ys, rs, ss = [], [], [], []
+    for y, d in enumerate(data):
+        for x, n in enumerate(d):
+            xs.append(x)
+            ys.append(y)
+            linear_scale = float(n)/float(maxvalue) * maxrender
+            log_scale = linear_scale**2/maxrender
+            ss.append(log_scale)
+    # create a figure an axes with the same background color
+    fig = plt.figure(figsize=(8, title and 3 or 2.5),facecolor='#efefef')
+    ax = fig.add_subplot('111', axisbg='#efefef')
+    # make the figure margins smaller
+    if title:
+        fig.subplots_adjust(left=0.06, bottom=0.04, right=0.98, top=0.95)
+        ax.set_title(title, y=0.96).set_color('#333333')
+    else:
+        fig.subplots_adjust(left=0.06, bottom=0.08, right=0.98, top=0.99)
+    # don't display the axes frame
+    ax.set_frame_on(False)
+    # plot the punch card data
+    ax.scatter(xs, ys[::-1], s=ss, c='#333333', edgecolor='#333333')
+    # hide the tick lines
+    for line in ax.get_xticklines() + ax.get_yticklines():
+        line.set_alpha(0.0)
+    # draw x and y lines (instead of axes frame)
+    dist = -0.8
+    ax.plot([dist, 24], [dist, dist], c='#999999')
+    ax.plot([dist, dist], [dist, 6.4], c='#999999')
+    # select new axis limits
+    ax.set_xlim(-0.9, 24.5)
+    ax.set_ylim(-0.9, 7)
+    # set tick labels and draw them smaller than normal
+    ax.set_yticks(range(7))
+    for tx in ax.set_yticklabels(days[::-1]):
+        tx.set_color('#555555')
+        tx.set_size(8)
+    ax.set_xticks(range(24))
+    t = '12am|1|2|3|4|5|6|7|8|9|10|11|12pm|1|2|3|4|5|6|7|8|9|10|11'.split('|')
+    for tx in ax.set_xticklabels(t):
+        tx.set_color('#555555')
+        tx.set_size(8.5)
+    # get equal spacing for days and hours
+    ax.set_aspect('equal')
+    # Produce an image.
+    plt.savefig("/tmp/"+cid+"_freq.jpg", format='jpg')
+    plt.close()
+        
+if len(sys.argv) == 2:
+    print("Generating graphs...")
+
+    chatid = sys.argv[1]
+    cid = str(chatid).replace("-","G")
+    of = open(cid,"r")
+    lines = of.readlines()
+    of.close()
+    
+    mlist = getMessagesPerUser(lines)
+    clist = getCharactersPerUser(lines)
+    getPie(cid,mlist)
+
+    
+    '''
+    strts = "Mensajes:\n"
+    for item in mlist:
+        strts = strts + str(item[2])+": "+str(item[1])+" mensajes\n"
+    bot.send_message(chat_id=update.message.chat_id, text=strts)
+
+    getMessagesPerDay(update.message.chat_id)
+    getFreqPerUser(update.message.chat_id)
+
+    '''
+    getLengthPerUser(cid,mlist,clist,lines)
+    getConnections(cid,lines)
+    gen_plot(cid,lines)
+    getMessagesOverTime(cid,lines)
+
+    exit(0)
+    
+coloredlogs.install()
+coloredlogs.DEFAULT_LOG_FORMAT = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+logging.info("Initiating bot...")
+updater = Updater(token=bottoken, workers=2,request_kwargs={'read_timeout': 6, 'connect_timeout': 7})
+dispatcher = updater.dispatcher
+
+logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',level=logging.INFO)
+
+#start_handler = CommandHandler('start', start)
+#dispatcher.add_handler(start_handler)
+
+msg_handler = MessageHandler((~Filters.command), echo)
+dispatcher.add_handler(msg_handler)
+
+stat_handler = CommandHandler('gstats', stats)
+dispatcher.add_handler(stat_handler)
+
+stickstats_handler = CommandHandler('stickers', stickstats)
+dispatcher.add_handler(stickstats_handler)
+
+alive_handler = CommandHandler('alive', aliveresp)
+dispatcher.add_handler(alive_handler)
+
+#unknown_handler = MessageHandler(Filters.command, unknown)
+#dispatcher.add_handler(unknown_handler)
+
+logging.info("Bot started")
+updater.start_polling(poll_interval=2.0)

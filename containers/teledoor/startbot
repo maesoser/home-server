@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+if [ ! -f config.json ]; then
+    echo "No config file"
+    ./teledoor --token "783323965:AAHGecXH26rGIQfBWKogwzsVZMvm2lci9xo"
+else
+    echo "Config file found"
+    ./teledoor --config "config.json"
+fi
