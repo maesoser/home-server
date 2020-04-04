@@ -2,27 +2,92 @@
 
 ## Introduction
 
-## 3th party containers
+I this repo I am going to try to summarize all the configuration that I have on my home server.
 
-## Common containers
+## Containers
+
+```
+    9300      +-------------------+
++-------------+  virgin_exporter  |
+|             +-------------------+
+|
+|   9333      +-------------------+
++-------------+  pihole_exporter  |
+|             +-------------------+
+|
+|   9400      +-----------------+
++-------------+  ping_exporter  |
+|             +-----------------+
+|
+|   9134      +-------------------+
++-------------+  docker_exporter  |
+|             +-------------------+
+|
+|   9797      +-------------+    8080
++-------------+  promrelay  +--------------+
+|             +-------------+              |
+|                                          |
+|                                          |
+|     +--------------+     +----------+    |
+|     |              |9090 |          |3000|
++-----+  prometheus  +-----+ Grafana  +----+
+      |              |     |          |    |
+      +--------------+     +----------+    |
+                                           |
+                           +----------+    |
+                           |          |    |
+                           |   Hugo   +----+
+                           |          |    |  +---------+   +---------------+
+                           +----------+    |  |         |80 |               |
+                                           +--+  nginx  +---+  cloudflared  +->
+          +----------+     +----------+    |  |         |   |               |
+          |          |3306 |          |80  |  +---------+   +---------------+
+          | MariaDB  +-----+  Lychee  +----+
+          |          |     |          |    |
+          +----------+     +----------+    |
+                                           |
+                           +----------+    |
+                           |          |8080|
+                           |  Pihole  +----+
+                           |          |    |
+                           +----------+    |
+                                           |
+                          +-----------+    |
+                          |           |8080|
+                          | httpecho  +----+
+                          |           |8443
+                          +-----------+
+
+```
+
+### 3th party containers
+
+### Common containers
 
 ## Useful functions
 
 ```bash
-function docker-bash() {
+function docker-sh() {
   if [ -z "$1" ]; then
     echo -e "Usage:\n\tdocker-bash <container_name>"
   else
     echo "Logging into container $1"
     docker exec -it $1 /bin/bash
+    if [ $? -ne 0 ]; then
+      echo "Falling back to /bin/sh"
+      docker exec -it $1 /bin/sh
+      echo "Exitcode $?"
+    fi
   fi
 }
 ```
 
 ```bash
 function docker-clean() {
-  docker container prune
-  docker image prune -a
+  echo -e "Deleting stopped containers"
+  docker container prune -f
+  echo -e "Deleting unused images"
+  docker image prune -af
   # docker rmi $(docker images --filter "dangling=true" -q --no-trunc)
 }
 ```
@@ -64,6 +129,10 @@ alias rotatelogs='sudo logrotate -vf /etc/logrotate.conf'
 alias compose-edit="vi $COMPOSECONF"
 alias docker-compose="docker-compose -f $COMPOSECONF"
 alias sizes="du -h --max-depth=1"
+alias dc="docker-compose -f $COMPOSECONF"
+alias d="docker"
+alias debian='docker run -it --name debian --rm debian /bin/bash'
+alias fwlist='sudo iptables -nL --line-numbers'
 ```
 
 ## crontab
@@ -81,7 +150,7 @@ alias sizes="du -h --max-depth=1"
 */3 * * * * /usr/local/bin/temp_exporter
 
 # DNS UPDATE
-*/5 * * * * curl -s -u $EMAIL:$PASSWD "https://now-dns.com/update?hostname=hecuba.vpndns.net" > /tmp/now-dns-last-update 2>&1
+*/5 * * * * curl -s -u $EMAIL:$PASSWD "https://now-dns.com/update?hostname=$HOST" > /tmp/now-dns-last-update 2>&1
 
 # Docker restart services at Saturdays
 15 0 * * 6 /usr/local/bin/docker-compose -f "/media/storage/infra/docker-compose.yml" restart trex crontab > /dev/null 2>&1

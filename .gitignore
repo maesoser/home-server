@@ -1,0 +1,11 @@
+# Ignore docker storage
+docker-data/
+other/
+data/
+
+# Ignore passwords file
+*.env
+*.pem
+*.crt
+config/lychee/lychee/config.php
+config/mariadb/env
