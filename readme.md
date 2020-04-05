@@ -6,7 +6,23 @@ I this repo I am going to try to summarize all the configuration that I have on 
 
 ## Containers
 
+I've several containers running on my home server. Such container are orchestated using a single docker-compose yaml file. As you can infer from the repo, I use the following foder structure to keep everything organized:
+
+- **config:** In this folder I store the configuration files of each container if needed.
+- **data:** In this folder I store the data in use for each container. For instance, the database files on the prometheus container.
+- **containers:** If I need to create a container by myself, the Dockerfile and all the needed files are located under this folder.
+
+Here is an schema of the running containers at the time of writting this.
+
 ```
+              +-------------------+     +-------------------+    +----------+
+              |      cotibot      |     |   selenium-hub    |    |  stocks  |
+              +-------------------+     +-------------------+    +----------+
+
+              +-------------------+     +-------------------+    +----------+
+              |      pihole       |     |  selenium-chrome  |    |   trex   |
+              +-------------------+     +-------------------+    +----------+
+
     9300      +-------------------+
 +-------------+  virgin_exporter  |
 |             +-------------------+
@@ -64,6 +80,8 @@ I this repo I am going to try to summarize all the configuration that I have on 
 
 #### Grafana
 
+Grafana is a famous monitoring solution designed to generate graphics from different data sources like prometheus, elasticsearch, graphite, loki, etc.
+
 #### Prometheus
 
 Prometheus is a well-known TSDB. This service receives data from different local or remote (by using promrelay) exporters.
@@ -80,29 +98,39 @@ Nginx acts as an Edge Router on my configuration, sending the requests to their 
 
 ### Self-made containers
 
-#### ping_exporter
+#### [ping_exporter](https://github.com/maesoser/home-server/tree/master/containers/ping_exporter)
 
 Ping exporter is an exporter for prometheus that perform TCP or ICMP pings.
 
-#### docker_exporter
+#### [docker_exporter](https://github.com/maesoser/home-server/tree/master/containers/docker_exporter)
 
-Exposes metrics related to docker containers.
+Exposes docker container metrics like CPU, memory and network usage, among others.
 
-#### pihole_exporter
+#### [pihole_exporter](https://github.com/maesoser/home-server/tree/master/containers/pihole_exporter)
+
+Exposes metrics about [pihole](https://pi-hole.net/).
 
 #### virgin_exporter
 
+It exposed metrics extracted from Virgin Media Hub router.
+
 #### tplink_exporter
+
+It exposed metrics extracted from tplink router.
 
 #### weather_exporter
 
-#### promrelay
+Weather exporter is an UDP receiver for a custom weather station based on the ESP8266.
 
+#### [promrelay](https://github.com/maesoser/home-server/tree/master/containers/promrelay)
 
+Promrelay is a relay for prometheus exporters that are on another machine and whose metrics needs to be pushed to a prometheus instance instead of being pushed for such instance.
 
 ### Self-made Dockerfiles
 
 #### Cloudflared
+
+[Cloudflared](https://github.com/cloudflare/cloudflared) is a binary created by cloudflare that allow me to expose HTTP services by making use of a technology called [Argo Tunnel](https://www.cloudflare.com/es-es/products/argo-tunnel/). Cloudflare does not offer an official docker image so I created mine.
 
 #### Hugo
 

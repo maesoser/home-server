@@ -2,7 +2,7 @@
 
 ![docker_exporter_img](imgs/docker_exporter.png) 
 
-docker_exporter exposes emtrics related to docker container to a prometheus instance. It was written to be lighter and simpler than [cadvisor](https://github.com/google/cadvisor).
+docker_exporter exposes metrics related to resource utilization from running containers. It was written cause I wanted an alternative lighter and simpler than [cadvisor](https://github.com/google/cadvisor).
 
 It exposes the following metrics:
 
