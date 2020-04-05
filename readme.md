@@ -62,7 +62,53 @@ I this repo I am going to try to summarize all the configuration that I have on 
 
 ### 3th party containers
 
-### Common containers
+#### Grafana
+
+#### Prometheus
+
+Prometheus is a well-known TSDB. This service receives data from different local or remote (by using promrelay) exporters.
+
+#### Lychee
+
+[Lychee](https://lychee.electerious.com/) is a self-hosted photo management service, quite easy to configure and maintain.
+
+#### Nginx
+
+I could use something better integrated with Docker like [traefik](https://docs.traefik.io/) but I find nginx easier to configure and maintain and it is very efficient in terms of resources consumption.
+
+Nginx acts as an Edge Router on my configuration, sending the requests to their corresponding container by making use of the [HTTP Host header](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Host).
+
+### Self-made containers
+
+#### ping_exporter
+
+Ping exporter is an exporter for prometheus that perform TCP or ICMP pings.
+
+#### docker_exporter
+
+Exposes metrics related to docker containers.
+
+#### pihole_exporter
+
+#### virgin_exporter
+
+#### tplink_exporter
+
+#### weather_exporter
+
+#### promrelay
+
+
+
+### Self-made Dockerfiles
+
+#### Cloudflared
+
+#### Hugo
+
+#### Jupyter
+
+
 
 ## Useful functions
 
@@ -138,7 +184,7 @@ alias fwlist='sudo iptables -nL --line-numbers'
 ## crontab
 
 
-```
+```bash
 # clean-up and backup
 15 0 * * 1 docker image prune -af
 30 0 * * 1 nocache rsync -avC --delete --exclude '.local' --exclude '.go' --exclude '.cache' --exclude 'go' /home/user/ /media/backup/home/ > /tmp/home-backup.log 2>&1
@@ -157,6 +203,8 @@ alias fwlist='sudo iptables -nL --line-numbers'
 ```
 
 ## Scripts
+
+#### ddns
 
 ```
 
