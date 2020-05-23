@@ -1,0 +1,2 @@
+go-bindata -pkg main -o assets.go assets/
+go build

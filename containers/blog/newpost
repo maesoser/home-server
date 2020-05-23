@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+POSTS_PATH="/media/storage/config/blog/posts"
+DATESTR=$(date +%d%m%Y)
+TIMESTR=$(date +'%d-%m-%Y %H:%M')
+
+cd $POSTS_PATH
+
+mkdir "${DATESTR}_$1"
+echo "---" > "${DATESTR}_$1"/post.md
+echo "title: $1" >> "${DATESTR}_$1"/post.md
+echo "date: $TIMESTR" >> "${DATESTR}_$1"/post.md
+echo "draft: true" >> "${DATESTR}_$1"/post.md
+echo "tags: tobeclassified, draft" >> "${DATESTR}_$1"/post.md
+echo "---" >> "${DATESTR}_$1"/post.md
+nano "${DATESTR}_$1"/post.md
+cd -

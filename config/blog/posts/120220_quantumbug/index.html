@@ -1,0 +1,60 @@
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+    <meta charset="UTF-8">
+    <title>Quantenverschränkung, la circustancia que provocará el efecto 2000 del futuro.</title>
+    <link rel='stylesheet' href='https://rawgit.com/mblode/marx/master/css/marx.min.css'>
+    <style> main {  max-width: 1200px; } img { display: block; margin-left: auto; margin-right: auto; }</style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.0.3/styles/tomorrow.min.css">
+    <style> .hljs { background: #F6F8FA; } </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.0.3/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+  </head>
+  <body>
+    <main>
+      <center class="hero">
+        <h1><a href="/">Tidy Bits</a></h1>
+        <h3 id="tagline">The blog where I tell my geek adventures</h3>
+      </center>
+      <h1>Quantenverschränkung, la circustancia que provocará el efecto 2000 del futuro.</h1><br>
+      <p>¿Os acordáis del efecto 2000? Ese bug apocalíptico que según la tele estuvo a punto de poner en jaque nuestros sistemas informáticos la noche del 31 de diciembre de 1999.</p>
+
+<p><a href="http://www.youtube.com/watch?v=Lf2eT8kmunE" target="_blank"><img src="http://img.youtube.com/vi/Lf2eT8kmunE/0.jpg" alt="Efecto2000" /></a></p>
+
+<p>El problema se daba en programas que se habían construido bajo una premisa específica, que dichos sistemas jamás iban a utilizarse más allá del siglo XX. Eso permitía a los programadores guardar el año en dos dígitos en vez de en cuatro, y obtener un ahorro de memoria considerable en aquella época.</p>
+
+<p>Yo era bastante pequeño, pero recuerdo que al ver las noticias en la tele me dio la sensación de que nos habíamos dado cuenta ese mismo año de esa circunstancia tan peligrosa. Y lo cierto es que ya desde finales de los 80, <a href="https://www.independent.co.uk/news/obituaries/bob-bemer-550018.html" target="_blank">algunos incluso antes</a>, la industria del software había empezado a tomar medidas de cara al nuevo milenio.</p>
+
+<p>Tendremos otros pequeños sustos en el futuro. Uno de ellos ocurrirá en el <a href="https://en.wikipedia.org/wiki/Year_2038_problem" target="_blank">año 2038</a> cuando el contador de 32 bit que se usa en algunos sistemas operativos para guardar la fecha se desborde. Pero otro bastante más serio <em>y mucho más molón</em> podría tener lugar en el momento en el que nuestras comunicaciones dejen de usar la física convencional y empecemos a desplegar sistemas de comunicación basados en física cuántica.</p>
+
+<p>Seguro que os suena escuchar de cuando en cuando alguna noticia sobre un equipo de física que ha <a href="https://www.technologyreview.com/s/608252/first-object-teleported-from-earth-to-orbit/" target="_blank">logrado teletransportar algo</a>. Detrás de esos titulares tan impactantes en los que yo siempre espero encontrarme una apasionante historia sobre teletransportar un conejo o un coche suelen esconderse artículos algo vagos y aburridos que en mi opinión no logran captar lo verdaderamente interesante del asunto.</p>
+
+<p><img src="https://media.giphy.com/media/nYaRWwyG9qAH6/giphy.gif" alt="star_trek_teleportation" /></p>
+
+<p>Porque al final, tras leerlo te enteras que lo único que han conseguido es transmitir de de una partícula elemental a otra el momento de espín, o alguna otra propiedad física, extraña y desconocida para la mayoría de nosotros. ¿Qué tiene eso de utilidad? Y lo que nos interesa en este artículo ¿En qué puede afectar eso a nuestras telecomunicaciones?</p>
+
+<p>Con lo que estos equipos de físicos están realmente experimentando es con una propiedad hipotética que tendrían las partículas elementales llamada entrelazamiento. Según esa propiedad, todas las partículas pertenecientes a un mismo sistema cuántico compartirían ciertas características físicas. Un cambio de una de esas características en una partícula de ese sistema provocará que todas las demás partículas cambien también. Y de forma <strong>instantánea</strong>.</p>
+
+<p>Muy pocos protocolos en Internet están preparados para esta situación, en especial los <a href="https://en.wikipedia.org/wiki/TCP_congestion_control#Compound_TCP" target="_blank">algoritmos de control de congestión</a> que se encargan de regular la velocidad a la que se transmite la información desde un ordenador para impedir saturar al receptor.</p>
+
+<p>Algunos de ellos, como <a href="https://tools.ietf.org/html/rfc6817" target="_blank">LedBat</a>, intentan molestar lo menos posible al resto de comunicaciones de la red, teniendo en cuenta en sus cálculos el tiempo que pasa entre enviar un mensaje y recibir confirmación de que ha sido recibido. Esa medida se llama Round Trip Time (RTT). En una red cuántica, este RTT podría llegar a ser 0, lo que provocaría que LedBat enviara más tráfico del que la red pudiera soportar. LedBat se usa en la actualidad en la red torrent y para descargar actualizaciones en segundo plano en algunos sistemas operativos.</p>
+
+<p>Otro protocolo que vería aumentada su agresividad sería CompoundTCP, el algoritmo de control de congestión de Windows, o <a href="https://blog.apnic.net/2020/01/10/when-to-use-and-not-use-bbr/" target="_blank">BBR</a>, el prometedor algoritmo que usa Google para transmitir los videos de youtube.</p>
+
+<p>Pero tranquilos, a pesar de que la cuenta atrás ya ha empezado, se cree que la gran mayoría del tráfico basado en TCP resistiría este cambio y seguiría funcionando, aunque no de forma óptima.</p>
+
+<h2 id="referencias">Referencias</h2>
+
+<p><a href="https://www.rfc-editor.org/rfc/rfc8774.txt" target="_blank">The Quantum Bug</a></p>
+
+<p><a href="https://tools.ietf.org/html/rfc6921" target="_blank">Design Considerations for Faster-Than-Light (FTL) Communication</a></p>
+
+<p><a href="https://www.youtube.com/watch?v=Vwvix4ahHEk" target="_blank">https://www.youtube.com/watch?v=Vwvix4ahHEk</a></p>
+
+      <footer>
+        <p>&copy; 2020 &middot; <a href="https://github.com/maesoser" target="_blank">Maesoser</a></p>
+      </footer>
+    </main>
+  </body>
+</html>

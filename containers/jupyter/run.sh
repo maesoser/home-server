@@ -26,8 +26,11 @@ fi
 if [ -z "$JUPYTER_NBDIR" ]; then
     export JUPYTER_NBDIR=/jupyter/Notebooks
 fi
+if [ ! -d "$JUPYTER_NBDIR" ]; then
+  mkdir -p "JUPYTER_NBDIR"
+fi
+
 echo "c.NotebookApp.notebook_dir = $JUPYTER_NBDIR" >> $RESULT_CONFIG
 
 echo "Starting Jupyter notebook"
 $JUPYTER_BIN notebook --config=$RESULT_CONFIG
-

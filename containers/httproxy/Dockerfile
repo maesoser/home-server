@@ -10,4 +10,6 @@ RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -ldflags '-extldflag
 # Create docker
 FROM scratch
 COPY --from=builder /server /app/server
+RUN adduser -D httproxy
+USER httproxy
 ENTRYPOINT ["/app/server"]

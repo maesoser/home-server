@@ -1,0 +1,315 @@
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+    <meta charset="UTF-8">
+    <title>Installing opnSense firewall on KVM</title>
+    <link rel='stylesheet' href='https://rawgit.com/mblode/marx/master/css/marx.min.css'>
+    <style> main {  max-width: 1200px; } img { display: block; margin-left: auto; margin-right: auto; }</style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.0.3/styles/tomorrow.min.css">
+    <style> .hljs { background: #F6F8FA; } </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.0.3/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+  </head>
+  <body>
+    <main>
+      <center class="hero">
+        <h1><a href="/">Tidy Bits</a></h1>
+        <h3 id="tagline">The blog where I tell my geek adventures</h3>
+      </center>
+      <h1>Installing opnSense firewall on KVM</h1><br>
+      <p>A couple of months ago I impulsively bought an inexpensive <a href="https://es.aliexpress.com/item/32856202817.html?spm=a219c.search0302.3.23.164c2f65OWW0WN&amp;ws_ab_test=searchweb0_0,searchweb201602_0,searchweb201603_0,ppcSwitch_0&amp;algo_pvid=226d034f-15bc-4a39-ada7-bbf9baf3614e&amp;algo_expid=226d034f-15bc-4a39-ada7-bbf9baf3614e-3" target="_blank">x86 router</a>. It is not really well fitted for anything professional. The processor  is just a low end dual core Intel 1007u that does not have neither  AES-NI nor SRIOV so it is more like a 10 years old computer with a lot  of network interfaces than a real router. The good thing is that it is  fanless and although it is definitely not performant at all, it would  allow me to play with virtualization, firewalls, software defined  networking and all of that things.</p>
+
+<p><img src="router.png" alt="router_image" /></p>
+
+<p>After trying <a href="https://fd.io" target="_blank">FD.io</a> and <a href="https://www.pfsense.org" target="_blank">pfsense</a> I end up installing <a href="https://opnsense.org/" target="_blank">OPNsense</a>. I really enjoyed playing with it but I had the feeling that I was  wasting memory and disk resources by just filtering packets with it. So I decided to virtualize it and use the remaining resources to add more  features like a backup service or an IoT gateway.</p>
+
+<p>As the device  has six NICs and my idea is to use it at home, I am going to configure  one interface for the WAN, four of them for LAN access and the last one  will remain connected to the host to allow management access.</p>
+
+<pre><code class="language-bash">      +--------------------------------------------------------------------------+
+      |                                                                          |
+      |  +--------+  +--------+  +--------+  +--------+  +--------+  +--------+  |
+      |  |        |  |        |  |        |  |        |  |        |  |        |  |
+      |  | enp6s0 |  | enp5s0 |  | enp4s0 |  | enp3s0 |  | enp2s0 |  | enp1s0 |  |
+      |  | (WAN)  |  | (LAN)  |  | (LAN)  |  | (LAN)  |  | (LAN)  |  | (MGMT) |  |
+      |  +--------+  +--------+  +--------+  +--------+  +--------+  +--------+  |
+      |                                                                          |
+      +--------------------------------------------------------------------------+
+</code></pre>
+
+<p>In order to not to waste any interface, we will configure the host to  forward all the traffic to the OPNsense virtual machine. By doing that,  we will be able to use management interface to get Internet access and  still be protected through the firewall. The logical configuration will  look like the following:</p>
+
+<pre><code class="language-bash">          +--------+
+          |        |
+        +-+ enp6s0 +------------------------+
+        | |        |                        |
+        | +--------+   WANBR                |
+        |                        +-------+  |
+        +------------------------+       +--+
+                                 | vnet1 | (NAT)
+        +------------------------+       +--+
+        |                        +-------+  |
+        |            Opnsense VM            |
+        |  +-------+                        |
+        +--+       +------------------------+
+           | vnet0 |
++----------+       +--------------------------------------+
+|          +-------+                         10.10.10.0/24|
+|                     LANBR                               |
+|                                                         |
+|  +--------+ +--------+ +--------+ +--------+  +-------+ |
++--+        | |        | |        | |        +--+       +-+
+   | enp5s0 | | enp4s0 | | enp3s0 | | enp2s0 |  | veth1 |
+   |        | |        | |        | |        |  |       |
+   +--------+ +--------+ +--------+ +--------+  +-------+
+                                                   ||                    
+                                                +-------+      +--------+
+                                                |       |      |        |10.10.11.1/24
+                                           (NAT)| veth0 +------+ enp1s0 |
+                                      10.10.10.2|       |      |        |
+                                                +-------+      +--------+
+</code></pre>
+
+<p>So let&rsquo;s get the ball rolling. After installing debian we will  download some needed packages and configure our user to execute commands as root.</p>
+
+<pre><code>apt update
+apt upgrade -y
+apt install -y tmux htop libvirt-daemon-system \
+  qemu-kvm libvirt-clients bridge-utils libguestfs-tools \
+  genisoimage virtinst libosinfo-bin sudo
+
+echo &quot;$USER ALL=(ALL) NOPASSWD: ALL&quot; &gt; /etc/sudoers.d/$USER
+chmod 0440 /etc/sudoers.d/$USER
+</code></pre>
+
+<p>We will also need to configure our system to forward IP packets:</p>
+
+<pre><code class="language-bash">sudo echo &quot;net.ipv4.ip_forward=1&quot; &gt;&gt; /etc/sysctl.conf
+</code></pre>
+
+<p>From a networking perspective, inside our host we will have three main components:</p>
+
+<ul>
+<li>The LAN bridge.</li>
+<li>The WAN bridge.</li>
+<li>The management interface</li>
+</ul>
+
+<p>The WAN bridge will connect the physical <code>enp6s0</code> interface with out virtual  machine. It is pretty straight forward to configure. We just need to add an anonymous bridge on <code>/etc/network/interfaces</code> .</p>
+
+<pre><code class="language-bash"># WAN interface
+allow-hotplug enp6s0
+iface enp1s0 inet manual
+
+# WAN bridge 
+auto wanbr
+iface wanbr inet manual
+  bridge_ports enp6s0
+  bridge_waitport 0    # no delay before a port becomes available
+  bridge_fd 0          # no forwarding delay
+  bridge_maxwait 0
+</code></pre>
+
+<p>Now let&rsquo;s configure the LAN bridge. As you&rsquo;ve seen on the previous  diagram, that bridge will have four physical interfaces and one virtual  interface called <a href="http://man7.org/linux/man-pages/man4/veth.4.html" target="_blank">Virtual Ethernet or Veth</a>. These interfaces are commonly used to move traffic between namespaces  (i.e. provide internet access to a container) or connect bridges. They  are basically a virtual Ethernet wire. We will use it here to connect  our management interface (<code>enp1s0</code>) to the firewall by using NAT, as the  management interface and the LAN bridge are different networks. This  approach will give us several advantages:</p>
+
+<ul>
+<li>If OPNsense is unavailable we still have access to the host.</li>
+<li>Traffic from the host or the management interface is still going through the firewall and being protected.</li>
+<li>Access to the firewall&rsquo;s dashboard is available from the management interface.</li>
+<li>Services from the host will be available also on the LAN subnet, as the host has an IP address there.</li>
+</ul>
+
+<p>Adding a Veth pair is pretty straight forward:</p>
+
+<pre><code class="language-bash">ip link add veth0 type veth peer name veth1
+</code></pre>
+
+<p>We will configure an IP inside the address space of our OPNsense LAN subnet on <code>veth0</code>. Veth1 will be added to the LAN bridge.</p>
+
+<pre><code class="language-bash">ip addr add 10.10.10.2/24 dev veth0
+</code></pre>
+
+<p>As the host subnet is not the same as the one configured on the OPNsense LAN network, we will add an static route to forward all the packets to  firewall LAN gateway through <code>veth0</code>. As the management subnet and the LAN subnet are different, we will also configure a NAT rule on <code>veth0</code>.</p>
+
+<pre><code class="language-bash">  pre-up ip route add default via 10.10.10.1 dev veth0
+  pre-up iptables -t nat -A POSTROUTING -o veth0 -j MASQUERADE
+</code></pre>
+
+<p>All of these changes will look like that on the /etc/network/interfaces file:</p>
+
+<pre><code class="language-bash"># LAN interfaces
+allow-hotplug enp2s0
+iface enp1s0 inet manual
+
+allow-hotplug enp3s0
+iface enp1s0 inet manual
+
+allow-hotplug enp4s0
+iface enp1s0 inet manual
+
+allow-hotplug enp5s0
+iface enp1s0 inet manual
+
+# LAN Bridge
+auto lanbr
+iface lanbr inet manual
+  pre-up ip link add veth0 type veth peer name veth1
+  pre-up ip addr add 10.10.10.2/24 dev veth0
+  pre-up ip link set veth0 up
+  pre-up ip link set veth1 up
+  pre-up ip route add default via 10.10.10.1 dev veth0
+  pre-up iptables -t nat -A POSTROUTING -o veth0 -j MASQUERADE
+  bridge_ports enp2s0 enp3s0 enp4s0 enp5s0 veth1
+  bridge_waitport 0    # no delay before a port becomes available
+  bridge_fd 0          # no forwarding delay
+  bridge_maxwait 0
+  bridge_stp on
+</code></pre>
+
+<p>And finally, let&rsquo;s configure the management interface with an static IP.</p>
+
+<pre><code class="language-bash"># Managing Network interface
+allow-hotplug enp1s0
+iface enp1s0 inet static
+  address 10.10.11.1
+  netmask 255.255.255.0
+</code></pre>
+
+<p>We will also configure <a href="https://help.ubuntu.com/community/isc-dhcp-server" target="_blank">isc-dhcp-server</a> on the host. To do so we first will need to adjust in which interfaces this server is listening:</p>
+
+<pre><code class="language-bash">sudo echo 'INTERFACESv4=&quot;enp1s0&quot;'' &gt; /etc/default/isc-dhcp-server
+</code></pre>
+
+<p>Then we will add the network lease information on <code>/etc/dhcp/dhcpd.conf</code>:</p>
+
+<pre><code class="language-bash">option domain-name &quot;hyperion.local&quot;;
+option domain-name-servers 1.1.1.1, 8.8.8.8;
+
+default-lease-time 600;
+max-lease-time 7200;
+
+# The server won't attempt to do a DNS update when a lease is confirmed.
+ddns-update-style none;
+
+# This DHCP server is the official server for the local
+authoritative;
+
+# Subnet offered on the management interface 
+subnet 10.10.11.0 netmask 255.255.255.0 {
+  range 10.10.11.24 10.10.11.128;
+  option routers 10.10.11.1;
+}
+</code></pre>
+
+<p>After finishing applying all these network changes we need to boot up OPNsense to see if it works. We will download OPNsense nano image and  increase the size of the image to 8Gb as we don&rsquo;t want to run out of  space. The nano flavor of OPNsense is intended to be installed on an USB drive or a CF card and works straight away without installing it so it  is perfect for our use case.</p>
+
+<pre><code class="language-bash">wget https://opn.sense.nz/releases/20.1/OPNsense-20.1-OpenSSL-nano-amd64.img.bz2
+bzip2 -d OPNsense-20.1-OpenSSL-nano-amd64.img.bz2
+qemu-img convert -f raw -O qcow2 OPNsense-20.1-OpenSSL-nano-amd64.img OPNsense-20.1-OpenSSL-nano-amd64.qcow2
+qemu-img resize OPNsense-20.1-OpenSSL-nano-amd64.qcow2 +8G
+mv /home/sierra/OPNsense-20.1-OpenSSL-nano-amd64.qcow2 /var/lib/libvirt/images/opnsense201.qcow
+</code></pre>
+
+<p>Now we will configure the domain xml file that define our virtual  firewall. We will give 1gb of ram and one core to the guest OS. We will  also connect it to both the LAN bridge and the WAN bridge. There is no  need to add anything else to the definition.</p>
+
+<pre><code class="language-xml">&lt;domain type='kvm'&gt;
+  &lt;name&gt;opnsense&lt;/name&gt;
+  &lt;memory unit='MiB'&gt;1024&lt;/memory&gt;
+  &lt;currentMemory unit='MiB'&gt;1024&lt;/currentMemory&gt;
+  &lt;vcpu&gt;1&lt;/vcpu&gt;
+  &lt;os&gt;
+    &lt;type arch='x86_64'&gt;hvm&lt;/type&gt;
+    &lt;boot dev='hd'/&gt;
+  &lt;/os&gt;
+  &lt;features&gt;&lt;acpi/&gt;&lt;apic/&gt;&lt;pae/&gt;&lt;/features&gt;
+  &lt;clock offset='utc'/&gt;
+  &lt;on_poweroff&gt;destroy&lt;/on_poweroff&gt;
+  &lt;on_reboot&gt;restart&lt;/on_reboot&gt;
+  &lt;on_crash&gt;restart&lt;/on_crash&gt;
+  &lt;devices&gt;
+    &lt;emulator&gt;/usr/bin/qemu-system-x86_64&lt;/emulator&gt;
+    &lt;controller type='pci' index='0' model='pci-root'/&gt;
+    &lt;disk type='file' device='disk'&gt;
+      &lt;driver name='qemu' type='qcow2' cache='none'/&gt;
+      &lt;source file='/var/lib/libvirt/images/opnsense201.qcow2'/&gt;
+      &lt;target dev='vda' bus='virtio'/&gt;
+    &lt;/disk&gt;
+    &lt;interface type='bridge'&gt;
+      &lt;source bridge='lanbr'/&gt;
+      &lt;model type='virtio'/&gt;
+      &lt;alias name='lanbr'/&gt;
+    &lt;/interface&gt;
+    &lt;interface type='bridge'&gt;
+      &lt;source bridge='wanbr'/&gt;
+      &lt;model type='virtio'/&gt;
+      &lt;alias name='wanbr'/&gt;
+    &lt;/interface&gt;
+    &lt;serial type='pty'&gt;&lt;target port='0'/&gt;&lt;/serial&gt;
+    &lt;console type='pty'&gt;&lt;target port='0'/&gt;&lt;/console&gt;
+    &lt;memballoon model='none'&gt;&lt;/memballoon&gt;
+  &lt;/devices&gt;
+&lt;/domain&gt;
+</code></pre>
+
+<p>In order to test it we will define and launch the virtual machine:</p>
+
+<pre><code class="language-bash">sudo virsh define opnsense.xml
+sudo virs list --all
+sudo virsh start opnsense
+</code></pre>
+
+<p>We should see something like the following if we connect to the console:</p>
+
+<p><img src="console_1.png" alt="console_1" /></p>
+
+<p>The first time we boot up OPNsense it will configure automatically  the interfaces if we do not interrupt the boot up process. Interface <code>vtnet0</code> will be configured as LAN interface and <code>vtnet1</code> will be configured as WAN interface, just as we wrote on the domain definition file.</p>
+
+<p><img src="console_2.png" alt="console_2" /></p>
+
+<p>After doing that we should need to connect to the firewall to adjust  some settings like the subnet addressing. We can do that from the  console or by using the web dashboard.</p>
+
+<p><img src="dashboard.png" alt="dashboard" /></p>
+
+<p>Once we finished with the setup we need to tell libvirt to start the VM at boot time:</p>
+
+<pre><code class="language-bash">sudo virsh autostart opnsense
+</code></pre>
+
+<p>Now that we have all the base system installed we can install <a href="https://docs.docker.com/get-docker/" target="_blank">docker</a> and <a href="https://docs.docker.com/compose/" target="_blank">docker-compose</a> and add additional services to our home router like <a href="https://pi-hole.net/" target="_blank">pi-hole</a> or <a href="https://www.duplicati.com/" target="_blank">duplicati</a>. But that will be covered on another post. That&rsquo;s all for today, Folks!</p>
+
+<p><img src="thatsall.jpeg" alt="thatsallfolks" /></p>
+
+<h3 id="things-to-improve"><strong>Things to improve</strong></h3>
+
+<p>LAN side bridge configured on the host has references to the subnet configured on OPNsense. I  would like to be able to modify network addressing on the guest without  modifying anything on the host. I still need to investigate how to do  that.</p>
+
+<p>As OPNsense exposes an <a href="https://docs.opnsense.org/development/api.html" target="_blank">API</a>, maybe a service that would be able to check the health of the virtual  machine, redeploy it if needed and configure it automatically if changes are detected either on the host or on the guest OS would solve that  issue.</p>
+
+<h2 id="references">References</h2>
+
+<ul>
+<li><p><a href="https://developer.ibm.com/linuxonpower/2018/07/25/enabling-pci-pass-guest-using-libvirt-daemon/" target="_blank">Enabling PCI passtrhough</a></p></li>
+
+<li><p><a href="https://wiki.alpinelinux.org/wiki/KVM" target="_blank">Alpine KVM</a></p></li>
+
+<li><p><a href="https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/6/html/virtualization_administration_guide" target="_blank">Virtualization Administration Guide</a></p></li>
+
+<li><p><a href="https://wiki.archlinux.org/index.php/PCI_passthrough_via_OVMF" target="_blank">PCI passthrough via OVMF</a></p></li>
+
+<li><p><a href="https://developers.redhat.com/blog/2018/10/22/introduction-to-linux-interfaces-for-virtual-networking/" target="_blank">Introduction to Linux interfaces</a></p></li>
+
+<li><p><a href="https://linux-blog.anracom.com/tag/linux-bridge-linking/" target="_blank">Fun with veth devices</a></p></li>
+
+<li><p><a href="https://wiki.debian.org/BridgeNetworkConnections" target="_blank">Bridge Network Connections</a></p></li>
+
+<li><p><a href="https://paulgorman.org/technical/linux-bridges-and-virtual-networking.txt.html" target="_blank">Linux Bridges and Virtual Networking</a></p></li>
+
+<li><p><a href="https://paulgorman.org/technical/linux-bridges-and-virtual-networking.txt.html)" target="_blank">https://paulgorman.org/technical/linux-bridges-and-virtual-networking.txt.html)</a></p></li>
+</ul>
+
+      <footer>
+        <p>&copy; 2020 &middot; <a href="https://github.com/maesoser" target="_blank">Maesoser</a></p>
+      </footer>
+    </main>
+  </body>
+</html>

@@ -40,7 +40,7 @@
       "fill": 1,
       "fillGradient": 0,
       "gridPos": {
-        "h": 10,
+        "h": 8,
         "w": 12,
         "x": 0,
         "y": 1
@@ -78,18 +78,18 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "8*idelta(crisipo_tplink_wan_rx_kbytes[15m])/ 900 >=0",
+          "expr": "- (8*idelta(crisipo_tplink_wan_rx_kbytes[15m])/ 900 >=0)",
           "format": "time_series",
           "intervalFactor": 1,
-          "legendFormat": "RX",
+          "legendFormat": "Download",
           "refId": "A"
         },
         {
-          "expr": "8*idelta(crisipo_tplink_wan_tx_kbytes[15m])/900 >=0",
+          "expr": "(8*idelta(crisipo_tplink_wan_tx_kbytes[15m])/900 >=0)",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
-          "legendFormat": "TX",
+          "legendFormat": "Upload",
           "refId": "B"
         }
       ],
@@ -118,7 +118,7 @@
           "label": null,
           "logBase": 1,
           "max": null,
-          "min": "0",
+          "min": null,
           "show": true
         },
         {
@@ -144,7 +144,7 @@
       "fill": 0,
       "fillGradient": 0,
       "gridPos": {
-        "h": 10,
+        "h": 9,
         "w": 12,
         "x": 12,
         "y": 1
@@ -155,7 +155,7 @@
         "avg": false,
         "current": false,
         "hideEmpty": true,
-        "hideZero": false,
+        "hideZero": true,
         "max": false,
         "min": false,
         "show": true,
@@ -180,7 +180,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "crisipo_tplink_lan_lease_seconds",
+          "expr": "avg_over_time(crisipo_tplink_lan_lease_seconds[5m])",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
@@ -239,24 +239,28 @@
       "fill": 1,
       "fillGradient": 0,
       "gridPos": {
-        "h": 9,
+        "h": 8,
         "w": 24,
         "x": 0,
-        "y": 11
+        "y": 10
       },
       "hiddenSeries": false,
       "id": 6,
       "interval": "",
       "legend": {
-        "avg": false,
+        "alignAsTable": true,
+        "avg": true,
         "current": false,
         "hideEmpty": true,
-        "hideZero": false,
+        "hideZero": true,
         "max": false,
         "min": false,
+        "rightSide": true,
         "show": true,
+        "sort": "avg",
+        "sortDesc": true,
         "total": false,
-        "values": false
+        "values": true
       },
       "lines": true,
       "linewidth": 1,
@@ -280,7 +284,7 @@
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
-          "legendFormat": "{{name}}",
+          "legendFormat": "{{ip}} ({{name}})",
           "refId": "A"
         }
       ],
@@ -334,7 +338,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 20
+        "y": 18
       },
       "id": 27,
       "panels": [],
@@ -350,10 +354,10 @@
       "fill": 1,
       "fillGradient": 0,
       "gridPos": {
-        "h": 10,
+        "h": 8,
         "w": 12,
         "x": 0,
-        "y": 21
+        "y": 19
       },
       "hiddenSeries": false,
       "id": 15,
@@ -474,10 +478,10 @@
       "fill": 1,
       "fillGradient": 0,
       "gridPos": {
-        "h": 10,
+        "h": 8,
         "w": 12,
         "x": 12,
-        "y": 21
+        "y": 19
       },
       "hiddenSeries": false,
       "id": 10,
@@ -577,7 +581,7 @@
     "list": []
   },
   "time": {
-    "from": "now-30m",
+    "from": "now-24h",
     "to": "now"
   },
   "timepicker": {
@@ -601,5 +605,5 @@
   "timezone": "",
   "title": "Internet (Madrid)",
   "uid": "YX9iXrkgk",
-  "version": 2
+  "version": 20806
 }

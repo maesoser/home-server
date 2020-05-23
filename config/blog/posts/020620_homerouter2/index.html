@@ -1,0 +1,73 @@
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+    <meta charset="UTF-8">
+    <title>Adding more capabilities to my router with virtualized firewall</title>
+    <link rel='stylesheet' href='https://rawgit.com/mblode/marx/master/css/marx.min.css'>
+    <style> main {  max-width: 1200px; } img { display: block; margin-left: auto; margin-right: auto; }</style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.0.3/styles/tomorrow.min.css">
+    <style> .hljs { background: #F6F8FA; } </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.0.3/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+  </head>
+  <body>
+    <main>
+      <center class="hero">
+        <h1><a href="/">Tidy Bits</a></h1>
+        <h3 id="tagline">The blog where I tell my geek adventures</h3>
+      </center>
+      <h1>Adding more capabilities to my router with virtualized firewall</h1><br>
+      <h2 id="fwmgrd">fwmgrd</h2>
+
+<p>Is an utility that manages the firewall vm:</p>
+
+<ul>
+<li>Get its status</li>
+<li>Stop/start the Firewall</li>
+</ul>
+
+<pre><code>{
+  status: &quot;BOOTSTRAPED&quot;,
+  healthy: true
+  cpu_pcnt: 34,
+  mem_pcnt: 57,
+  disk_pcnt: 43,
+  disk_read: 1,
+  disk_write: 414
+  wan_tx: 0,
+  wan_rx: 15,
+  lan_tx: 124,
+  lan_rx: 345,
+  image_url: &quot;https://repo.souvlaki.cf/images/opnsense.tar.gz&quot;  
+  lan_subnet: &quot;192.168.0.17&quot;
+}
+</code></pre>
+
+<p>The different status the VM could have are:
+  - UNCONFIGURED: There is no image_url so the vm is undeployed
+  - DOWNLOADING: The image_url has been added or modified and the router is downloading the image from internet
+  - UNDEPLOYED: The image has been downloaded, it is being copied and it is currently not configured
+  - DEPLOYING: The image is being started, configured and then restarted with the right interfaces
+  - RUNNING: The image is configured and running
+  - STOPPED: The image is configured and it is stopped
+  - ERROR: There is an error</p>
+
+<h2 id="metricd">metricd</h2>
+
+<p>Gets statistics about the router</p>
+
+<h2 id="dockermgrd">dockermgrd</h2>
+
+<p>Starts/Stops/config containers</p>
+
+<h2 id="apigwd">apigwd</h2>
+
+<p>communicates the different services with the command an control servers</p>
+
+      <footer>
+        <p>&copy; 2020 &middot; <a href="https://github.com/maesoser" target="_blank">Maesoser</a></p>
+      </footer>
+    </main>
+  </body>
+</html>

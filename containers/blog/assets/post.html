@@ -1,0 +1,27 @@
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+    <meta charset="UTF-8">
+    <title>{{.Title}}</title>
+    <link rel='stylesheet' href='https://rawgit.com/mblode/marx/master/css/marx.min.css'>
+    <style> main {  max-width: 1200px; } img { display: block; margin-left: auto; margin-right: auto; }</style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.0.3/styles/tomorrow.min.css">
+    <style> .hljs { background: #F6F8FA; } </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.0.3/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+  </head>
+  <body>
+    <main>
+      <center class="hero">
+        <h1><a href="/">{{.Blog.Title}}</a></h1>
+        <h3 id="tagline">{{.Blog.Subtitle}}</h3>
+      </center>
+      <h1>{{.Title}}</h1><br>
+      {{.Content}}
+      <footer>
+        <p>&copy; {{.Blog.Year}} &middot; <a href="{{.Blog.AuthorURL}}" target="_blank">{{.Blog.Author}}</a></p>
+      </footer>
+    </main>
+  </body>
+</html>

@@ -1,0 +1,143 @@
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+    <meta charset="UTF-8">
+    <title>Para qué hacerlo fácil si puedes complicarte sin motivo: El nacimiento de Blog</title>
+    <link rel='stylesheet' href='https://rawgit.com/mblode/marx/master/css/marx.min.css'>
+    <style> main {  max-width: 1200px; } img { display: block; margin-left: auto; margin-right: auto; }</style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.0.3/styles/tomorrow.min.css">
+    <style> .hljs { background: #F6F8FA; } </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.0.3/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+  </head>
+  <body>
+    <main>
+      <center class="hero">
+        <h1><a href="/">Tidy Bits</a></h1>
+        <h3 id="tagline">The blog where I tell my geek adventures</h3>
+      </center>
+      <h1>Para qué hacerlo fácil si puedes complicarte sin motivo: El nacimiento de Blog</h1><br>
+      <p>Llevo varios años queriendo hacer un blog. Entre la vaguería y la desidia todos esos proyectos han acabado languideciendo conteniendo apenas un par de artículos mediocremente escritos. En este tercer intento me he propuesto empezar de forma diferente. Dándole vueltas sobre la forma ideal de comenzarlo, alguna manera para evitar no cumplir mi objetivo. Soy muy poco disciplinado y tampoco soy demasiado bueno redactando, pero no se me da mal programar. ¿Por qué no, antes de escribir un blog, <em>escribo</em> un blog?</p>
+
+<p>Es por eso que, a pesar de la <a href="https://www.staticgen.com" target="_blank">multitud de opciones disponibles</a> para generar y servir una página web estática, he decidido crear mi pequeña utilidad para esta tarea: Blog.</p>
+
+<h4 id="blog-es-simple">Blog es simple</h4>
+
+<p>Blog tan sólo necesita un fichero de configuración (<code>config.yaml</code>) y una carpeta con posts. El fichero de configuración incluye algunos detalles para personalizar el blog y la localización de la carpeta de posts:</p>
+
+<pre><code>---
+title: Tidy Bits
+subtitle: The blog where I tell my geek adventures
+author: Maesoser
+author_url: https://github.com/maesoser
+url: blog.souvlaki.cf
+year: '2020'
+posts: &quot;./posts&quot;
+</code></pre>
+
+<p>En la esa carpeta deberían encontrarse los distintos artículos, ordenados como subcarpetas.</p>
+
+<pre><code>  posts
+    ├── 010120_post1
+    │   ├── foto1.jpg
+    │   └── post.md
+    ├── 120220_quantumbug
+        ├── 120220_quantumbug.md
+        ├── foto2.jpg
+        └── foto4.png
+</code></pre>
+
+<p>Iniciar Blog es tan sencillo como:</p>
+
+<pre><code>blog -port 8080 -tls_port 8443 -config /temp/config.yaml
+</code></pre>
+
+<p><img src="blog_start.png" alt="blog container starting" /></p>
+
+<h4 id="blog-es-limpio">Blog es limpio</h4>
+
+<p>Soy un desastre con el diseño. Para conseguir que el blog fuera lo más sencillo posible a la par que agradable y simple de leer, he hecho uso de <a href="https://mblode.github.io/marx/" target="_blank">Marx, un CSS sin clases</a>. Esto me permite aplicarlo a mi código HTML sin tener que modificar cada elemento sobre el que quiera aplicar un formato. Añadirlo (y personalizarlo) es tan sencillo como incluir estas líneas en la cabecera de tu web:</p>
+
+<pre><code>&lt;link rel='stylesheet' href='https://rawgit.com/mblode/marx/master/css/marx.min.css'&gt;
+&lt;style&gt; 
+    main {  max-width: 1200px; } 
+    img { display: block; margin-left: auto; margin-right: auto; }
+&lt;/style&gt;
+</code></pre>
+
+<p>Para colorear los fragmentos de código que añado a mis artículos uso <a href="https://highlightjs.org/" target="_blank">Highlight.js</a>. Añadirlo es igual de sencillo que con Marx. Tan sólo hace falta incluir unas pocas lineas a la cabecera de nuestra plantilla:</p>
+
+<pre><code>&lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.0.3/styles/tomorrow.min.css&quot;&gt;
+&lt;style&gt; .hljs { background: #F6F8FA; } &lt;/style&gt;
+&lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.0.3/highlight.min.js&quot;&gt;&lt;/script&gt;
+&lt;script&gt;hljs.initHighlightingOnLoad();&lt;/script&gt;
+</code></pre>
+
+<h4 id="blog-es-seguro">Blog es Seguro</h4>
+
+<p>Blog escucha por defecto tanto en el puerto 80 como en el puerto 443. Si no se ha incluido un certificado SSL, Blog emitirá un certificado firmado por él mismo al iniciarse.</p>
+
+<p>Blog también sigue <a href="https://blog.gopheracademy.com/advent-2016/exposing-go-on-the-internet/" target="_blank">las recomendaciones básicas</a> a la hora de exponer un servicio escrito en Go en Internet</p>
+
+<h2 id="desplegando-la-solución">Desplegando la solución</h2>
+
+<p>Para desplegar el binario en mi servidor he hecho uso de Docker. Con un Dockerfile sencillo como el siguiente, la imagen final no llega a 10Mb de tamaño. Eso se debe a que hemos usado la imagen <a href="https://docs.docker.com/develop/develop-images/baseimages/#create-a-simple-parent-image-using-scratch" target="_blank">scratch</a> como base, que tan sólo incluye el binario que hemos generado. Este truco no sólo nos ayuda a reducir espacio si no que también mejora la seguridad al deshacernos de todas los bnarios y objetos no necesarios dentro del contenedor.</p>
+
+<pre><code>FROM golang:alpine as builder
+
+RUN adduser -D blog
+WORKDIR /
+COPY . .
+
+RUN apk add git &amp;&amp; \
+  go get -u github.com/gorilla/mux &amp;&amp; \
+  go get github.com/k3a/html2text &amp;&amp; \
+  go get github.com/gomarkdown/markdown &amp;&amp; \
+  go get -u github.com/go-bindata/go-bindata/... &amp;&amp; \
+  go-bindata -pkg main -o assets.go assets/ &amp;&amp; \
+  CGO_ENABLED=0 GOOS=linux go build -a \
+  -installsuffix cgo \
+  -ldflags '-extldflags &quot;-static&quot;' \
+  -o blog .
+
+FROM scratch
+COPY --from=builder /blog /blog
+COPY --from=0 /etc/passwd /etc/passwd
+USER blog
+WORKDIR /
+ENTRYPOINT [&quot;./blog&quot;]
+</code></pre>
+
+<p>Un fichero de docker-compose igual de simple configura el contenedor:</p>
+
+<pre><code>version: &quot;2.4&quot;
+
+services:
+  blog:
+    container_name: blog
+    restart: unless-stopped
+    mem_limit: 64m
+    build:
+     context: ./containers/blog
+     dockerfile: Dockerfile
+    environment:
+     - SERVER_HTTP_PORT=8080
+     - SERVER_HTTPS_PORT=8443
+    volumes:
+     - ./config/blog/config.json:/config.yml
+     - ./config/blog/posts:/posts
+</code></pre>
+
+<h2 id="referencias">Referencias</h2>
+
+<p><a href="https://medium.com/rungo/beginners-guide-to-serving-files-using-http-servers-in-go-4e542e628eac" target="_blank">Begginers guide to serving files using go</a></p>
+
+<p><a href="http://www.inanzzz.com/index.php/post/9ats/http2-and-tls-client-and-server-example-with-golang" target="_blank">HTTP2 and TLS client and server example</a></p>
+
+      <footer>
+        <p>&copy; 2020 &middot; <a href="https://github.com/maesoser" target="_blank">Maesoser</a></p>
+      </footer>
+    </main>
+  </body>
+</html>

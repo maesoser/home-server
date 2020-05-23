@@ -33,6 +33,7 @@
       },
       "hiddenSeries": false,
       "id": 5,
+      "interval": "",
       "legend": {
         "avg": false,
         "current": false,
@@ -59,12 +60,14 @@
       "renderer": "flot",
       "seriesOverrides": [
         {
-          "alias": "Mean",
-          "color": "#FF9830"
+          "alias": "1 min",
+          "color": "#56A64B",
+          "fill": 5
         },
         {
           "alias": "cpu_temp",
           "color": "#E02F44",
+          "linewidth": 2,
           "yaxis": 2
         }
       ],
@@ -73,30 +76,37 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "crisipo_node_load5",
+          "expr": "max_over_time(crisipo_node_load5[5m])",
           "format": "time_series",
-          "hide": false,
+          "hide": true,
+          "interval": "",
           "intervalFactor": 1,
           "legendFormat": "5 min",
           "refId": "A"
         },
         {
-          "expr": "crisipo_node_load1",
+          "expr": "max_over_time(crisipo_node_load1[5m])",
           "format": "time_series",
+          "hide": false,
+          "instant": false,
+          "interval": "",
           "intervalFactor": 1,
           "legendFormat": "1 min",
           "refId": "B"
         },
         {
-          "expr": "crisipo_node_load15",
+          "expr": "max_over_time(crisipo_node_load15[5m])",
           "format": "time_series",
-          "hide": false,
+          "hide": true,
           "intervalFactor": 1,
           "legendFormat": "15 min",
           "refId": "C"
         },
         {
-          "expr": "crisipo_node_thermal_zone_temp",
+          "expr": "max_over_time(crisipo_node_thermal_zone_temp[5m])",
+          "instant": false,
+          "interval": "",
+          "intervalFactor": 4,
           "legendFormat": "cpu_temp",
           "refId": "F"
         }
@@ -198,14 +208,14 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "(crisipo_node_memory_MemFree_bytes) / (1024*1024)",
+          "expr": "(max_over_time(crisipo_node_memory_MemFree_bytes[5m])) / (1024*1024)",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "Free",
           "refId": "A"
         },
         {
-          "expr": "(crisipo_node_memory_MemTotal_bytes - crisipo_node_memory_MemAvailable_bytes) / (1024*1024)",
+          "expr": "(max_over_time(crisipo_node_memory_MemTotal_bytes[5m]) - max_over_time(crisipo_node_memory_MemAvailable_bytes[5m])) / (1024*1024)",
           "format": "time_series",
           "hide": false,
           "instant": false,
@@ -214,7 +224,7 @@
           "refId": "B"
         },
         {
-          "expr": "(crisipo_node_memory_MemAvailable_bytes - crisipo_node_memory_MemFree_bytes ) / (1024*1024)",
+          "expr": "(max_over_time(crisipo_node_memory_MemAvailable_bytes[5m]) - max_over_time(crisipo_node_memory_MemFree_bytes[5m]) ) / (1024*1024)",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "Cached",
@@ -412,7 +422,7 @@
       "steppedLine": true,
       "targets": [
         {
-          "expr": "crisipo_node_cpu_frequency_hertz",
+          "expr": "max_over_time(crisipo_node_cpu_frequency_hertz[10m])",
           "interval": "",
           "legendFormat": "{{cpu}}",
           "refId": "A"
@@ -621,7 +631,7 @@
       ],
       "targets": [
         {
-          "expr": "100 * (crisipo_node_filesystem_size_bytes - crisipo_node_filesystem_free_bytes) / crisipo_node_filesystem_size_bytes",
+          "expr": "100 * (max_over_time(crisipo_node_filesystem_size_bytes[5m]) - max_over_time(crisipo_node_filesystem_free_bytes[5m])) / max_over_time(crisipo_node_filesystem_size_bytes[5m])",
           "legendFormat": "{{mountpoint}}",
           "refId": "A"
         }
@@ -768,7 +778,7 @@
       }
     }
   ],
-  "refresh": "5m",
+  "refresh": false,
   "schemaVersion": 22,
   "style": "dark",
   "tags": [],
@@ -776,8 +786,8 @@
     "list": []
   },
   "time": {
-    "from": "now-6h",
-    "to": "now"
+    "from": "2020-05-01T16:58:53.834Z",
+    "to": "2020-05-01T19:03:44.065Z"
   },
   "timepicker": {
     "hidden": false,
