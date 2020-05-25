@@ -1,4 +1,4 @@
-package main
+package blog
 
 import (
 	"encoding/json"
@@ -116,6 +116,57 @@ func (h *Blog) ServeMain(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func (h *Blog) ServeTag(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+    tagName := vars["tag"]
+	if len(tagName) == 0 {
+		h.ServeMain(w,r)
+        return
+	}
+	indexTemplate, err := Asset("assets/main.html")
+	if err != nil {
+		log.Printf("[ERR] %s\n", err)
+	}
+	tagBlog := Blog{
+        Title:     h.Title,
+        Subtitle:   h.Subtitle,
+        Path:       h.Path,
+        Author:     h.Author,
+        AuthorURL:  h.AuthorURL,
+        Year:       h.Year,
+        Domain:     h.Domain,
+        Tags:       h.Tags,
+        PrevPage:   0,
+        ActualPage: 1,
+        NextPage:   0,
+    }
+    for _, post := range(h.Posts){
+        if post.TagExist(tagName){
+            tagBlog.Posts = append(tagBlog.Posts, post)
+        }
+    }
+	tmpl, err := template.New("index").Parse(string(indexTemplate))
+	if err != nil {
+		log.Fatal(err)
+	}
+	err = tmpl.Execute(w, tagBlog)
+	if err != nil {
+		log.Printf("[ERR] %s\n", err)
+	}
+}
+
+func (h *Blog) ServeStyle(w http.ResponseWriter, r *http.Request) {
+	stylecss, err := Asset("assets/classless.css")
+	if err != nil {
+		log.Printf("[ERR] %s\n", err)
+	}
+	w.Header().Set("Content-Type", "text/css; charset=utf-8")
+    w.Header().Set("Content-Length", strconv.FormatInt(int64(len(stylecss)), 10))
+	w.WriteHeader(http.StatusOK)
+	w.Write(stylecss)
+}
+
 func (h *Blog) NotFound(w http.ResponseWriter, r *http.Request) {
+    w.WriteHeader(http.StatusNotFound)
 	fmt.Fprintf(w, "Not found\n")
 }

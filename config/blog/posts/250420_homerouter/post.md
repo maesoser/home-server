@@ -1,7 +1,7 @@
 ---
 title: Installing opnSense firewall on KVM
 draft: false
-tags: networks, engineering
+tags: networks, projects
 ---
 
 A couple of months ago I impulsively bought an inexpensive [x86 router](https://es.aliexpress.com/item/32856202817.html?spm=a219c.search0302.3.23.164c2f65OWW0WN&ws_ab_test=searchweb0_0,searchweb201602_0,searchweb201603_0,ppcSwitch_0&algo_pvid=226d034f-15bc-4a39-ada7-bbf9baf3614e&algo_expid=226d034f-15bc-4a39-ada7-bbf9baf3614e-3). It is not really well fitted for anything professional. The processor  is just a low end dual core Intel 1007u that does not have neither  AES-NI nor SRIOV so it is more like a 10 years old computer with a lot  of network interfaces than a real router. The good thing is that it is  fanless and although it is definitely not performant at all, it would  allow me to play with virtualization, firewalls, software defined  networking and all of that things.

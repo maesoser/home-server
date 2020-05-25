@@ -1,19 +1,23 @@
 FROM golang:alpine as builder
 
 RUN adduser -D blog
-WORKDIR /
-COPY . .
+COPY assets /go/src/github.com/blog/assets
+COPY pkg /go/src/github.com/blog/pkg
+COPY cmd /go/src/github.com/blog/cmd
+WORKDIR /go/src/github.com/blog/cmd/
 
 # Compile it
 RUN apk add git && \
   go get -u github.com/gorilla/mux && \
   go get github.com/gomarkdown/markdown && \
   go get -u github.com/go-bindata/go-bindata/... && \
-  go-bindata -pkg main -o assets.go assets/ && \
+  go-bindata -pkg blog \
+    -prefix /go/src/github.com/blog/ \
+    -o /go/src/github.com/blog/pkg/blog/assets.go /go/src/github.com/blog/assets/ && \
   CGO_ENABLED=0 GOOS=linux go build -a \
   -installsuffix cgo \
   -ldflags '-extldflags "-static"' \
-  -o blog .
+  -o /blog .
 
 # Create docker
 FROM scratch

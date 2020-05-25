@@ -1,4 +1,4 @@
-package main
+package blog
 
 import (
 	"bufio"
@@ -143,4 +143,13 @@ func (p *Post) Compile(path string) error {
 		return err
 	}
 	return nil
+}
+
+func (p *Post) TagExist(tag string) bool{
+    for _, t := range p.Tags {
+		if tag == t {
+			return true
+		}
+	}
+	return false
 }

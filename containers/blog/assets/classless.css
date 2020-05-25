@@ -21,7 +21,7 @@ ul, ol, dl, fieldset, pre, pre > code {
 }
 body { 
 	margin: auto; 
-	max-width: 50rem; 
+	max-width: 70rem; 
 	padding: 2rem 0.5rem 0rem; 
 	overflow-x: hidden; 
 }
@@ -75,7 +75,6 @@ figcaption, caption { color: #777; margin-bottom: 1rem; }
 pre > code {
   margin: 0;
   padding: 0.5rem 1.0rem;
-  /* border-left: 0.3rem solid #3273dc; */
   background-color: #f4f5f6;
 }
 code, kbd, samp { 

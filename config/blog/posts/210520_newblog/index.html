@@ -4,7 +4,7 @@
     <head>
     <meta charset="UTF-8">
     <title>Para qué hacerlo fácil si puedes complicarte sin motivo: El nacimiento de Blog</title>
-    <link rel='stylesheet' href='https://rawgit.com/mblode/marx/master/css/marx.min.css'>
+    <link rel='stylesheet' href='/classless.css'>
     <style> main {  max-width: 1200px; } img { display: block; margin-left: auto; margin-right: auto; }</style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.0.3/styles/tomorrow.min.css">
     <style> .hljs { background: #F6F8FA; } </style>
@@ -18,15 +18,17 @@
         <h3 id="tagline">The blog where I tell my geek adventures</h3>
       </center>
       <h1>Para qué hacerlo fácil si puedes complicarte sin motivo: El nacimiento de Blog</h1><br>
-      <p>Llevo varios años queriendo hacer un blog. Entre la vaguería y la desidia todos esos proyectos han acabado languideciendo conteniendo apenas un par de artículos mediocremente escritos. En este tercer intento me he propuesto empezar de forma diferente. Dándole vueltas sobre la forma ideal de comenzarlo, alguna manera para evitar no cumplir mi objetivo. Soy muy poco disciplinado y tampoco soy demasiado bueno redactando, pero no se me da mal programar. ¿Por qué no, antes de escribir un blog, <em>escribo</em> un blog?</p>
+      <p>Llevo varios años queriendo hacer un blog. Entre la vaguería y la desidia todas las veces que he intentado iniciarlo el proyecto ha acabado languideciendo conteniendo apenas un par de artículos mediocremente escritos. En este tercer intento me he propuesto empezar de forma diferente. ¿Por qué no intento escribir el backend que se ocupe de servir los artículos desde cero? De esta forma, aún en el hipotético caso de que no llegue a escribir de forma asidua, al menos me quedará el consuelo de que escribí <em>el blog</em>.</p>
 
-<p>Es por eso que, a pesar de la <a href="https://www.staticgen.com" target="_blank">multitud de opciones disponibles</a> para generar y servir una página web estática, he decidido crear mi pequeña utilidad para esta tarea: Blog.</p>
+<p>Sé que hay <a href="https://www.staticgen.com" target="_blank">muchísimas opciones disponibles</a> para generar y servir una página web estática y estoy seguro de que varias de ellas ofrecen justo las funcionalidades que yo quiero, pero aún así he decidido crear mi pequeña utilidad para esta tarea: Blog.</p>
 
-<h4 id="blog-es-simple">Blog es simple</h4>
+<p>Blog es un pequeño binario escrito en Go que es capaz de convertir una estructura de carpetas y documentos escritos en <a href="https://guides.github.com/features/mastering-markdown/" target="_blank">Markdown</a>, en un sencillo blog. Blog intenta ser simple de usar, tener una interfaz limpia y ser ofrecer un nivel razonable de seguridad.</p>
+
+<h3 id="blog-es-sencillo-de-usar">Blog es sencillo de usar</h3>
 
 <p>Blog tan sólo necesita un fichero de configuración (<code>config.yaml</code>) y una carpeta con posts. El fichero de configuración incluye algunos detalles para personalizar el blog y la localización de la carpeta de posts:</p>
 
-<pre><code>---
+<pre><code class="language-yaml">---
 title: Tidy Bits
 subtitle: The blog where I tell my geek adventures
 author: Maesoser
@@ -50,68 +52,60 @@ posts: &quot;./posts&quot;
 
 <p>Iniciar Blog es tan sencillo como:</p>
 
-<pre><code>blog -port 8080 -tls_port 8443 -config /temp/config.yaml
+<pre><code class="language-bash">blog -port 8080 -tls_port 8443 -config /temp/config.yaml
 </code></pre>
 
 <p><img src="blog_start.png" alt="blog container starting" /></p>
 
-<h4 id="blog-es-limpio">Blog es limpio</h4>
+<p>Las plantillas de la página de posts y el índice, así como el estilo CSS utilizado están incluidos en el binario usando <a href="https://github.com/go-bindata/go-bindata" target="_blank">go-bindata</a>.</p>
 
-<p>Soy un desastre con el diseño. Para conseguir que el blog fuera lo más sencillo posible a la par que agradable y simple de leer, he hecho uso de <a href="https://mblode.github.io/marx/" target="_blank">Marx, un CSS sin clases</a>. Esto me permite aplicarlo a mi código HTML sin tener que modificar cada elemento sobre el que quiera aplicar un formato. Añadirlo (y personalizarlo) es tan sencillo como incluir estas líneas en la cabecera de tu web:</p>
+<h3 id="blog-es-simple">Blog es simple</h3>
 
-<pre><code>&lt;link rel='stylesheet' href='https://rawgit.com/mblode/marx/master/css/marx.min.css'&gt;
-&lt;style&gt; 
-    main {  max-width: 1200px; } 
-    img { display: block; margin-left: auto; margin-right: auto; }
-&lt;/style&gt;
+<p>He intentado escribir blog para que sea sencillo, fácil de entender y de  extender. El código apenas supera las 400 líneas. Blog tan sólo usa dos paquetes propios:</p>
+
+<ul>
+<li><strong>easycert</strong>: Es un pequeño paquete que se ocupa de emitir certificados autofirmados</li>
+<li><strong>blog</strong>: Este paquete incluye dos estructuras principales en torno a las que gira toda su operativa:
+
+<ul>
+<li><strong>Blog</strong> : Esta es la estructura que guarda los tags, las entradas de los blogs, su título, etc</li>
+<li>**Post: ** Esta estructura se ocupa de parsear los archivos de texto y generar a partir de ellos el código HTML. Además de eso, guarda los datos básicos de cada post como su fecha, su título, etc.</li>
+</ul></li>
+</ul>
+
+<p>Los principales paquetes externos que usa blog son:</p>
+
+<ul>
+<li><strong><a href="https://www.gorillatoolkit.org/" target="_blank">Gorilla</a>:</strong> Es un conjunto de utilidades para crear webs en Go.</li>
+<li><strong>[gomarkdown]()<a href="https://github.com/gomarkdown/markdown:" target="_blank">https://github.com/gomarkdown/markdown:</a></strong> Es el encarado de analizar los documentos en Markdown y traducirlos a html.</li>
+</ul>
+
+<h3 id="blog-es-limpio">Blog es limpio</h3>
+
+<p>Soy un desastre con el diseño. Para conseguir que el blog fuera lo más sencillo posible a la par que agradable y simple de leer empecé usando <a href="https://mblode.github.io/marx/" target="_blank">Marx</a> como estilo CSS. Sin embargo, me he cambiado a <a href="http://classless.de/" target="_blank">classless.css</a> que en mi opinión es bastante más limpio y usa unas fuentes más agradables a la vista. El uso de un archivo css sin clases extra me permite aplicarlo sobre el código html generado de los ficheros de Markdown sin tener que añadir clases extra a los elementos que conforman la web. Añadirlo y personalizarlo es tan sencillo como incluir esta línea en la cabecera de mi web:</p>
+
+<pre><code class="language-html">&lt;link rel='stylesheet' href='/classless.css'&gt;
 </code></pre>
 
-<p>Para colorear los fragmentos de código que añado a mis artículos uso <a href="https://highlightjs.org/" target="_blank">Highlight.js</a>. Añadirlo es igual de sencillo que con Marx. Tan sólo hace falta incluir unas pocas lineas a la cabecera de nuestra plantilla:</p>
+<p>Para colorear los fragmentos de código que añado a mis artículos uso <a href="https://highlightjs.org/" target="_blank">Highlight.js</a>. Añadirlo es igual de sencillo, tan sólo hace falta incluir unas pocas lineas a la cabecera de la plantilla:</p>
 
-<pre><code>&lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.0.3/styles/tomorrow.min.css&quot;&gt;
+<pre><code class="language-html">&lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.0.3/styles/tomorrow.min.css&quot;&gt;
 &lt;style&gt; .hljs { background: #F6F8FA; } &lt;/style&gt;
 &lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.0.3/highlight.min.js&quot;&gt;&lt;/script&gt;
 &lt;script&gt;hljs.initHighlightingOnLoad();&lt;/script&gt;
 </code></pre>
 
-<h4 id="blog-es-seguro">Blog es Seguro</h4>
+<h3 id="blog-es-seguro">Blog es Seguro</h3>
 
-<p>Blog escucha por defecto tanto en el puerto 80 como en el puerto 443. Si no se ha incluido un certificado SSL, Blog emitirá un certificado firmado por él mismo al iniciarse.</p>
+<p>Blog escucha por defecto tanto en el puerto 80 como en el puerto 443. Si no se ha incluido un certificado SSL, Blog emite un certificado firmado por él mismo al iniciarse.</p>
 
-<p>Blog también sigue <a href="https://blog.gopheracademy.com/advent-2016/exposing-go-on-the-internet/" target="_blank">las recomendaciones básicas</a> a la hora de exponer un servicio escrito en Go en Internet</p>
+<p>Blog también sigue <a href="https://blog.gopheracademy.com/advent-2016/exposing-go-on-the-internet/" target="_blank">las recomendaciones básicas</a> a la hora de exponer un servicio escrito en Go en Internet.</p>
 
-<h2 id="desplegando-la-solución">Desplegando la solución</h2>
+<p>Blog además está desplegado en un contenedor, con un sólo volumen para que tenga acceso a los artículos. También tiene configurados límites de memoria y de número de procesadores que puede llegar a usar. El contenedor está basado en la imagen <a href="https://docs.docker.com/develop/develop-images/baseimages/#create-a-simple-parent-image-using-scratch" target="_blank">scratch</a> por lo que no incluye ningún otro binario salvo el propio ejecutable del Blog, y está lanzado con un usuario no privilegiado.</p>
 
-<p>Para desplegar el binario en mi servidor he hecho uso de Docker. Con un Dockerfile sencillo como el siguiente, la imagen final no llega a 10Mb de tamaño. Eso se debe a que hemos usado la imagen <a href="https://docs.docker.com/develop/develop-images/baseimages/#create-a-simple-parent-image-using-scratch" target="_blank">scratch</a> como base, que tan sólo incluye el binario que hemos generado. Este truco no sólo nos ayuda a reducir espacio si no que también mejora la seguridad al deshacernos de todas los bnarios y objetos no necesarios dentro del contenedor.</p>
+<p>Este es el fichero de docker-compose que lo configura</p>
 
-<pre><code>FROM golang:alpine as builder
-
-RUN adduser -D blog
-WORKDIR /
-COPY . .
-
-RUN apk add git &amp;&amp; \
-  go get -u github.com/gorilla/mux &amp;&amp; \
-  go get github.com/k3a/html2text &amp;&amp; \
-  go get github.com/gomarkdown/markdown &amp;&amp; \
-  go get -u github.com/go-bindata/go-bindata/... &amp;&amp; \
-  go-bindata -pkg main -o assets.go assets/ &amp;&amp; \
-  CGO_ENABLED=0 GOOS=linux go build -a \
-  -installsuffix cgo \
-  -ldflags '-extldflags &quot;-static&quot;' \
-  -o blog .
-
-FROM scratch
-COPY --from=builder /blog /blog
-COPY --from=0 /etc/passwd /etc/passwd
-USER blog
-WORKDIR /
-ENTRYPOINT [&quot;./blog&quot;]
-</code></pre>
-
-<p>Un fichero de docker-compose igual de simple configura el contenedor:</p>
-
-<pre><code>version: &quot;2.4&quot;
+<pre><code class="language-yaml">version: &quot;2.4&quot;
 
 services:
   blog:
@@ -129,11 +123,17 @@ services:
      - ./config/blog/posts:/posts
 </code></pre>
 
+<h2 id="resumen">Resumen</h2>
+
+<p>Independientemente de si finalmente consigo imbuirme cierta disciplina y comienzo a escribir de forma regular en esta web, programar esta pequeña utilidad ha sido divertido y me ha servido para practicar en algunos aspectos como la creación de un contenedor, la compilación de un programa con múltiples paquetes en un entorno contenedorizado o para jugar con algunos de los estilos CSS sencillos y elegantes que hay sueltos por Internet.</p>
+
 <h2 id="referencias">Referencias</h2>
 
 <p><a href="https://medium.com/rungo/beginners-guide-to-serving-files-using-http-servers-in-go-4e542e628eac" target="_blank">Begginers guide to serving files using go</a></p>
 
 <p><a href="http://www.inanzzz.com/index.php/post/9ats/http2-and-tls-client-and-server-example-with-golang" target="_blank">HTTP2 and TLS client and server example</a></p>
+
+<p><a href="https://www.docker.com/blog/docker-golang/" target="_blank">Docker + Golang = &lt;3</a></p>
 
       <footer>
         <p>&copy; 2020 &middot; <a href="https://github.com/maesoser" target="_blank">Maesoser</a></p>

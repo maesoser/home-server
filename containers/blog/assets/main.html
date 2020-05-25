@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <title>{{.Title}}</title>
-  <link rel='stylesheet' href='https://rawgit.com/mblode/marx/master/css/marx.min.css'>
+  <link rel='stylesheet' href='/classless.css'>
   <style> main {  max-width: 1200px; } </style>
 </head>
 <body>
@@ -12,7 +12,7 @@
   <center class="hero">
     <h1>{{.Title}}</h1>
     <h3 id="tagline">{{.Subtitle}}</h3>
-    <p>{{range $Tag := .Tags}} <a href="?tag={{$Tag}}" >{{$Tag}}</a> {{end}}<p>
+    <p>{{range $Tag := .Tags}} <a href="/tag/{{$Tag}}" >{{$Tag}}</a> {{end}}<p>
   </center>
   {{range $Post := .Posts}}
     <h3 id="{{$Post.Name}}"><a href="/posts/{{$Post.Name}}">{{$Post.Title}}</a></h3>
