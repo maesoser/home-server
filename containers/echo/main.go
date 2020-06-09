@@ -2,6 +2,7 @@ package main
 
 import (
     "bytes"
+    "strings"
     "crypto/rand"
     "crypto/rsa"
     "crypto/tls"
@@ -9,6 +10,7 @@ import (
     "crypto/x509/pkix"
     "encoding/json"
     "encoding/pem"
+    "text/template"
     "flag"
     "fmt"
     "io/ioutil"
@@ -35,6 +37,58 @@ type requestInfo struct {
     TLSCipher  string            `json:"tls_cipher"`
     TLSServer  string            `json:"tls_servername"`
     Headers    map[string]string `json:"headers"`
+}
+
+func (info requestInfo) GetCFHeaders() map[string]string {
+    var out map[string]string
+    out = make(map[string]string)
+    for key, element := range info.Headers {
+        if strings.Contains(key, "Cf-") == true && strings.Contains(key, "-Bot") == false{
+            out[key] = element
+        }
+    }
+    return out
+}
+
+func (info requestInfo) GetCookies() map[string]string {
+    var out map[string]string
+    out = make(map[string]string)
+    for key, element := range info.Headers {
+        if strings.Contains(key, "Cookie") {
+            out[key] = element
+        }
+    }
+    return out
+}
+
+func (info requestInfo) GetBotHeaders() map[string]string {
+    var out map[string]string
+    out = make(map[string]string)
+    for key, element := range info.Headers {
+        if strings.Contains(key, "-Bot") {
+            out[key] = element
+        }
+    }
+    return out
+}
+
+func (info requestInfo) GetOtherHeaders() map[string]string {
+    var out map[string]string
+    out = make(map[string]string)
+    for key, element := range info.Headers {
+        if strings.Contains(key, "Cf-") == false && strings.Contains(key, "Cookie") == false {
+            out[key] = element
+        }
+    }
+    return out
+}
+
+func (info requestInfo) GetJSON() string {
+    e, err := json.MarshalIndent(info, "", "  ")
+    if err != nil {
+        fmt.Println(err)
+    }
+    return string(e)
 }
 
 func GetEnvStr(name, value string) string {
@@ -173,11 +227,10 @@ func main() {
     }
 
     router := mux.NewRouter()
-    router.HandleFunc("/ping", MainWebpage)
-    router.HandleFunc("/pong", PongResponse)
+    router.HandleFunc("/json", ReturnHeaders)
     router.HandleFunc("/wait/{seconds}", Wait)
     router.HandleFunc("/code/{code}", ReturnCode)
-    router.NotFoundHandler = http.HandlerFunc(ReturnHeaders)
+    router.NotFoundHandler = http.HandlerFunc(MainWebpage)
     http.Handle("/", router)
     Run(":"+*Port, ":"+*TLSPort, *CertArg, *KeyArg, *DomainName)
 }
@@ -206,7 +259,7 @@ func GetBodySize(r *http.Request) int {
     return len(body)
 }
 
-func GetInfo(r *http.Request) string {
+func GetInfo(r *http.Request) requestInfo {
     info := requestInfo{
         Src:    r.RemoteAddr,
         Dst:    r.Host,
@@ -214,6 +267,9 @@ func GetInfo(r *http.Request) string {
         Method: r.Method,
         Proto:  r.Proto,
         Path:   r.URL.Path,
+        TLSVersion: "None",
+        TLSCipher: "None",
+        TLSServer: "None",
     }
     info.Headers = make(map[string]string)
     for name, value := range r.Header {
@@ -228,25 +284,28 @@ func GetInfo(r *http.Request) string {
         info.TLSCipher = tls.CipherSuiteName(r.TLS.CipherSuite)
         info.TLSServer = r.TLS.ServerName
     }
-    e, err := json.MarshalIndent(info, "", "  ")
-    if err != nil {
-        fmt.Println(err)
-    }
-    return string(e)
+    return info
 }
 
 func MainWebpage(w http.ResponseWriter, r *http.Request) {
-    log.Println("Trying to serve main.html")
-    data, err := ioutil.ReadFile("/app/main.html")
-    if err != nil {
-        log.Println(err)
+    info := GetInfo(r)
+	indexTemplate, err := Asset("assets/main.html")
+	if err != nil {
+		log.Printf("[ERR] %s\n", err)
+	}
+	tmpl, err := template.New("index").Parse(string(indexTemplate))
+	if err != nil {
+		log.Fatal(err)
+	}
+	err = tmpl.Execute(w, info)
+	if err != nil {
+		log.Printf("[ERR] %s\n", err)
     }
-    w.Header().Set("Content-Type", "text/html")
-    fmt.Fprintf(w, string(data))
 }
 
 func ReturnHeaders(w http.ResponseWriter, r *http.Request) {
-    output := GetInfo(r)
+    info := GetInfo(r)
+    output := info.GetJSON()
     log.Println(output)
     w.Header().Set("Content-Type", "application/json")
     fmt.Fprintf(w, output)
@@ -273,11 +332,6 @@ func Wait(w http.ResponseWriter, r *http.Request) {
     } else {
         time.Sleep(time.Duration(seconds) * time.Second)
     }
-    fmt.Fprintf(w, vars["seconds"])
-}
-
-func PongResponse(w http.ResponseWriter, r *http.Request) {
-    log.Printf("Ping from %s (%v)\n", r.RemoteAddr, r.Header.Get("User-Agent"))
-    fmt.Fprintf(w, "pong")
+    MainWebpage(w,r)
 }
 

@@ -84,6 +84,7 @@ func main() {
 	b := blog.Blog{}
 	b.Load(*Config)
 	b.Compile()
+    go b.Watch()
 
 	router := mux.NewRouter()
 	router.HandleFunc("/main/{page}", b.ServeMain)

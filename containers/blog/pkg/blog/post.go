@@ -10,7 +10,6 @@ import (
 	"strings"
 	"text/template"
 	"time"
-
 	"github.com/gomarkdown/markdown"
 	"github.com/gomarkdown/markdown/html"
 	"github.com/gomarkdown/markdown/parser"
@@ -58,7 +57,9 @@ func (p *Post) ParseMetadata(data string) error {
 			}
 		}
 		if strings.HasPrefix(line, "tags:") {
-			p.Tags = strings.Split(strings.TrimPrefix(line, "tags: "), ",")
+			for _, tag := range(strings.Split(strings.TrimPrefix(line, "tags: "), ",")){
+			  p.Tags = append(p.Tags, strings.TrimSpace(tag))
+			}
 		}
 	}
 	return nil
@@ -120,6 +121,7 @@ func (p *Post) findMarkdown() error {
 	}
 	return fmt.Errorf("Markdown file not found")
 }
+
 
 // Compile fills the metadata info and then generates HTML file
 func (p *Post) Compile(path string) error {

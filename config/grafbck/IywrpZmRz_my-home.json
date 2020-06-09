@@ -1,0 +1,89 @@
+{
+    "meta": {
+        "type": "db",
+        "canSave": false,
+        "canEdit": false,
+        "canAdmin": false,
+        "canStar": true,
+        "slug": "my-home",
+        "url": "/d/IywrpZmRz/my-home",
+        "expires": "0001-01-01T00:00:00Z",
+        "created": "2020-06-04T22:01:15Z",
+        "updated": "2020-06-04T22:01:15Z",
+        "updatedBy": "admin",
+        "createdBy": "admin",
+        "version": 1,
+        "hasAcl": false,
+        "isFolder": false,
+        "folderId": 0,
+        "folderTitle": "General",
+        "folderUrl": "",
+        "provisioned": false,
+        "provisionedExternalId": ""
+    },
+    "dashboard": {
+        "annotations": {
+            "list": [
+                {
+                    "builtIn": 1,
+                    "datasource": "-- Grafana --",
+                    "enable": true,
+                    "hide": true,
+                    "iconColor": "rgba(0, 211, 255, 1)",
+                    "name": "Annotations & Alerts",
+                    "type": "dashboard"
+                }
+            ]
+        },
+        "editable": true,
+        "gnetId": null,
+        "graphTooltip": 0,
+        "hideControls": false,
+        "id": 51,
+        "links": [],
+        "panels": [
+            {
+                "datasource": "Prometheus",
+                "fieldConfig": {
+                    "defaults": {
+                        "custom": {}
+                    },
+                    "overrides": []
+                },
+                "gridPos": {
+                    "h": 9,
+                    "w": 12,
+                    "x": 0,
+                    "y": 0
+                },
+                "headings": true,
+                "id": 2,
+                "limit": 10,
+                "query": "",
+                "recent": false,
+                "search": false,
+                "starred": true,
+                "tags": [],
+                "timeFrom": null,
+                "timeShift": null,
+                "title": "Favorites",
+                "type": "dashlist"
+            }
+        ],
+        "schemaVersion": 25,
+        "style": "dark",
+        "tags": [],
+        "templating": {
+            "list": []
+        },
+        "time": {
+            "from": "now-6h",
+            "to": "now"
+        },
+        "timepicker": {},
+        "timezone": "",
+        "title": "My Home",
+        "uid": "IywrpZmRz",
+        "version": 1
+    }
+}

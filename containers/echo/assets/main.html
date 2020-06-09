@@ -1,0 +1,151 @@
+
+
+<!doctype html>
+<html lang="en">
+   <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.0.3/styles/tomorrow.min.css">
+      <style> .hljs { background: #F6F8FA; } </style>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.0.3/highlight.min.js"></script>
+      <script>hljs.initHighlightingOnLoad();</script>
+      <title>Echo</title>
+   </head>
+   <body>
+      <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+         <a class="navbar-brand" href="#">Echo</a>
+         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+         <span class="navbar-toggler-icon"></span>
+         </button>
+         <div class="collapse navbar-collapse" id="navbarText">
+            <ul class="navbar-nav mr-auto">
+               <li class="nav-item active"><a class="nav-link" href="/json">JSON</a></li>
+               <li class="nav-item"><a class="nav-link" href="#">Help</a></li>
+               <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">HTTP Code</a>
+                  <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="/code/404">400 - Bad Request</a>
+                    <a class="dropdown-item" href="/code/404">401 - Unauthorized</a>
+                    <a class="dropdown-item" href="/code/403">403 - Forbidden</a>
+                    <a class="dropdown-item" href="/code/404">404 - Not found</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="/code/500">500 - Internal Server Error</a>
+                    <a class="dropdown-item" href="/code/502">502 - Bad Gateway</a>
+                    <a class="dropdown-item" href="/code/503">503 - Service Unavailable</a>
+                    <a class="dropdown-item" href="/code/504">504 - Gateway Timeout</a>
+                  </div>
+               </li>
+               <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Wait</a>
+                  <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="/wait/10">10 seconds</a>
+                    <a class="dropdown-item" href="/wait/20">20 seconds</a>
+                    <a class="dropdown-item" href="/wait/60">60 seconds</a>
+                  </div>
+               </li>
+            </ul>
+            <span class="navbar-text"><a href="https://github.com/maesoser/home-server/tree/master/containers/echo">Github</a></span>
+         </div>
+      </nav>
+      <section>
+         <div class="col-xs-12" style="height:15px;"></div>
+         <div class="container">
+            <div class="row">
+               <div class="w-75 col-2"><small><div class="alert alert-success text-center">{{.Method}}</div></small></div>
+               <div class="w-75 col-2"><small><div class="alert alert-success text-center">{{.Proto}}</div></small></div>
+               <div class="w-75 col"><small><li class="list-group-item text-monospace">  {{.Dst}}{{.Path}}</li></small></div>
+            </div>
+            {{if ne .Size 0}}
+            <p class="text-right text-muted">{{.Size}} bytes from {{.Src}}</p>
+            {{end}}
+         </div>
+      </section>
+      {{if ne .TLSVersion "None"}}
+      <section>
+         <div class="col-xs-12" style="height:10px;"></div>
+         <div class="container">
+            <h4>TLS:</h4>
+            <div class="col-xs-12" style="height:10px;"></div>
+            <div class="row">
+               <div class="col-4"><small><div class="alert alert-secondary text-center">Version</div></small></div>
+               <div class="col"><small><li class="list-group-item text-monospace">{{.TLSVersion}}</li></small></div>
+            </div>
+            <div class="row">
+               <div class="col-4"><small><div class="alert alert-secondary text-center">Ciphers</div></small></div>
+               <div class="col"><small><li class="list-group-item text-monospace">{{.TLSCipher}}</li></small></div>
+            </div>
+            <div class="row">
+               <div class="col-4"><small><div class="alert alert-secondary text-center">SNI</div></small></div>
+               <div class="col"><small><li class="list-group-item text-monospace">{{.TLSServer}}</li></small></div>
+            </div>
+         </div>
+         </div>
+      </section>
+      {{end}}
+      <section>
+         <div class="col-xs-12" style="height:10px;"></div>
+         <div class="container">
+            <h4>Cloudflare Headers:</h4>
+            <div class="col-xs-8" style="height:10px;"></div>
+            {{ range $key, $value := .GetCFHeaders }}
+            <div class="row">
+               <div class="col-4"><small><div class="alert text-center" style="border-color: #faad3f; background-color: #faad3f;">{{ $key }}</div></small></div>
+               <div class="col"><small><li class="list-group-item text-monospace">{{ $value }}</li></small></div>
+            </div>
+            {{ end }}
+         </div>
+      </section>
+      <section>
+         <div class="col-xs-12" style="height:10px;"></div>
+         <div class="container">
+            <h4>Bot Management:</h4>
+            <div class="col-xs-8" style="height:10px;"></div>
+            {{ range $key, $value := .GetBotHeaders }}
+            <div class="row">
+               <div class="col-4"><small><div class="alert text-center" style="border-color: #faad3f; background-color: #faad3f;">{{ $key }}</div></small></div>
+               <div class="col"><small><li class="list-group-item text-monospace">{{ $value }}</li></small></div>
+            </div>
+            {{ end }}
+         </div>
+      </section>
+      <section>
+         <div class="col-xs-12" style="height:10px;"></div>
+         <div class="container">
+         <h4>Other Headers:</h4>
+         <div class="col-xs-12" style="height:10px;"></div>
+         {{ range $key, $value := .GetOtherHeaders }}
+         <div class="row">
+            <div class="col-4"><small><div class="alert alert-secondary text-center">{{ $key }}</div></small></div>
+            <div class="col"><small><li class="list-group-item text-monospace">{{ $value }}</li></small></div>
+         </div>
+          {{ end }}
+         </div>
+      </section>
+      <section>
+         <div class="col-xs-12" style="height:10px;"></div>
+         <div class="container">
+            <h4>Cookies:</h4>
+            <div class="col-xs-12" style="height:10px;"></div>
+            {{ range $key, $value := .GetCookies }}
+            <div class="row">
+               <div class="col-4"><small><div class="alert alert-secondary text-center">{{ $key }}</div></small></div>
+               <div class="col"><small><li class="list-group-item text-monospace">{{ $value }}</li></small></div>
+            </div>
+             {{ end }}
+         </div>
+      </section>
+      <section>
+         <div class="col-xs-12" style="height:10px;"></div>
+         <div class="container">
+            <h4>JSON:</h4>
+            <div class="col-xs-12" style="height:10px;"></div>
+            <div class="bg-light"><pre><code>{{.GetJSON}}</code></pre></div>
+         </div>
+      </section>
+      <footer class="page-footer font-small blue">
+         <div class="footer-copyright text-center py-3">2020 - <a href="https://blog.maesoser.cf/">Maesoser</a></div>
+      </footer>
+      <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+      <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+   </body>
+</html>

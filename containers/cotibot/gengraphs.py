@@ -264,7 +264,11 @@ def getNet(cursor,cid):
 def bash_history_map(lines):
     otlist = []
     for strdate in lines:
-        tm = time.strptime(strdate, '%Y-%m-%d %H:%M:%S')
+        strdate = strdate.replace("+00:00","")
+        try:
+            tm = time.strptime(strdate, '%Y-%m-%d %H:%M:%S')
+        except Exception as e:
+            logging.error("{} parsing {}".format(e, strdate))
         otlist.append((tm.tm_wday, tm.tm_hour))
     return otlist
 
@@ -286,6 +290,8 @@ def genWeeklyFreq(cursor,cid,delta = None):
         SELECT date 
         FROM """+cid+cstr).fetchall()
     lines = [line[0] for line in lines]
+    logging.info(lines[0])
+    logging.info(lines[-1])
     h = time_count_reduce(bash_history_map(lines))
 
     data = [[h[x,y] for y in range(24)] for x in range(7)]
@@ -457,12 +463,14 @@ def genPoster(cursor,cid,timeDelta = None):
                 G.add_edge(realnames[u1], realnames[u2], weight=w)
 
     try:
-        edges,weights = zip(*nx.get_edge_attributes(G,'weight').items())
+        edges, weights = zip(*nx.get_edge_attributes(G,'weight').items())
     except Exception as e:
         logging.warning("Not significant connections between members")
         return
     pos = nx.circular_layout(G)
-    logging.info(pos)
+    # logging.info(pos)
+    # logging.info(edges)
+    logging.info(G)
     nx.draw(G,
         pos,
         node_color = colorm,
@@ -579,11 +587,11 @@ for chatID in chats:
         genWeeklyFreq(cursor, chatID, 15)
         try:
             genPoster(cursor, chatID, 15)
-        except:
+        except Exception as e:
             logging.exception("["+str(i)+"/"+str(len(chats))+"] ["+chatID+"] : "+str(e))
         try:
             genPoster(cursor, chatID, 120)
-        except:
+        except Exception as e:
             logging.exception("["+str(i)+"/"+str(len(chats))+"] ["+chatID+"] : "+str(e))
         logging.info("[{0}/{1}] Ended Async Stats Gen for chat {2}".format(i,len(chats),chatID))
     except Exception as e:

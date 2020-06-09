@@ -1,0 +1,855 @@
+{
+    "meta": {
+        "type": "db",
+        "canSave": false,
+        "canEdit": false,
+        "canAdmin": false,
+        "canStar": true,
+        "slug": "cloudflare-logs",
+        "url": "/d/qP8dnRigz/cloudflare-logs",
+        "expires": "0001-01-01T00:00:00Z",
+        "created": "2020-06-03T15:33:52Z",
+        "updated": "2020-06-04T22:14:48Z",
+        "updatedBy": "admin",
+        "createdBy": "admin",
+        "version": 11,
+        "hasAcl": false,
+        "isFolder": false,
+        "folderId": 50,
+        "folderTitle": "Cloudflare",
+        "folderUrl": "/dashboards/f/0f6T5Wigz/cloudflare",
+        "provisioned": false,
+        "provisionedExternalId": ""
+    },
+    "dashboard": {
+        "annotations": {
+            "list": [
+                {
+                    "builtIn": 1,
+                    "datasource": "-- Grafana --",
+                    "enable": true,
+                    "hide": true,
+                    "iconColor": "rgba(0, 211, 255, 1)",
+                    "name": "Annotations & Alerts",
+                    "type": "dashboard"
+                }
+            ]
+        },
+        "editable": true,
+        "gnetId": null,
+        "graphTooltip": 0,
+        "id": 49,
+        "links": [],
+        "panels": [
+            {
+                "collapsed": false,
+                "datasource": null,
+                "gridPos": {
+                    "h": 1,
+                    "w": 24,
+                    "x": 0,
+                    "y": 0
+                },
+                "id": 4,
+                "panels": [],
+                "title": "Snapshot",
+                "type": "row"
+            },
+            {
+                "aliasColors": {},
+                "breakPoint": "50%",
+                "cacheTimeout": null,
+                "combine": {
+                    "label": "Others",
+                    "threshold": ""
+                },
+                "datasource": "Loki",
+                "fieldConfig": {
+                    "defaults": {
+                        "custom": {}
+                    },
+                    "overrides": []
+                },
+                "fontSize": "80%",
+                "format": "short",
+                "gridPos": {
+                    "h": 11,
+                    "w": 8,
+                    "x": 0,
+                    "y": 1
+                },
+                "id": 2,
+                "interval": null,
+                "legend": {
+                    "percentage": false,
+                    "show": true,
+                    "sort": "total",
+                    "sortDesc": true,
+                    "values": true
+                },
+                "legendType": "Right side",
+                "links": [],
+                "maxDataPoints": "",
+                "nullPointMode": "connected",
+                "pieType": "pie",
+                "strokeWidth": 1,
+                "targets": [
+                    {
+                        "expr": "topk(10,sum(count_over_time({zone_id=\"227016835\"}[24h])) by (client_country))",
+                        "refId": "A"
+                    }
+                ],
+                "timeFrom": null,
+                "timeShift": null,
+                "title": "Top countries",
+                "transparent": true,
+                "type": "grafana-piechart-panel",
+                "valueName": "total"
+            },
+            {
+                "aliasColors": {},
+                "bars": false,
+                "dashLength": 10,
+                "dashes": false,
+                "datasource": "Loki",
+                "fieldConfig": {
+                    "defaults": {
+                        "custom": {}
+                    },
+                    "overrides": []
+                },
+                "fill": 1,
+                "fillGradient": 0,
+                "gridPos": {
+                    "h": 11,
+                    "w": 16,
+                    "x": 8,
+                    "y": 1
+                },
+                "hiddenSeries": false,
+                "hideTimeOverride": true,
+                "id": 10,
+                "legend": {
+                    "avg": false,
+                    "current": false,
+                    "hideEmpty": true,
+                    "hideZero": true,
+                    "max": false,
+                    "min": false,
+                    "rightSide": true,
+                    "show": true,
+                    "total": false,
+                    "values": false
+                },
+                "lines": true,
+                "linewidth": 1,
+                "maxDataPoints": "",
+                "nullPointMode": "null",
+                "options": {
+                    "dataLinks": []
+                },
+                "percentage": false,
+                "pointradius": 2,
+                "points": false,
+                "renderer": "flot",
+                "seriesOverrides": [],
+                "spaceLength": 10,
+                "stack": false,
+                "steppedLine": false,
+                "targets": [
+                    {
+                        "expr": "sum(count_over_time({zone_id=\"227016835\"}[5m])) by (client_request_host)",
+                        "refId": "B"
+                    }
+                ],
+                "thresholds": [],
+                "timeFrom": null,
+                "timeRegions": [],
+                "timeShift": "30m",
+                "title": "Traffic per subdomain",
+                "tooltip": {
+                    "shared": true,
+                    "sort": 2,
+                    "value_type": "individual"
+                },
+                "transparent": true,
+                "type": "graph",
+                "xaxis": {
+                    "buckets": null,
+                    "mode": "time",
+                    "name": null,
+                    "show": true,
+                    "values": []
+                },
+                "yaxes": [
+                    {
+                        "decimals": null,
+                        "format": "short",
+                        "label": "",
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                    },
+                    {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": false
+                    }
+                ],
+                "yaxis": {
+                    "align": false,
+                    "alignLevel": null
+                }
+            },
+            {
+                "aliasColors": {},
+                "breakPoint": "50%",
+                "cacheTimeout": null,
+                "combine": {
+                    "label": "Others",
+                    "threshold": 0
+                },
+                "datasource": "Prometheus-Loki",
+                "fieldConfig": {
+                    "defaults": {
+                        "custom": {}
+                    },
+                    "overrides": []
+                },
+                "fontSize": "80%",
+                "format": "short",
+                "gridPos": {
+                    "h": 7,
+                    "w": 5,
+                    "x": 0,
+                    "y": 12
+                },
+                "id": 16,
+                "interval": "",
+                "legend": {
+                    "show": true,
+                    "values": false
+                },
+                "legendType": "Right side",
+                "links": [],
+                "maxDataPoints": 1,
+                "nullPointMode": "connected",
+                "pieType": "pie",
+                "strokeWidth": 1,
+                "targets": [
+                    {
+                        "expr": "sum(count_over_time({zone_id=\"227016835\"}[24h])) by (client_device)",
+                        "legendFormat": "{{client_device}}",
+                        "refId": "A"
+                    }
+                ],
+                "timeFrom": null,
+                "timeShift": null,
+                "title": "Traffic Type",
+                "type": "grafana-piechart-panel",
+                "valueName": "total"
+            },
+            {
+                "aliasColors": {},
+                "breakPoint": "50%",
+                "cacheTimeout": null,
+                "combine": {
+                    "label": "Others",
+                    "threshold": 0
+                },
+                "datasource": "Prometheus-Loki",
+                "fieldConfig": {
+                    "defaults": {
+                        "custom": {}
+                    },
+                    "overrides": []
+                },
+                "fontSize": "80%",
+                "format": "short",
+                "gridPos": {
+                    "h": 7,
+                    "w": 5,
+                    "x": 5,
+                    "y": 12
+                },
+                "id": 27,
+                "interval": "",
+                "legend": {
+                    "show": true,
+                    "values": false
+                },
+                "legendType": "Right side",
+                "links": [],
+                "maxDataPoints": 1,
+                "nullPointMode": "connected",
+                "pieType": "pie",
+                "strokeWidth": 1,
+                "targets": [
+                    {
+                        "expr": "sum(count_over_time({zone_id=\"227016835\"}[24h])) by (client_request_method)",
+                        "legendFormat": "{{client_request_method}}",
+                        "refId": "A"
+                    }
+                ],
+                "timeFrom": null,
+                "timeShift": null,
+                "title": "Request Methods",
+                "type": "grafana-piechart-panel",
+                "valueName": "total"
+            },
+            {
+                "collapsed": false,
+                "datasource": null,
+                "gridPos": {
+                    "h": 1,
+                    "w": 24,
+                    "x": 0,
+                    "y": 19
+                },
+                "id": 6,
+                "panels": [],
+                "title": "Reliability",
+                "type": "row"
+            },
+            {
+                "aliasColors": {},
+                "bars": false,
+                "dashLength": 10,
+                "dashes": false,
+                "datasource": "Prometheus-Loki",
+                "fieldConfig": {
+                    "defaults": {
+                        "custom": {}
+                    },
+                    "overrides": []
+                },
+                "fill": 1,
+                "fillGradient": 0,
+                "gridPos": {
+                    "h": 9,
+                    "w": 16,
+                    "x": 0,
+                    "y": 20
+                },
+                "hiddenSeries": false,
+                "hideTimeOverride": true,
+                "id": 14,
+                "legend": {
+                    "avg": false,
+                    "current": false,
+                    "max": false,
+                    "min": false,
+                    "rightSide": true,
+                    "show": true,
+                    "total": false,
+                    "values": false
+                },
+                "lines": true,
+                "linewidth": 1,
+                "nullPointMode": "null",
+                "options": {
+                    "dataLinks": []
+                },
+                "percentage": false,
+                "pointradius": 2,
+                "points": false,
+                "renderer": "flot",
+                "seriesOverrides": [],
+                "spaceLength": 10,
+                "stack": false,
+                "steppedLine": false,
+                "targets": [
+                    {
+                        "expr": "sum(count_over_time({zone_id=\"227016835\"}[5m])) by (origin_response_status)",
+                        "legendFormat": "{{origin_response_status}}",
+                        "refId": "A"
+                    }
+                ],
+                "thresholds": [],
+                "timeFrom": null,
+                "timeRegions": [],
+                "timeShift": "30m",
+                "title": "Origin Response Status Over Time",
+                "tooltip": {
+                    "shared": true,
+                    "sort": 0,
+                    "value_type": "individual"
+                },
+                "type": "graph",
+                "xaxis": {
+                    "buckets": null,
+                    "mode": "time",
+                    "name": null,
+                    "show": true,
+                    "values": []
+                },
+                "yaxes": [
+                    {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                    },
+                    {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": false
+                    }
+                ],
+                "yaxis": {
+                    "align": false,
+                    "alignLevel": null
+                }
+            },
+            {
+                "aliasColors": {},
+                "breakPoint": "50%",
+                "cacheTimeout": null,
+                "combine": {
+                    "label": "Others",
+                    "threshold": 0
+                },
+                "datasource": "Prometheus-Loki",
+                "fieldConfig": {
+                    "defaults": {
+                        "custom": {}
+                    },
+                    "overrides": []
+                },
+                "fontSize": "80%",
+                "format": "short",
+                "gridPos": {
+                    "h": 9,
+                    "w": 8,
+                    "x": 16,
+                    "y": 20
+                },
+                "hideTimeOverride": true,
+                "id": 25,
+                "interval": null,
+                "legend": {
+                    "percentage": false,
+                    "show": true,
+                    "sort": "total",
+                    "sortDesc": true,
+                    "values": true
+                },
+                "legendType": "Right side",
+                "links": [],
+                "maxDataPoints": 1,
+                "nullPointMode": "connected",
+                "pieType": "pie",
+                "strokeWidth": 1,
+                "targets": [
+                    {
+                        "expr": "sum(count_over_time({zone_id=\"227016835\"}[24h])) by (origin_response_status)",
+                        "legendFormat": "{{origin_response_status}}",
+                        "refId": "A"
+                    }
+                ],
+                "timeFrom": null,
+                "timeShift": "30m",
+                "title": "Origin Response Status Over Time",
+                "type": "grafana-piechart-panel",
+                "valueName": "total"
+            },
+            {
+                "aliasColors": {},
+                "bars": false,
+                "dashLength": 10,
+                "dashes": false,
+                "datasource": "Prometheus-Loki",
+                "fieldConfig": {
+                    "defaults": {
+                        "custom": {}
+                    },
+                    "overrides": []
+                },
+                "fill": 1,
+                "fillGradient": 0,
+                "gridPos": {
+                    "h": 9,
+                    "w": 16,
+                    "x": 0,
+                    "y": 29
+                },
+                "hiddenSeries": false,
+                "hideTimeOverride": true,
+                "id": 12,
+                "legend": {
+                    "avg": false,
+                    "current": false,
+                    "max": false,
+                    "min": false,
+                    "rightSide": true,
+                    "show": true,
+                    "total": false,
+                    "values": false
+                },
+                "lines": true,
+                "linewidth": 1,
+                "nullPointMode": "null",
+                "options": {
+                    "dataLinks": []
+                },
+                "percentage": false,
+                "pointradius": 2,
+                "points": false,
+                "renderer": "flot",
+                "seriesOverrides": [],
+                "spaceLength": 10,
+                "stack": false,
+                "steppedLine": false,
+                "targets": [
+                    {
+                        "expr": "sum(count_over_time({zone_id=\"227016835\"}[5m])) by (edge_response_status)",
+                        "legendFormat": "{{edge_response_status}}",
+                        "refId": "A"
+                    }
+                ],
+                "thresholds": [],
+                "timeFrom": null,
+                "timeRegions": [],
+                "timeShift": "30m",
+                "title": "Edge Response Status Over Time",
+                "tooltip": {
+                    "shared": true,
+                    "sort": 0,
+                    "value_type": "individual"
+                },
+                "type": "graph",
+                "xaxis": {
+                    "buckets": null,
+                    "mode": "time",
+                    "name": null,
+                    "show": true,
+                    "values": []
+                },
+                "yaxes": [
+                    {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                    },
+                    {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": false
+                    }
+                ],
+                "yaxis": {
+                    "align": false,
+                    "alignLevel": null
+                }
+            },
+            {
+                "aliasColors": {},
+                "breakPoint": "50%",
+                "cacheTimeout": null,
+                "combine": {
+                    "label": "Others",
+                    "threshold": 0
+                },
+                "datasource": "Prometheus-Loki",
+                "fieldConfig": {
+                    "defaults": {
+                        "custom": {}
+                    },
+                    "overrides": []
+                },
+                "fontSize": "80%",
+                "format": "short",
+                "gridPos": {
+                    "h": 9,
+                    "w": 8,
+                    "x": 16,
+                    "y": 29
+                },
+                "hideTimeOverride": true,
+                "id": 26,
+                "interval": null,
+                "legend": {
+                    "percentage": false,
+                    "show": true,
+                    "values": true
+                },
+                "legendType": "Right side",
+                "links": [],
+                "maxDataPoints": 1,
+                "nullPointMode": "connected",
+                "pieType": "pie",
+                "strokeWidth": "",
+                "targets": [
+                    {
+                        "expr": "sum(count_over_time({zone_id=\"227016835\"}[24h])) by (edge_response_status)",
+                        "legendFormat": "{{edge_response_status}}",
+                        "refId": "A"
+                    }
+                ],
+                "timeFrom": null,
+                "timeShift": "30m",
+                "title": "Edge Response Status Over Time",
+                "type": "grafana-piechart-panel",
+                "valueName": "total"
+            },
+            {
+                "collapsed": false,
+                "datasource": null,
+                "gridPos": {
+                    "h": 1,
+                    "w": 24,
+                    "x": 0,
+                    "y": 38
+                },
+                "id": 24,
+                "panels": [],
+                "title": "Performance",
+                "type": "row"
+            },
+            {
+                "aliasColors": {},
+                "bars": false,
+                "dashLength": 10,
+                "dashes": false,
+                "datasource": "Prometheus-Loki",
+                "fieldConfig": {
+                    "defaults": {
+                        "custom": {}
+                    },
+                    "overrides": []
+                },
+                "fill": 1,
+                "fillGradient": 0,
+                "gridPos": {
+                    "h": 8,
+                    "w": 12,
+                    "x": 0,
+                    "y": 39
+                },
+                "hiddenSeries": false,
+                "hideTimeOverride": true,
+                "id": 8,
+                "legend": {
+                    "avg": false,
+                    "current": false,
+                    "max": false,
+                    "min": false,
+                    "rightSide": true,
+                    "show": true,
+                    "total": false,
+                    "values": false
+                },
+                "lines": true,
+                "linewidth": 1,
+                "nullPointMode": "null",
+                "options": {
+                    "dataLinks": []
+                },
+                "percentage": false,
+                "pointradius": 2,
+                "points": false,
+                "renderer": "flot",
+                "seriesOverrides": [],
+                "spaceLength": 10,
+                "stack": false,
+                "steppedLine": false,
+                "targets": [
+                    {
+                        "expr": "sum(count_over_time({zone_id=\"227016835\"}[5m])) by (cache_status)",
+                        "legendFormat": "{{cache_status}}",
+                        "refId": "A"
+                    }
+                ],
+                "thresholds": [],
+                "timeFrom": null,
+                "timeRegions": [],
+                "timeShift": "30m",
+                "title": "Cache Status Over Time",
+                "tooltip": {
+                    "shared": true,
+                    "sort": 0,
+                    "value_type": "individual"
+                },
+                "transparent": true,
+                "type": "graph",
+                "xaxis": {
+                    "buckets": null,
+                    "mode": "time",
+                    "name": null,
+                    "show": true,
+                    "values": []
+                },
+                "yaxes": [
+                    {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                    },
+                    {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                    }
+                ],
+                "yaxis": {
+                    "align": false,
+                    "alignLevel": null
+                }
+            },
+            {
+                "collapsed": false,
+                "datasource": null,
+                "gridPos": {
+                    "h": 1,
+                    "w": 24,
+                    "x": 0,
+                    "y": 47
+                },
+                "id": 18,
+                "panels": [],
+                "title": "Security",
+                "type": "row"
+            },
+            {
+                "aliasColors": {},
+                "bars": false,
+                "dashLength": 10,
+                "dashes": false,
+                "datasource": "Prometheus-Loki",
+                "fieldConfig": {
+                    "defaults": {
+                        "custom": {}
+                    },
+                    "overrides": []
+                },
+                "fill": 1,
+                "fillGradient": 0,
+                "gridPos": {
+                    "h": 8,
+                    "w": 12,
+                    "x": 0,
+                    "y": 48
+                },
+                "hiddenSeries": false,
+                "id": 20,
+                "legend": {
+                    "avg": false,
+                    "current": false,
+                    "max": false,
+                    "min": false,
+                    "rightSide": true,
+                    "show": true,
+                    "total": false,
+                    "values": false
+                },
+                "lines": true,
+                "linewidth": 1,
+                "nullPointMode": "null",
+                "options": {
+                    "dataLinks": []
+                },
+                "percentage": false,
+                "pointradius": 2,
+                "points": false,
+                "renderer": "flot",
+                "seriesOverrides": [],
+                "spaceLength": 10,
+                "stack": false,
+                "steppedLine": false,
+                "targets": [
+                    {
+                        "expr": "sum(count_over_time({zone_id=\"227016835\"}[5m])) by (waf_action)",
+                        "legendFormat": "{{waf_action}}",
+                        "refId": "A"
+                    }
+                ],
+                "thresholds": [],
+                "timeFrom": null,
+                "timeRegions": [],
+                "timeShift": null,
+                "title": "Firewall Actions Over Time",
+                "tooltip": {
+                    "shared": true,
+                    "sort": 0,
+                    "value_type": "individual"
+                },
+                "type": "graph",
+                "xaxis": {
+                    "buckets": null,
+                    "mode": "time",
+                    "name": null,
+                    "show": true,
+                    "values": []
+                },
+                "yaxes": [
+                    {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                    },
+                    {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": false
+                    }
+                ],
+                "yaxis": {
+                    "align": false,
+                    "alignLevel": null
+                }
+            }
+        ],
+        "refresh": "15m",
+        "schemaVersion": 25,
+        "style": "dark",
+        "tags": [],
+        "templating": {
+            "list": []
+        },
+        "time": {
+            "from": "now-6h",
+            "to": "now"
+        },
+        "timepicker": {
+            "refresh_intervals": [
+                "5m",
+                "15m",
+                "30m",
+                "1h",
+                "2h",
+                "1d"
+            ]
+        },
+        "timezone": "",
+        "title": "Cloudflare Logs",
+        "uid": "qP8dnRigz",
+        "version": 11
+    }
+}

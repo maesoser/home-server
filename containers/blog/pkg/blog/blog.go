@@ -9,7 +9,7 @@ import (
 	"os"
 	"strconv"
 	"text/template"
-
+	"github.com/fsnotify/fsnotify"
 	"github.com/gorilla/mux"
 )
 
@@ -40,8 +40,52 @@ type Blog struct {
 	PrevPage   int
 	ActualPage int
 	NextPage   int
+	watcher    *fsnotify.Watcher
 }
 
+func (b *Blog) Watch(){
+    var err error
+    b.watcher, err = fsnotify.NewWatcher()
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer b.watcher.Close()
+
+	done := make(chan bool)
+	go func() {
+		for {
+			select {
+			case event, ok := <-b.watcher.Events:
+				if !ok {
+					return
+				}
+				log.Printf("[INFO] Change detected at file %s\n", event.Name)
+                for _, post := range b.Posts{
+                    fullName := post.Path + "/" + post.MDFile
+                    if fullName == event.Name{
+                        log.Printf("[INFO] Recompiling file %s\n", event.Name)
+                        post.Compile(fullName)
+                    }
+                }
+			case err, ok := <-b.watcher.Errors:
+				if !ok {
+					return
+				}
+				log.Println("error:", err)
+			}
+		}
+	}()
+
+    for _, post := range b.Posts{
+        fullName := post.Path + "/" + post.MDFile
+        log.Printf("[INFO] Watching file %s for changes\n", fullName)
+        err = b.watcher.Add(fullName)
+        if err != nil {
+            log.Fatal(err)
+        }
+    }
+	<-done
+}
 func (u *Blog) Load(filename string) {
 	bytes, err := ioutil.ReadFile(filename)
 	if err != nil {

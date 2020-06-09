@@ -6,33 +6,34 @@ import (
 	"crypto/x509"
 	"flag"
 	"fmt"
-	"github.com/gorilla/websocket"
 	"io"
 	"io/ioutil"
 	"log"
 	"net"
 	"net/http"
 	"os"
-	"time"
 	"sync"
+	"time"
+
+	"github.com/gorilla/websocket"
 )
 
 const (
-	writeWait = 10 * time.Second
-	maxMessageSize = 2048
-	pongWait = 100 * time.Second
-	pingPeriod = pongWait / 4
+	writeWait        = 10 * time.Second
+	pongWait         = 100 * time.Second
+	pingPeriod       = pongWait / 4
 	closeGracePeriod = pongWait * 4
 )
 
 type SockClient struct {
 	Address  string
 	CertPath string
-	Verbose bool
-	r io.Reader
-	w io.Writer
-	ws *websocket.Conn
-	wg sync.WaitGroup
+	Verbose  bool
+	BuffSize int
+	r        io.Reader
+	w        io.Writer
+	ws       *websocket.Conn
+	wg       sync.WaitGroup
 }
 
 /*
@@ -57,41 +58,41 @@ func (client *SockClient) ping(done chan struct{}) {
 func (client *SockClient) pong(string) error {
 	vlog(client.Verbose, "\rPong received\n")
 	client.ws.SetReadDeadline(time.Now().Add(pongWait))
-	return nil 
+	return nil
 }
 
-func (client *SockClient) toStdout(){
+func (client *SockClient) toStdout() {
 	defer client.wg.Done()
 	for {
 		mt, r, err := client.ws.NextReader()
 		if err != nil {
 			log.Printf("read: %v\n", err)
 		}
-		if mt == websocket.BinaryMessage{
-			writer(r, os.Stdout, maxMessageSize)
+		if mt == websocket.BinaryMessage {
+			writer(r, os.Stdout, client.BuffSize)
 		}
 		// We read from the endpoint and write to the ws
 	}
 }
 
-func (client *SockClient) fromStdin(){
+func (client *SockClient) fromStdin() {
 	defer client.wg.Done()
 	for {
 		w, err := client.ws.NextWriter(websocket.BinaryMessage)
 		if err != nil {
 			log.Printf("write: %v\n", err)
 		}
-		writer(os.Stdin, w, maxMessageSize)
+		writer(os.Stdin, w, client.BuffSize)
 	}
 }
 
-func vlog(enabled bool, format string, v ...interface{}){
-	if (enabled){
+func vlog(enabled bool, format string, v ...interface{}) {
+	if enabled {
 		log.Printf(format, v...)
 	}
 }
 
-func (client *SockClient) Close(){
+func (client *SockClient) Close() {
 	client.ws.WriteMessage(websocket.CloseMessage, websocket.FormatCloseMessage(websocket.CloseNormalClosure, ""))
 	time.Sleep(closeGracePeriod)
 	client.ws.Close()
@@ -102,7 +103,7 @@ func (client *SockClient) Run() {
 	//signal.Notify(interrupt, os.Interrupt)
 
 	var caCertPool *x509.CertPool
-	if client.CertPath != ""{
+	if client.CertPath != "" {
 		vlog(client.Verbose, "Using certificate %s\n", client.CertPath)
 		caCert, err := ioutil.ReadFile(client.CertPath)
 		if err != nil {
@@ -123,9 +124,9 @@ func (client *SockClient) Run() {
 		},
 	}
 	var err error
-	client.ws, _, err = dialer.Dial("ws://" + client.Address, nil)
+	client.ws, _, err = dialer.Dial(client.Address, nil)
 	if err != nil {
-		log.Fatalf("Error dialing to ws://%s (%s)\n", client.Address, err)
+		log.Fatalf("Error dialing to %s (%s)\n", client.Address, err)
 	}
 	defer client.ws.Close()
 	vlog(client.Verbose, "Succesfully connected to %s\n", client.Address)
@@ -133,7 +134,7 @@ func (client *SockClient) Run() {
 	stdoutDone := make(chan struct{})
 	client.wg.Add(3)
 
-	client.ws.SetReadLimit(maxMessageSize)
+	client.ws.SetReadLimit(int64(client.BuffSize))
 	client.ws.SetReadDeadline(time.Now().Add(pongWait))
 	client.ws.SetPongHandler(client.pong)
 
@@ -158,17 +159,11 @@ func writer(r io.Reader, to io.Writer, bufSize int) {
 
 // Server code
 type SockServer struct {
-	Verbose bool
-	Target  string
-	wg sync.WaitGroup
-	ws *websocket.Conn
-}
-
-var upgrader = websocket.Upgrader{
-	CheckOrigin:     (func(r *http.Request) bool { return true }),
-	EnableCompression: true,
-	ReadBufferSize:  maxMessageSize,
-	WriteBufferSize: maxMessageSize,
+	Verbose  bool
+	Target   string
+	BuffSize int
+	wg       sync.WaitGroup
+	ws       *websocket.Conn
 }
 
 func (server *SockServer) ping(string) error {
@@ -176,18 +171,25 @@ func (server *SockServer) ping(string) error {
 	//if err := server.ws.WriteControl(websocket.PongMessage, []byte{}, time.Now().Add(writeWait)); err != nil {
 	//	log.Printf("pong reponse: %s\n", err)
 	//}
-	return nil 
+	return nil
 }
 
 func (server *SockServer) close(i int, t string) error {
-	vlog(server.Verbose, "Receiving CLOSE %d %s\n",i,t)
-	return nil 
+	vlog(server.Verbose, "Receiving CLOSE %d %s\n", i, t)
+	return nil
 }
 
 func (server *SockServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	var endConn *net.TCPConn
 	var err error
 	var addr *net.TCPAddr
+
+	var upgrader = websocket.Upgrader{
+		CheckOrigin:       (func(r *http.Request) bool { return true }),
+		EnableCompression: true,
+		ReadBufferSize:    server.BuffSize,
+		WriteBufferSize:   server.BuffSize,
+	}
 
 	log.Printf("Received request from %s (%s)\n", r.Host, r.RemoteAddr)
 	server.ws, err = upgrader.Upgrade(w, r, nil)
@@ -203,15 +205,15 @@ func (server *SockServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if endConn, err = net.DialTCP("tcp", nil, addr); err != nil {
-		fmt.Printf("Error forwarding connection to: %s\n%s", server.Target,err)
+		fmt.Printf("Error forwarding connection to: %s\n%s", server.Target, err)
 	}
 	vlog(server.Verbose, "Forwarding connection to %s\n", server.Target)
 	bufReader := bufio.NewReader(endConn)
 
-	server.ws.SetReadLimit(maxMessageSize)
+	server.ws.SetReadLimit(int64(server.BuffSize))
 	server.ws.SetPingHandler(server.ping)
 	//server.ws.SetCloseHandler(server.close)
-	
+
 	server.wg.Add(2)
 	go func() {
 		defer server.wg.Done()
@@ -221,10 +223,10 @@ func (server *SockServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 				log.Printf("read err: %v\n", err)
 				return
 			}
-			if mt != 2{
+			if mt != 2 {
 				vlog(server.Verbose, "RCVD MSG %d\n", mt)
 			}
-			writer(r, endConn, maxMessageSize)
+			writer(r, endConn, server.BuffSize)
 		}
 	}()
 	func() {
@@ -235,7 +237,7 @@ func (server *SockServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 				log.Printf("write err: %v\n", err)
 				return
 			}
-			writer(bufReader, w, maxMessageSize)
+			writer(bufReader, w, server.BuffSize)
 		}
 	}()
 	server.wg.Wait()
@@ -243,10 +245,10 @@ func (server *SockServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 }
 
 func GetEnvStr(name, value string) string {
-    if os.Getenv(name) != "" {
-        return os.Getenv(name)
-    }
-    return value
+	if os.Getenv(name) != "" {
+		return os.Getenv(name)
+	}
+	return value
 }
 
 /*
@@ -259,30 +261,34 @@ Server usage:
 func main() {
 	// sudo setcap 'cap_net_bind_service=+ep' pasarela
 	clientAddr := flag.String("client", GetEnvStr("CLIENT_ADDR", ""), "WebSocket target address")
-	clientCert := flag.String("cert", GetEnvStr("CLIENT_CERT","client-ca.pem"), "Client certificate for Access")
-	serverPort := flag.String("server", GetEnvStr("SERVER_PORT","8080"), "Server port")
-	targetAddr := flag.String("dest", GetEnvStr("SERVER_TARGET","127.0.0.1:22"), "Service target address")
-	verboseOpt := flag.Bool("verbose",false, "Verbose")
+	clientCert := flag.String("cert", GetEnvStr("CLIENT_CERT", "client-ca.pem"), "Client certificate for Access")
+	serverPort := flag.String("server", GetEnvStr("SERVER_PORT", "8080"), "Server port")
+	targetAddr := flag.String("dest", GetEnvStr("SERVER_TARGET", "127.0.0.1:22"), "Service target address")
+	verboseOpt := flag.Bool("verbose", false, "Verbose")
+	bufferSize := flag.Int("buffer", 2048, "Buffer size")
+
 	flag.Parse()
 
 	if *clientAddr != "" && *clientCert != "" {
 		client := &SockClient{
 			Address:  *clientAddr,
-			Verbose: *verboseOpt,
+			Verbose:  *verboseOpt,
+			BuffSize: *bufferSize,
 		}
 		client.Run()
 	} else if *clientAddr != "" && *clientCert == "" {
 		client := &SockClient{
 			Address:  *clientAddr,
 			CertPath: *clientCert,
-			Verbose: *verboseOpt,
-
+			Verbose:  *verboseOpt,
+			BuffSize: *bufferSize,
 		}
 		client.Run()
 	} else if *serverPort != "" {
 		server := &SockServer{
-			Target:  *targetAddr,
-			Verbose: *verboseOpt,
+			Target:   *targetAddr,
+			Verbose:  *verboseOpt,
+			BuffSize: *bufferSize,
 		}
 		addr := fmt.Sprintf("0.0.0.0:%s", *serverPort)
 		log.Printf("Listening at %s, forwarding to %s\n", addr, *targetAddr)
@@ -292,3 +298,4 @@ func main() {
 		os.Exit(1)
 	}
 }
+

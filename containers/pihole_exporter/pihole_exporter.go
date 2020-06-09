@@ -70,24 +70,20 @@ func (e *PiHoleExporter) getMetrics() error {
 }
 
 func (e *PiHoleExporter) promHandler(w http.ResponseWriter, r *http.Request) {
-	//log.Printf("Received request from %s\n", r.RemoteAddr)
 	err := e.getMetrics()
 	if err != nil {
 		log.Fatal(err)
 		return
 	}
-
 	fmt.Fprintf(w, "pihole_blocked_domains %d\n", e.status.BlockedDomains)
 	fmt.Fprintf(w, "pihole_dns_queries_today %d\n", e.status.TotalQueriesToday)
 	fmt.Fprintf(w, "pihole_ads_blocked_today %d\n", e.status.BlockedQueriesToday)
-
 	fmt.Fprintf(w, "pihole_ads_percentage_today %f\n", e.status.BlockedPcntToday)
 	fmt.Fprintf(w, "pihole_unique_domains %d\n", e.status.UniqueDomains)
 	fmt.Fprintf(w, "pihole_queries_forwarded %d\n", e.status.ForwardedQueries)
 	fmt.Fprintf(w, "pihole_queries_cached %d\n", e.status.CachedQueries)
 	fmt.Fprintf(w, "pihole_clients_ever_seen %d\n", e.status.ClientsEverSeen)
 	fmt.Fprintf(w, "pihole_unique_clients %d\n", e.status.UniqueClients)
-
 	fmt.Fprintf(w, "pihole_dns_queries_all_types %d\n", e.status.TotalQueries)
 	fmt.Fprintf(w, "pihole_reply_nodata %d\n", e.status.NODATAReplies)
 	fmt.Fprintf(w, "pihole_reply_nxdomain %d\n", e.status.NXDOMAINReplies)
@@ -110,7 +106,6 @@ func main() {
 	exporter.Target = flag.String("a", GetEnvStr("PIHOLE_ADDR", "127.0.0.1:8080"), "PiHole Address")
 	exporter.Listener = flag.String("p", GetEnvStr("PROMETHEUS_PORT", "9333"), "Exporter address to listen to")
 	flag.Parse()
-
 	log.Printf("Listening at %s\n", *exporter.Listener)
 	http.HandleFunc("/metrics", exporter.promHandler)
 	log.Fatal(http.ListenAndServe(":"+*exporter.Listener, nil))

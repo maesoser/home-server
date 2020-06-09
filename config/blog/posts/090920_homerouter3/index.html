@@ -18,14 +18,23 @@
         <h3 id="tagline">The blog where I tell my geek adventures</h3>
       </center>
       <h1>Adding more capabilities to my router with virtualized firewall</h1><br>
-      <h2 id="fwmgrd">fwmgrd</h2>
+      <p>On my previous post I explained hot to install, configure and use docker to add additional services to my home router. On this post I will explain the tools I developed in order to get a tighter integration between the different elements that make up my router and enhance monitoring.</p>
 
-<p>Is an utility that manages the firewall vm:</p>
+<p>I found out one really annoying problem. If, for some reason, my router lost power, the firewall VNF that I deployed on it gets corrupted. Although the solution is no so difficult (download the image, uncompress it, boot it up and configure it), it is a little bit annoyin and induces a downtime that could be greatly reduced.</p>
 
-<ul>
-<li>Get its status</li>
-<li>Stop/start the Firewall</li>
-</ul>
+<p>For that reason I started to write a tiny daemon that not only will manage the lifecycle of the firewall and provision it. It will also expose a metrics API and a configuration API and it will include a minimal dashboard to perform basic actions and take a look at the performance of the router.</p>
+
+<h2 id="routerd">routerd</h2>
+
+<pre><code>GET status/firewall
+GET status/containers
+GET status/host
+
+GET config/vm
+GET config/host
+</code></pre>
+
+<h3 id="firewall-management">Firewall management</h3>
 
 <pre><code>{
   status: &quot;BOOTSTRAPED&quot;,
@@ -52,6 +61,10 @@
   - RUNNING: The image is configured and running
   - STOPPED: The image is configured and it is stopped
   - ERROR: There is an error</p>
+
+<h3 id="monitorization">Monitorization</h3>
+
+<h3 id="webpage">Webpage</h3>
 
 <h2 id="metricd">metricd</h2>
 

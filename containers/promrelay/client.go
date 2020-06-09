@@ -20,13 +20,15 @@ import (
 type RelayClient struct {
 	Interval     time.Duration
 	Target       *url.URL
-        Hostname     string
+	Host         string
+    Hostname     string
 	HMACKey      string
 	HMACHash     string
 	Exporters    exporters
 	httpClient   http.Client
+	Verbose      bool
 	Compress     bool
-        Oneshot      bool
+    Oneshot      bool
 	Data         []byte
 }
 
@@ -76,8 +78,10 @@ func (c *RelayClient) ScrapeExporter(ExporterAddr string) ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	log.Printf("Got %d bytes from exporter %s", len(bodyBytes), ExporterAddr)
-	return bodyBytes, nil
+	if c.Verbose{
+        log.Printf("Got %d bytes from exporter %s", len(bodyBytes), ExporterAddr)
+    }
+    return bodyBytes, nil
 }
 
 // ForwardData sends the data to the remote prometheus server
@@ -96,10 +100,10 @@ func (c *RelayClient) ForwardData() error {
 	}
 	req.Header.Set("Content-Length", fmt.Sprintf("%d", len(c.Data)))
 	req.Header.Set("Accept", "*/*")
-        req.Header.Set("Content-Type", "text/html; charset=utf-8")
+    req.Header.Set("Content-Type", "text/html; charset=utf-8")
 	req.Header.Set("User-Agent", "PromRelay Ver 1.0")
-	req.Header.Set("Host", c.Target.Hostname())
-	resp, err := c.httpClient.Do(req)
+    req.Header.Set("Host", c.Host)
+    resp, err := c.httpClient.Do(req)
 	if err != nil {
 		return err
 	}
@@ -107,8 +111,10 @@ func (c *RelayClient) ForwardData() error {
 	if resp.StatusCode != http.StatusOK {
 		return fmt.Errorf("server did not answered OK, (%d)", resp.StatusCode)
 	}
-	log.Printf("%d %d bytes sent to %s", resp.StatusCode, len(c.Data), c.Target.Hostname())
-	return nil
+    if c.Verbose{
+        log.Printf("%d %d bytes sent to %s", resp.StatusCode, len(c.Data), c.Host)
+    }
+    return nil
 }
 
 // AddTarget parses the url string into a URL object and add it to the client Structure
@@ -132,6 +138,9 @@ func (c *RelayClient) Run() {
     	}
     	c.Hostname = name
 	}
+	if c.Host == ""{
+        c.Host = c.Target.Hostname()
+    }
 	for {
 		c.Data = nil
                 for _, exporter := range(c.Exporters){

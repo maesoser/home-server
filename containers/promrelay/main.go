@@ -53,9 +53,11 @@ func main() {
         var Exporters exporters
 	flag.Var(&Exporters, "exporter", "Endpoint in which the prometheus exporter exposes its metrics")
 	Target := flag.String("target", GetEnvStr("TARGET_URL", "http://domain.com"), "Target domain to send the collected metrics")
+    Host := flag.String("host", GetEnvStr("HOST_NAME", ""), "Hostname header override")
 	Interval := flag.String("interval", GetEnvStr("SCRAPE_INTERVAL", "10m"), "Interval between scrapes")
 	CompressOpt := flag.Bool("compress", false, "Compress the payload")
-        OneshotOpt := flag.Bool("oneshot", false, "Send the data once and then exit")
+    VerboseOpt := flag.Bool("verbose", false, "Verbose output")
+    OneshotOpt := flag.Bool("oneshot", false, "Send the data once and then exit")
 	flag.Parse()
 
 	if *ServerOpt == true && *ClientOpt == true {
@@ -65,6 +67,7 @@ func main() {
 		server.Reuse = !*NoReuseOpt
 		server.ExposedPort = *ExposedPort
 		server.ListenPort = *ListenPort
+		server.Verbose = *VerboseOpt
 		server.Verbose = true
 		server.Output = *OutputFile
 		server.HMACKey = *HMACKey
@@ -73,6 +76,8 @@ func main() {
 		var err error
 		var client RelayClient
 		client.Exporters = Exporters
+		client.Host = *Host
+		client.Verbose = *VerboseOpt
 		client.Compress = *CompressOpt
 		client.Oneshot = *OneshotOpt
 		client.HMACKey = *HMACKey

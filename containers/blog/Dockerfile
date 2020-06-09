@@ -11,6 +11,7 @@ RUN apk add git && \
   go get -u github.com/gorilla/mux && \
   go get github.com/gomarkdown/markdown && \
   go get -u github.com/go-bindata/go-bindata/... && \
+  go get github.com/fsnotify/fsnotify && \
   go-bindata -pkg blog \
     -prefix /go/src/github.com/blog/ \
     -o /go/src/github.com/blog/pkg/blog/assets.go /go/src/github.com/blog/assets/ && \

@@ -1,15 +1,27 @@
 ---
 title: Adding more capabilities to my router with virtualized firewall
 draft: true
-tags: networks, engineering
+tags: networks, projects
 ---
 
-## fwmgrd
+On my previous post I explained hot to install, configure and use docker to add additional services to my home router. On this post I will explain the tools I developed in order to get a tighter integration between the different elements that make up my router and enhance monitoring.
 
-Is an utility that manages the firewall vm:
+I found out one really annoying problem. If, for some reason, my router lost power, the firewall VNF that I deployed on it gets corrupted. Although the solution is no so difficult (download the image, uncompress it, boot it up and configure it), it is a little bit annoyin and induces a downtime that could be greatly reduced.
 
- - Get its status
- - Stop/start the Firewall
+For that reason I started to write a tiny daemon that not only will manage the lifecycle of the firewall and provision it. It will also expose a metrics API and a configuration API and it will include a minimal dashboard to perform basic actions and take a look at the performance of the router.
+
+## routerd
+
+```
+GET status/firewall
+GET status/containers
+GET status/host
+
+GET config/vm
+GET config/host
+```
+
+### Firewall management
 
 ```
 {
@@ -37,6 +49,14 @@ The different status the VM could have are:
   - RUNNING: The image is configured and running
   - STOPPED: The image is configured and it is stopped
   - ERROR: There is an error
+
+
+### Monitorization
+
+
+### Webpage
+
+
 
 ## metricd
 

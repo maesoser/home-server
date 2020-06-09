@@ -114,10 +114,6 @@ def echo(bot, update):
         conn.commit()
 
     message = update.message
-    try:
-       logging.info(message)
-    except:
-        logging.info(message)
     reply = "0"
     name = str(message.from_user.id)
     emoji = ''

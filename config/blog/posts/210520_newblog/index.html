@@ -22,7 +22,7 @@
 
 <p>Sé que hay <a href="https://www.staticgen.com" target="_blank">muchísimas opciones disponibles</a> para generar y servir una página web estática y estoy seguro de que varias de ellas ofrecen justo las funcionalidades que yo quiero, pero aún así he decidido crear mi pequeña utilidad para esta tarea: Blog.</p>
 
-<p>Blog es un pequeño binario escrito en Go que es capaz de convertir una estructura de carpetas y documentos escritos en <a href="https://guides.github.com/features/mastering-markdown/" target="_blank">Markdown</a>, en un sencillo blog. Blog intenta ser simple de usar, tener una interfaz limpia y ser ofrecer un nivel razonable de seguridad.</p>
+<p>Blog es un pequeño binario escrito en Go que es capaz de convertir una estructura de carpetas y documentos escritos en <a href="https://guides.github.com/features/mastering-markdown/" target="_blank">Markdown</a> en un sencillo blog que intenta ser simple de usar, tener una interfaz limpia y ofrecer un nivel razonable de seguridad.</p>
 
 <h3 id="blog-es-sencillo-de-usar">Blog es sencillo de usar</h3>
 
@@ -38,7 +38,7 @@ year: '2020'
 posts: &quot;./posts&quot;
 </code></pre>
 
-<p>En la esa carpeta deberían encontrarse los distintos artículos, ordenados como subcarpetas.</p>
+<p>En la esa carpeta deberían encontrarse los distintos artículos, ordenados como subcarpetas. He elegido esta estructura porque me resulta cómoda a la hora de organizar los distintos recursos que uso en cada artículo.</p>
 
 <pre><code>  posts
     ├── 010120_post1
@@ -69,7 +69,7 @@ posts: &quot;./posts&quot;
 
 <ul>
 <li><strong>Blog</strong> : Esta es la estructura que guarda los tags, las entradas de los blogs, su título, etc</li>
-<li>**Post: ** Esta estructura se ocupa de parsear los archivos de texto y generar a partir de ellos el código HTML. Además de eso, guarda los datos básicos de cada post como su fecha, su título, etc.</li>
+<li><strong>Post:</strong> Esta estructura se ocupa de parsear los archivos de texto y generar a partir de ellos el código HTML. Además de eso, guarda los datos básicos de cada post como su fecha, su título, etc.</li>
 </ul></li>
 </ul>
 
@@ -77,12 +77,12 @@ posts: &quot;./posts&quot;
 
 <ul>
 <li><strong><a href="https://www.gorillatoolkit.org/" target="_blank">Gorilla</a>:</strong> Es un conjunto de utilidades para crear webs en Go.</li>
-<li><strong>[gomarkdown]()<a href="https://github.com/gomarkdown/markdown:" target="_blank">https://github.com/gomarkdown/markdown:</a></strong> Es el encarado de analizar los documentos en Markdown y traducirlos a html.</li>
+<li><strong><a href="https://github.com/gomarkdown/markdown" target="_blank">gomarkdown</a>:</strong> Es el encargado de analizar los documentos en Markdown y traducirlos a html.</li>
 </ul>
 
 <h3 id="blog-es-limpio">Blog es limpio</h3>
 
-<p>Soy un desastre con el diseño. Para conseguir que el blog fuera lo más sencillo posible a la par que agradable y simple de leer empecé usando <a href="https://mblode.github.io/marx/" target="_blank">Marx</a> como estilo CSS. Sin embargo, me he cambiado a <a href="http://classless.de/" target="_blank">classless.css</a> que en mi opinión es bastante más limpio y usa unas fuentes más agradables a la vista. El uso de un archivo css sin clases extra me permite aplicarlo sobre el código html generado de los ficheros de Markdown sin tener que añadir clases extra a los elementos que conforman la web. Añadirlo y personalizarlo es tan sencillo como incluir esta línea en la cabecera de mi web:</p>
+<p>Soy un desastre con el diseño. Para conseguir que el blog fuera lo más sencillo posible a la par que agradable y simple de leer empecé usando <a href="https://mblode.github.io/marx/" target="_blank">Marx</a> como estilo CSS. Sin embargo, me he cambiado a <a href="http://classless.de/" target="_blank">classless.css</a> que en mi opinión es bastante más limpio y usa unas fuentes más agradables a la vista. El uso de un archivo css sin clases me permite aplicarlo sobre el código html generado desde los ficheros en markdown sin tener que añadir etiquetas extra a los elementos que conforman la web. Añadirlo es tan sencillo como incluir esta línea en la cabecera de mi web:</p>
 
 <pre><code class="language-html">&lt;link rel='stylesheet' href='/classless.css'&gt;
 </code></pre>
@@ -101,7 +101,7 @@ posts: &quot;./posts&quot;
 
 <p>Blog también sigue <a href="https://blog.gopheracademy.com/advent-2016/exposing-go-on-the-internet/" target="_blank">las recomendaciones básicas</a> a la hora de exponer un servicio escrito en Go en Internet.</p>
 
-<p>Blog además está desplegado en un contenedor, con un sólo volumen para que tenga acceso a los artículos. También tiene configurados límites de memoria y de número de procesadores que puede llegar a usar. El contenedor está basado en la imagen <a href="https://docs.docker.com/develop/develop-images/baseimages/#create-a-simple-parent-image-using-scratch" target="_blank">scratch</a> por lo que no incluye ningún otro binario salvo el propio ejecutable del Blog, y está lanzado con un usuario no privilegiado.</p>
+<p>Blog además está desplegado en un contenedor, con un sólo volumen para que tenga acceso a los artículos. También tiene configurados límites de memoria y de número de procesadores que puede llegar a usar. El contenedor está basado en la imagen <a href="https://docs.docker.com/develop/develop-images/baseimages/#create-a-simple-parent-image-using-scratch" target="_blank">scratch</a> por lo que no incluye ningún otro binario salvo el propio ejecutable compilado, que se ejecuta con un usuario no privilegiado.</p>
 
 <p>Este es el fichero de docker-compose que lo configura</p>
 
@@ -134,6 +134,8 @@ services:
 <p><a href="http://www.inanzzz.com/index.php/post/9ats/http2-and-tls-client-and-server-example-with-golang" target="_blank">HTTP2 and TLS client and server example</a></p>
 
 <p><a href="https://www.docker.com/blog/docker-golang/" target="_blank">Docker + Golang = &lt;3</a></p>
+
+<p><a href="https://github.com/maesoser/home-server/tree/master/containers/blog" target="_blank">Blog Source Code</a></p>
 
       <footer>
         <p>&copy; 2020 &middot; <a href="https://github.com/maesoser" target="_blank">Maesoser</a></p>

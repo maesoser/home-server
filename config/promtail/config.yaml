@@ -1,0 +1,125 @@
+# https://github.com/denniskniep/GrafanaIssueDemo01/blob/dda4ae0aac55b5e94cd297c90f809025f779fdcc/docker/promtail/config.yaml
+
+server:
+  http_listen_port: 9080
+  grpc_listen_port: 0
+
+positions:
+  filename: /tmp/positions.yaml
+
+clients:
+  - url: http://loki:3100/loki/api/v1/push
+
+scrape_configs:
+- job_name: cloudflare
+  entry_parser: raw
+  static_configs:
+  - targets:
+    - localhost
+    labels:
+      __path__: /logs/cf/*.log
+  pipeline_stages:
+    - json:
+        expressions:
+          cache_status : "CacheCacheStatus"
+          cache_response_bytes : "CacheResponseBytes"
+          cache_response_status: "CacheResponseStatus"
+          cache_tiered_fill: "CacheTieredFill"
+          client_as: "ClientASN"
+          client_country: "ClientCountry"
+          client_device: "ClientDeviceType"
+          client_ip: "ClientIP"
+          client_ip_class: "ClientIPClass"
+          client_request_bytes: "ClientRequestBytes"
+          client_request_host: "ClientRequestHost"
+          client_request_method: "ClientRequestMethod"
+          client_request_proto: "ClientRequestProtocol"
+          client_request_referer: "ClientRequestReferer"
+          client_request_uri: "ClientRequestURI"
+          client_request_ua: "ClientRequestUserAgent"
+          client_ssl_cipher: "ClientSSLCipher"
+          client_ssl_proto: "ClientSSLProtocol"
+          client_src_port: "ClientSrcPort"
+          edge_colo: "EdgeColoID"
+          edge_end_ts: "EdgeEndTimestamp"
+          edge_pathing_op: "EdgePathingOp"
+          edge_pathing_src: "EdgePathingSrc"
+          edge_pathing_status: "EdgePathingStatus"
+          edge_ratelimit_action: "EdgeRateLimitAction"
+          edge_ratelimit_id: "EdgeRateLimitID"
+          edge_request_host: "EdgeRequestHost"
+          edge_response_bytes: "EdgeResponseBytes"
+          edge_response_compression: "EdgeResponseCompressionRatio"
+          edge_response_content: "EdgeResponseContentType"
+          edge_response_status: "EdgeResponseStatus"
+          edge_server_ip: "EdgeServerIP"
+          edge_start_ts: "EdgeStartTimestamp"
+          origin_ip: "OriginIP"
+          origin_response_bytes: "OriginResponseBytes"
+          origin_response_http_expires: "OriginResponseHTTPExpires"
+          origin_response_http_lastmodified: "OriginResponseHTTPLastModified"
+          origin_response_status: "OriginResponseStatus"
+          origin_response_time: "OriginResponseTime"
+          origin_ssl_proto: "OriginSSLProtocol"
+          parent_ray_id: "ParentRayID"
+          ray_id: "RayID"
+          security_level: "SecurityLevel"
+          waf_action: "WAFAction"
+          waf_flags: "WAFFlags"
+          waf_matched: "WAFMatchedVar"
+          waf_profile: "WAFProfile"
+          waf_rule_id: "WAFRuleID"
+          waf_rule_msg: "WAFRuleMessage"
+          worker_cpu: "WorkerCPUTime"
+          worker_status: "WorkerStatus"
+          worker_subrequest: "WorkerSubrequest"
+          worker_subrequest_count: "WorkerSubrequestCount"
+          zone_id: "ZoneID"
+    - timestamp:
+        source: "edge_start_ts"
+        format: UnixNs
+        action_on_failure: fudge
+    - labels:
+        cache_status : 
+        # cache_response_status: 
+        # cache_tiered_fill: 
+        #client_as: 
+        #client_country: 
+        client_device: 
+        #client_ip: 
+        #client_ip_class: 
+        #client_request_host: 
+        client_request_method: 
+        # client_request_proto: 
+        #client_request_referer: 
+        #client_request_uri: 
+        #client_request_ua: 
+        # client_ssl_cipher: 
+        # client_ssl_proto: 
+        # client_src_port: 
+        # edge_colo: 
+        # edge_pathing_op: 
+        # edge_pathing_src: 
+        # edge_pathing_status: 
+        # edge_ratelimit_action: 
+        # edge_ratelimit_id: 
+        #edge_request_host: 
+        # edge_response_content: 
+        edge_response_status: 
+        #origin_response_http_expires: 
+        #origin_response_http_lastmodified: 
+        origin_response_status: 
+        # origin_ssl_proto: 
+        #parent_ray_id: 
+        #ray_id: 
+        security_level: 
+        waf_action: 
+        # waf_flags: 
+        # waf_matched: 
+        # waf_profile: 
+        # waf_rule_id: 
+        # waf_rule_msg: 
+        # worker_cpu: 
+        # worker_status: 
+        # worker_subrequest: 
+        zone_id: 

@@ -46,7 +46,7 @@ type RelayServer struct {
 	ExposedPort int
 	ListenPort  int
 	Verbose     bool
-        Output      string
+    Output      string
 	HMACKey     string
 	Data        *PromData
 }
@@ -108,14 +108,18 @@ func (s *RelayServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			log.Printf("Error uncompressing update: %s\n", err)
 			return
-		} else {
-			compressPcnt := 100.0 - 100.0 * float64(len(bodyBytes))/float64(len(data))
-			log.Printf("Received %d bytes (%.1f%% compression) update from %s\n", len(bodyBytes), compressPcnt, r.RemoteAddr)
-			s.Data.Payload = string(data)
+		} else{
+            if s.Verbose {
+			    compressPcnt := 100.0 - 100.0 * float64(len(bodyBytes))/float64(len(data))
+			    log.Printf("Received %d bytes (%.1f%% compression) update from %s\n", len(bodyBytes), compressPcnt, r.RemoteAddr)
+            }
+            s.Data.Payload = string(data)
 		}
 	}else{
-                log.Printf("Received %d bytes update from %s\n", len(bodyBytes), r.RemoteAddr)
-		s.Data.Payload = string(bodyBytes)
+        if s.Verbose {
+            log.Printf("Received %d bytes update from %s\n", len(bodyBytes), r.RemoteAddr)
+        }
+        s.Data.Payload = string(bodyBytes)
 	}
 	s.Data.Used = false
 	s.Data.Timestamp = time.Now()

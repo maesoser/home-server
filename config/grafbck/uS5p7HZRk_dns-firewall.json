@@ -1,0 +1,766 @@
+{
+    "meta": {
+        "type": "db",
+        "canSave": false,
+        "canEdit": false,
+        "canAdmin": false,
+        "canStar": true,
+        "slug": "dns-firewall",
+        "url": "/d/uS5p7HZRk/dns-firewall",
+        "expires": "0001-01-01T00:00:00Z",
+        "created": "2020-03-11T18:19:21Z",
+        "updated": "2020-06-04T21:37:31Z",
+        "updatedBy": "admin",
+        "createdBy": "Anonymous",
+        "version": 2,
+        "hasAcl": false,
+        "isFolder": false,
+        "folderId": 50,
+        "folderTitle": "Cloudflare",
+        "folderUrl": "/dashboards/f/0f6T5Wigz/cloudflare",
+        "provisioned": false,
+        "provisionedExternalId": ""
+    },
+    "dashboard": {
+        "annotations": {
+            "list": [
+                {
+                    "builtIn": 1,
+                    "datasource": "-- Grafana --",
+                    "enable": true,
+                    "hide": true,
+                    "iconColor": "rgba(0, 211, 255, 1)",
+                    "name": "Annotations & Alerts",
+                    "type": "dashboard"
+                }
+            ]
+        },
+        "editable": true,
+        "gnetId": null,
+        "graphTooltip": 0,
+        "id": 33,
+        "links": [],
+        "panels": [
+            {
+                "collapsed": false,
+                "datasource": null,
+                "gridPos": {
+                    "h": 6,
+                    "w": 24,
+                    "x": 0,
+                    "y": 0
+                },
+                "id": 14,
+                "panels": [],
+                "repeat": "cluster",
+                "title": "$cluster",
+                "type": "row"
+            },
+            {
+                "aliasColors": {},
+                "bars": false,
+                "datasource": "cloudflare",
+                "editable": true,
+                "error": false,
+                "fill": 1,
+                "grid": {},
+                "gridPos": {
+                    "h": 7,
+                    "w": 24,
+                    "x": 0,
+                    "y": 1
+                },
+                "height": "250px",
+                "id": 1,
+                "legend": {
+                    "alignAsTable": true,
+                    "avg": true,
+                    "current": true,
+                    "hideEmpty": true,
+                    "hideZero": true,
+                    "max": true,
+                    "min": true,
+                    "rightSide": false,
+                    "show": true,
+                    "total": false,
+                    "values": true
+                },
+                "lines": true,
+                "linewidth": 1,
+                "links": [],
+                "maxPerRow": 1,
+                "nullPointMode": "connected",
+                "percentage": false,
+                "pointradius": 5,
+                "points": false,
+                "renderer": "flot",
+                "scopedVars": {
+                    "cluster": {
+                        "selected": true,
+                        "text": "cf_vdns_test",
+                        "value": "8ac38012fa7817bb31e7cd94458110b4/a67e14daa5f8dceeb91fe5449ba496eb"
+                    }
+                },
+                "seriesOverrides": [],
+                "stack": false,
+                "steppedLine": false,
+                "targets": [
+                    {
+                        "dimensions": "",
+                        "filters": [],
+                        "from": "vdns",
+                        "metrics": [
+                            "queryCount",
+                            "uncachedCount",
+                            "staleCount"
+                        ],
+                        "refId": "A",
+                        "tag": "$cluster"
+                    }
+                ],
+                "thresholds": [],
+                "timeFrom": null,
+                "timeShift": null,
+                "title": "Query rate, uncached, stale",
+                "tooltip": {
+                    "msResolution": false,
+                    "shared": true,
+                    "sort": 0,
+                    "value_type": "individual"
+                },
+                "type": "graph",
+                "xaxis": {
+                    "mode": "time",
+                    "name": null,
+                    "show": false,
+                    "values": []
+                },
+                "yaxes": [
+                    {
+                        "format": "pps",
+                        "label": "Query rate",
+                        "logBase": 1,
+                        "max": null,
+                        "min": 0,
+                        "show": true
+                    },
+                    {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                    }
+                ]
+            },
+            {
+                "aliasColors": {},
+                "bars": false,
+                "datasource": "cloudflare",
+                "editable": true,
+                "error": false,
+                "fill": 0,
+                "grid": {},
+                "gridPos": {
+                    "h": 6,
+                    "w": 12,
+                    "x": 0,
+                    "y": 7
+                },
+                "height": "",
+                "id": 3,
+                "legend": {
+                    "alignAsTable": true,
+                    "avg": true,
+                    "current": true,
+                    "hideEmpty": true,
+                    "hideZero": true,
+                    "max": true,
+                    "min": true,
+                    "rightSide": false,
+                    "show": true,
+                    "total": false,
+                    "values": true
+                },
+                "lines": true,
+                "linewidth": 1,
+                "links": [],
+                "maxPerRow": 2,
+                "nullPointMode": "connected",
+                "percentage": false,
+                "pointradius": 5,
+                "points": false,
+                "renderer": "flot",
+                "scopedVars": {
+                    "cluster": {
+                        "selected": true,
+                        "text": "cf_vdns_test",
+                        "value": "8ac38012fa7817bb31e7cd94458110b4/a67e14daa5f8dceeb91fe5449ba496eb"
+                    }
+                },
+                "seriesOverrides": [],
+                "stack": false,
+                "steppedLine": false,
+                "targets": [
+                    {
+                        "dimensions": "",
+                        "filters": [
+                            {
+                                "key": "responseCached",
+                                "operator": "=",
+                                "value": "uncached"
+                            }
+                        ],
+                        "from": "vdns",
+                        "metrics": [
+                            "responseTimeMedian",
+                            "responseTime90th",
+                            "responseTime99th"
+                        ],
+                        "refId": "A",
+                        "tag": "$cluster"
+                    }
+                ],
+                "thresholds": [],
+                "timeFrom": null,
+                "timeShift": null,
+                "title": "Latency percentiles",
+                "tooltip": {
+                    "msResolution": false,
+                    "shared": true,
+                    "sort": 0,
+                    "value_type": "individual"
+                },
+                "type": "graph",
+                "xaxis": {
+                    "mode": "time",
+                    "name": null,
+                    "show": false,
+                    "values": []
+                },
+                "yaxes": [
+                    {
+                        "format": "ms",
+                        "label": "Latency (ms)",
+                        "logBase": 1,
+                        "max": null,
+                        "min": 0,
+                        "show": true
+                    },
+                    {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                    }
+                ]
+            },
+            {
+                "aliasColors": {},
+                "bars": false,
+                "datasource": "cloudflare",
+                "editable": true,
+                "error": false,
+                "fill": 1,
+                "grid": {},
+                "gridPos": {
+                    "h": 6,
+                    "w": 12,
+                    "x": 12,
+                    "y": 7
+                },
+                "height": "",
+                "id": 2,
+                "legend": {
+                    "alignAsTable": true,
+                    "avg": true,
+                    "current": true,
+                    "hideEmpty": true,
+                    "hideZero": true,
+                    "max": true,
+                    "min": true,
+                    "rightSide": false,
+                    "show": true,
+                    "total": false,
+                    "values": true
+                },
+                "lines": true,
+                "linewidth": 1,
+                "links": [],
+                "maxPerRow": 2,
+                "nullPointMode": "connected",
+                "percentage": false,
+                "pointradius": 5,
+                "points": false,
+                "renderer": "flot",
+                "scopedVars": {
+                    "cluster": {
+                        "selected": true,
+                        "text": "cf_vdns_test",
+                        "value": "8ac38012fa7817bb31e7cd94458110b4/a67e14daa5f8dceeb91fe5449ba496eb"
+                    }
+                },
+                "seriesOverrides": [],
+                "stack": true,
+                "steppedLine": false,
+                "targets": [
+                    {
+                        "dimensions": "responseCode",
+                        "filters": [],
+                        "from": "vdns",
+                        "metrics": [
+                            "queryCount"
+                        ],
+                        "refId": "A",
+                        "tag": "$cluster"
+                    }
+                ],
+                "thresholds": [],
+                "timeFrom": null,
+                "timeShift": null,
+                "title": "Responses by type",
+                "tooltip": {
+                    "msResolution": false,
+                    "shared": true,
+                    "sort": 0,
+                    "value_type": "individual"
+                },
+                "type": "graph",
+                "xaxis": {
+                    "mode": "time",
+                    "name": null,
+                    "show": false,
+                    "values": []
+                },
+                "yaxes": [
+                    {
+                        "format": "pps",
+                        "label": "Query rate",
+                        "logBase": 1,
+                        "max": null,
+                        "min": 0,
+                        "show": true
+                    },
+                    {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                    }
+                ]
+            },
+            {
+                "aliasColors": {},
+                "bars": false,
+                "datasource": "cloudflare",
+                "fill": 1,
+                "gridPos": {
+                    "h": 6,
+                    "w": 12,
+                    "x": 0,
+                    "y": 13
+                },
+                "id": 9,
+                "legend": {
+                    "alignAsTable": true,
+                    "avg": true,
+                    "current": false,
+                    "hideEmpty": true,
+                    "hideZero": true,
+                    "max": true,
+                    "min": true,
+                    "show": true,
+                    "total": false,
+                    "values": true
+                },
+                "lines": true,
+                "linewidth": 1,
+                "links": [],
+                "maxPerRow": 2,
+                "nullPointMode": "null",
+                "percentage": false,
+                "pointradius": 5,
+                "points": false,
+                "renderer": "flot",
+                "scopedVars": {
+                    "cluster": {
+                        "selected": true,
+                        "text": "cf_vdns_test",
+                        "value": "8ac38012fa7817bb31e7cd94458110b4/a67e14daa5f8dceeb91fe5449ba496eb"
+                    }
+                },
+                "seriesOverrides": [],
+                "stack": false,
+                "steppedLine": false,
+                "targets": [
+                    {
+                        "currentMetricKey": "",
+                        "dimensions": "origin",
+                        "filters": [
+                            {
+                                "key": "responseCached",
+                                "operator": "=",
+                                "value": "uncached"
+                            }
+                        ],
+                        "from": "vdns",
+                        "metrics": [
+                            "queryCount"
+                        ],
+                        "refId": "A",
+                        "tag": "$cluster"
+                    }
+                ],
+                "thresholds": [],
+                "timeFrom": null,
+                "timeShift": null,
+                "title": "Query rate by Origin Nameserver",
+                "tooltip": {
+                    "shared": true,
+                    "sort": 0,
+                    "value_type": "individual"
+                },
+                "type": "graph",
+                "xaxis": {
+                    "mode": "time",
+                    "name": null,
+                    "show": true,
+                    "values": []
+                },
+                "yaxes": [
+                    {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                    },
+                    {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                    }
+                ]
+            },
+            {
+                "aliasColors": {},
+                "bars": false,
+                "datasource": "cloudflare",
+                "editable": true,
+                "error": false,
+                "fill": 1,
+                "grid": {},
+                "gridPos": {
+                    "h": 6,
+                    "w": 12,
+                    "x": 12,
+                    "y": 13
+                },
+                "height": "",
+                "id": 13,
+                "legend": {
+                    "alignAsTable": true,
+                    "avg": true,
+                    "current": true,
+                    "hideEmpty": true,
+                    "hideZero": true,
+                    "max": true,
+                    "min": true,
+                    "rightSide": false,
+                    "show": true,
+                    "total": false,
+                    "values": true
+                },
+                "lines": true,
+                "linewidth": 1,
+                "links": [],
+                "maxPerRow": 2,
+                "nullPointMode": "connected",
+                "percentage": false,
+                "pointradius": 5,
+                "points": false,
+                "renderer": "flot",
+                "scopedVars": {
+                    "cluster": {
+                        "selected": true,
+                        "text": "cf_vdns_test",
+                        "value": "8ac38012fa7817bb31e7cd94458110b4/a67e14daa5f8dceeb91fe5449ba496eb"
+                    }
+                },
+                "seriesOverrides": [],
+                "stack": false,
+                "steppedLine": false,
+                "targets": [
+                    {
+                        "dimensions": "origin",
+                        "filters": [
+                            {
+                                "key": "responseCached",
+                                "operator": "=",
+                                "value": "uncached"
+                            }
+                        ],
+                        "from": "vdns",
+                        "metrics": [
+                            "responseTimeMedian"
+                        ],
+                        "refId": "A",
+                        "tag": "$cluster"
+                    }
+                ],
+                "thresholds": [],
+                "timeFrom": null,
+                "timeShift": null,
+                "title": "Latency by Origin Nameserver",
+                "tooltip": {
+                    "msResolution": false,
+                    "shared": true,
+                    "sort": 0,
+                    "value_type": "individual"
+                },
+                "type": "graph",
+                "xaxis": {
+                    "mode": "time",
+                    "name": null,
+                    "show": false,
+                    "values": []
+                },
+                "yaxes": [
+                    {
+                        "format": "ms",
+                        "label": "Latency (ms)",
+                        "logBase": 1,
+                        "max": null,
+                        "min": 0,
+                        "show": true
+                    },
+                    {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                    }
+                ]
+            },
+            {
+                "columns": [
+                    {
+                        "text": "Total",
+                        "value": "total"
+                    }
+                ],
+                "datasource": "cloudflare",
+                "fontSize": "100%",
+                "gridPos": {
+                    "h": 6,
+                    "w": 12,
+                    "x": 0,
+                    "y": 19
+                },
+                "id": 11,
+                "links": [],
+                "maxPerRow": 2,
+                "pageSize": null,
+                "scopedVars": {
+                    "cluster": {
+                        "selected": true,
+                        "text": "cf_vdns_test",
+                        "value": "8ac38012fa7817bb31e7cd94458110b4/a67e14daa5f8dceeb91fe5449ba496eb"
+                    }
+                },
+                "scroll": true,
+                "showHeader": true,
+                "sort": {
+                    "col": 0,
+                    "desc": true
+                },
+                "styles": [
+                    {
+                        "align": "auto",
+                        "dateFormat": "YYYY-MM-DD HH:mm:ss",
+                        "pattern": "Time",
+                        "type": "date"
+                    },
+                    {
+                        "align": "auto",
+                        "colorMode": null,
+                        "colors": [
+                            "rgba(245, 54, 54, 0.9)",
+                            "rgba(237, 129, 40, 0.89)",
+                            "rgba(50, 172, 45, 0.97)"
+                        ],
+                        "decimals": 2,
+                        "pattern": "/.*/",
+                        "thresholds": [],
+                        "type": "number",
+                        "unit": "short"
+                    }
+                ],
+                "targets": [
+                    {
+                        "currentMetricKey": "",
+                        "dimensions": "queryName",
+                        "filters": [],
+                        "from": "vdns",
+                        "metrics": [
+                            "uncachedCount"
+                        ],
+                        "refId": "A",
+                        "tag": "$cluster"
+                    }
+                ],
+                "title": "Uncached Queries",
+                "transform": "table",
+                "type": "table"
+            },
+            {
+                "columns": [
+                    {
+                        "text": "Total",
+                        "value": "total"
+                    }
+                ],
+                "datasource": "cloudflare",
+                "fontSize": "100%",
+                "gridPos": {
+                    "h": 6,
+                    "w": 12,
+                    "x": 12,
+                    "y": 19
+                },
+                "id": 12,
+                "links": [],
+                "maxPerRow": 2,
+                "pageSize": null,
+                "scopedVars": {
+                    "cluster": {
+                        "selected": true,
+                        "text": "cf_vdns_test",
+                        "value": "8ac38012fa7817bb31e7cd94458110b4/a67e14daa5f8dceeb91fe5449ba496eb"
+                    }
+                },
+                "scroll": true,
+                "showHeader": true,
+                "sort": {
+                    "col": 0,
+                    "desc": true
+                },
+                "styles": [
+                    {
+                        "align": "auto",
+                        "dateFormat": "YYYY-MM-DD HH:mm:ss",
+                        "pattern": "Time",
+                        "type": "date"
+                    },
+                    {
+                        "align": "auto",
+                        "colorMode": null,
+                        "colors": [
+                            "rgba(245, 54, 54, 0.9)",
+                            "rgba(237, 129, 40, 0.89)",
+                            "rgba(50, 172, 45, 0.97)"
+                        ],
+                        "decimals": 2,
+                        "pattern": "/.*/",
+                        "thresholds": [],
+                        "type": "number",
+                        "unit": "short"
+                    }
+                ],
+                "targets": [
+                    {
+                        "currentMetricKey": "queryCount",
+                        "dimensions": "queryName",
+                        "filters": [
+                            {
+                                "key": "responseCode",
+                                "operator": "=",
+                                "value": "SERVFAIL"
+                            }
+                        ],
+                        "from": "vdns",
+                        "metrics": [],
+                        "refId": "A",
+                        "tag": "$cluster"
+                    }
+                ],
+                "title": "SERVFAIL Queries",
+                "transform": "timeseries_aggregations",
+                "type": "table"
+            }
+        ],
+        "refresh": false,
+        "schemaVersion": 22,
+        "style": "dark",
+        "tags": [],
+        "templating": {
+            "list": [
+                {
+                    "current": {
+                        "text": "",
+                        "value": ""
+                    },
+                    "datasource": "cloudflare",
+                    "hide": 0,
+                    "includeAll": false,
+                    "label": "Cluster",
+                    "multi": true,
+                    "name": "cluster",
+                    "query": "clusters()",
+                    "refresh": 1,
+                    "type": "query"
+                },
+                {
+                    "datasource": "cloudflare",
+                    "filters": [],
+                    "hide": 0,
+                    "label": "",
+                    "name": "Filters",
+                    "type": "adhoc"
+                }
+            ]
+        },
+        "time": {
+            "from": "now-1h",
+            "to": "now"
+        },
+        "timepicker": {
+            "refresh_intervals": [
+                "30s",
+                "1m",
+                "5m",
+                "15m",
+                "30m",
+                "1h",
+                "2h",
+                "1d"
+            ],
+            "time_options": [
+                "5m",
+                "15m",
+                "1h",
+                "6h",
+                "12h",
+                "24h",
+                "2d",
+                "7d",
+                "30d"
+            ]
+        },
+        "timezone": "browser",
+        "title": "DNS Firewall",
+        "uid": "uS5p7HZRk",
+        "version": 2
+    }
+}
