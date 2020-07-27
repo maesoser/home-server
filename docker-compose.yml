@@ -2,48 +2,96 @@ version: "2.4"
 
 services:
 
+  maxmind:
+    container_name: maxmind
+    restart: unless-stopped
+    mem_limit: 128m
+    build:
+     context: ./containers/maxmind
+     dockerfile: Dockerfile
+    volumes:
+     - ./data/maxmind:/data
+    ports:
+      - "9797:8080"
+
   hugo:
     container_name: hugo
     restart: unless-stopped
     mem_limit: 128m
     build:
-      context: ./containers/hugo
-      dockerfile: Dockerfile
+     context: ./containers/hugo
+     dockerfile: Dockerfile
     environment:
-      - HUGO_BASEURL=https://blog.souvlaki.cf
-      - HUGO_SOURCE=/hugo
-      - HUGO_THEME=pure
+     - HUGO_THEME=parsa-hugo
+     - HUGO_SOURCE=/hugo/
+     - HUGO_BASEURL=hugo.souvlaki.cf
     volumes:
-      - ./config/hugo:/hugo
-    ports:
-      - "1313:1313"
+     - ./data/hugo/:/hugo/
+     
+  blog:
+    container_name: blog
+    restart: unless-stopped
+    mem_limit: 128m
+    build:
+     context: ./containers/blog
+     dockerfile: Dockerfile
+    environment:
+     - SERVER_HTTP_PORT=8080
+     - SERVER_HTTPS_PORT=8443
+    volumes:
+     - ./config/blog/config.json:/config.json
+     - ./config/blog/posts:/posts
 
   promrelay:
     container_name: promrelay
     restart: "no"
     mem_limit: 32m
+    logging:
+      options:
+        max-size: "5m"
+        max-file: "2"
     build:
      context: ./containers/promrelay
      dockerfile: Dockerfile
+    ports:
+      - "9292:9292/tcp"
     env_file:
       - ./secrets.env
     volumes:
       - ./data/promrelay:/data
     environment:
       - EXPOSED_PORT=9797
-      - LISTEN_PORT=8080
+      - LISTEN_PORT=9292
       - OUTPUT_FILE=/data/promrelay.debug
 
-  httpecho:
-    container_name: httpecho
+  wstunn:
+    container_name: wstunn
     restart: unless-stopped
-    mem_limit: 128m
+    mem_limit: 16m
+    build:
+      context: ./containers/wstunn
+      dockerfile: Dockerfile
+    env_file:
+      - ./secrets.env
+
+  echo:
+    container_name: echo
+    restart: unless-stopped
+    mem_limit: 16m
+    logging:
+      options:
+        max-size: "5m"
+        max-file: "2"
     build:
       context: ./containers/echo
       dockerfile: Dockerfile
+    ports:
+     - "1313:1313"
     volumes:
       - ./config/echo/:/data/
     environment:
+      - SERVER_HTTP_PORT=8080
+      - SERVER_HTTPS_PORT=8443
       - SERVER_KEY=/data/serverkey.pem
       - SERVER_CERT=/data/certificate.pem
 
@@ -51,6 +99,11 @@ services:
     container_name: cloudflared
     restart: unless-stopped
     mem_limit: 128m
+    cpu_count: 2
+    logging:
+      options:
+        max-size: "5m"
+        max-file: "2"
     build:
       context: ./containers/cloudflared
       dockerfile: Dockerfile
@@ -68,7 +121,8 @@ services:
       - TUNNEL_LOGLEVEL=info
       - TUNNEL_TRANSPORT_LOGLEVEL=error
       - TUNNEL_HOSTNAME=souvlaki.cf
-      - TUNNEL_URL=http://nginx:80
+      - TUNNEL_URL=https://nginx:443
+      - TUNNEL_ORIGIN_SERVER_NAME=souvlaki.cf
       - TUNNEL_ORIGIN_CERT=/etc/cloudflared/cert.pem
       - TUNNEL_COMPRESSION_LEVEL=3
     ports:
@@ -81,6 +135,10 @@ services:
     container_name: nginx
     mem_limit: 64m
     cpu_count: 2
+    logging:
+      options:
+        max-size: "3m"
+        max-file: "3"
     volumes:
      - ./config/nginx/nginx.conf:/etc/nginx/nginx.conf
      - ./data/nginx/:/data/
@@ -90,62 +148,12 @@ services:
      - "nginx"
      - "-g"
      - "daemon off;"
-
-  # glan:
-  #   restart: "no"
-  #   container_name: glan
-  #   build:
-  #     context: ./containers/glan
-  #     dockerfile: Dockerfile
-  #   volumes:
-  #     - "./config/glan:/scans"
-
-#  flanscan:
-#    restart: "no"
-#    container_name: flanscan
-#    mem_limit: 256m
-#    cpu_count: 1
-#    ports:
-#      - "9999:9999"
-#    build:
-#      context: ./containers/flan
-#      dockerfile: Dockerfile
-#    volumes:
-#      - "./config/flan/:/shared/"
-#      #- "./config/flan/ips.txt:/shared/ips.txt"
-#      #- "./config/flan/xml_files/:/shared/xml_files/"
-#      #- "./config/flan/reports/:/shared/reports/"
-
-  selenium-hub:
-    restart: always
-    container_name: selenium-hub
-    image: deinchristian/rpi-selenium-hub
-    mem_limit: 256m
-    cpu_count: 1
-    ports:
-      - "4444:4444"
-
-  selenium-chrome:
-    restart: always
-    container_name: selenium-chrome
-    image: deinchristian/rpi-selenium-node-chrome
-    mem_limit: 1024m
-    cpu_count: 2
-    ports:
-      - "5900:5900"
-      - "9515:9515"
-    shm_size: 128M
-    depends_on:
-      - selenium-hub
-    environment:
-      - HUB_PORT_4444_TCP_ADDR=selenium-hub
-      - HUB_PORT_4444_TCP_PORT=4444
-
-#  expedia:
-#    container_name: expedia
-#    build:
-#      context: ./containers/flights_scrapper
-#      dockerfile: Dockerfile
+    healthcheck:
+     test: curl -k --fail https://127.0.0.1 || exit 1 
+     interval: 5m
+     timeout: 10s
+     retries: 3
+     start_period: 30s
 
   stocks:
     container_name: stocks
@@ -178,6 +186,10 @@ services:
     restart: unless-stopped
     mem_limit: 256m
     cpu_count: 2
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
     environment:
       - PUID=1000
       - PGID=1000
@@ -222,19 +234,6 @@ services:
     ports:
       - "9400:9400/tcp"
 
-#  jupyter:
-#    container_name: jupyter
-#    restart: unless-stopped
-#    cpu_count: 4
-#    mem_limit: 1024m
-#    build:
-#      context: ./containers/jupyter
-#      dockerfile: Dockerfile
-#    ports:
-#      - "8888:8888/tcp"
-#    volumes:
-#      - ./data/jupyter:/jupyter
-
   trex:
     container_name: trex
     restart: unless-stopped
@@ -246,19 +245,6 @@ services:
     env_file:
       - ./secrets.env
 
-  webindex:
-    container_name: webindex
-    restart: unless-stopped
-    cpu_count: 1
-    mem_limit: 8m
-    build:
-      context: ./containers/webindex
-      dockerfile: Dockerfile
-    ports:
-     - '80:80/tcp'
-    cap_add:
-     - NET_ADMIN
-
   prometheus:
     container_name: prometheus
     image: prom/prometheus
@@ -267,8 +253,8 @@ services:
     restart: unless-stopped
     environment:
       - VIRTUAL_HOST=prometheus.loc
-    #ports:
-    #  - '9090:9090/tcp'
+    ports:
+      - '9090:9090/tcp'
     volumes:
       - './config/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml'
       - './data/prometheus/:/prometheus/'
@@ -278,14 +264,16 @@ services:
       - '--storage.tsdb.retention=93d'
       - '--web.enable-lifecycle'
       - '--web.enable-admin-api'
-    depends_on:
-      - pihole_exporter
 
   virgin_exporter:
     container_name: virgin_exporter
     restart: unless-stopped
     cpu_count: 1
     mem_limit: 16m
+    logging:
+      options:
+        max-size: "5m"
+        max-file: "3"
     build:
       context: ./containers/virgin_exporter
       dockerfile: Dockerfile
@@ -296,18 +284,41 @@ services:
     env_file:
      - ./secrets.env
 
+  cf_exporter:
+    container_name: cf_exporter
+    restart: unless-stopped
+    cpu_count: 1
+    mem_limit: 32m
+    logging:
+      options:
+        max-size: "5m"
+        max-file: "3"
+    ports:
+     - "2112:2112"
+    build:
+      context: ./containers/cloudflare_exporter
+      dockerfile: Dockerfile
+    environment:
+     - CF_DATASET=waf,http,workers
+    env_file:
+     - ./secrets.env
+
   pihole_exporter:
     container_name: pihole_exporter
     restart: unless-stopped
     cpu_count: 1
     mem_limit: 8m
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
     build:
       context: ./containers/pihole_exporter
       dockerfile: Dockerfile
+    environment:
+     - PIHOLE_ADDR=pihole:80
     #ports:
-    # - "9333:9333/tcp"
-    depends_on:
-     - pihole
+    # - "9333:9333/tcp
 
   cotibot:
     container_name: cotibot
@@ -319,6 +330,10 @@ services:
       dockerfile: Dockerfile
     env_file:
       - ./secrets.env
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
     volumes:
      - "./data/cotibot/temp/:/tmp/"
      - "./data/cotibot/tgdatabase.db:/app/tgdatabase.db"
@@ -350,8 +365,6 @@ services:
        - './data/pihole/etc-dnsmasq.d/:/etc/dnsmasq.d/'
     cap_add:
        - NET_ADMIN
-    depends_on:
-       - cloudflared
 
   grafana:
     container_name: grafana
@@ -360,10 +373,14 @@ services:
     cpu_count: 4
     restart: unless-stopped
     healthcheck:
-      test: curl --fail -s http://localhost:3000/ || exit 1
+      test: curl --fail -s http://grafana:3000/ || exit 1
       interval: 10min
       timeout: 10s
       retries: 3
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
     volumes:
       - "./config/grafana/:/etc/grafana/provisioning/"
       - "./data/grafana/:/var/lib/grafana/"
@@ -378,3 +395,62 @@ services:
       - "3000:3000"
     depends_on:
       - prometheus
+
+#  loki:
+#    container_name: loki
+#    image: grafana/loki
+#    user: "1000:1000"
+#    command: -config.file=/etc/loki/loki-local-config.yaml
+#    cpu_count: 4
+#    mem_limit: 512m
+#    restart: unless-stopped
+#    ports:
+#      - "3100:3100"
+#    volumes:
+#      - ./data/loki:/data/loki
+#      - ./config/loki/config.yaml:/etc/loki/loki-local-config.yaml
+#
+#  promtail:
+#    container_name: promtail
+#    image: grafana/promtail
+#    cpu_count: 1
+#    mem_limit: 64m
+#    restart: unless-stopped
+#    volumes:
+#      - ./config/promtail/config.yaml:/etc/promtail/config.yaml
+#      - ./data/promtail/cf:/logs/cf:z
+#    command: -config.file=/etc/promtail/config.yaml
+#
+#  logpull:
+#    container_name: logpull
+#    build:
+#      context: ./containers/logpull
+#      dockerfile: Dockerfile
+#    cpu_count: 1
+#    mem_limit: 64m
+#    restart: unless-stopped
+#    logging:
+#      options:
+#        max-size: "10m"
+#        max-file: "3"
+#    env_file:
+#      - ./secrets.env
+#    volumes:
+#      - ./data/promtail/cf:/logs:z
+
+  grafbck:
+    container_name: grafbck
+    build:
+      context: ./containers/grafbck
+      dockerfile: Dockerfile
+    cpu_count: 1
+    mem_limit: 64m
+    restart: unless-stopped
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
+    env_file:
+      - ./secrets.env
+    volumes:
+      - ./config/grafbck:/dashboards

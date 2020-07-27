@@ -9,10 +9,10 @@
         "url": "/d/eIn8GHWgk/cloudflared",
         "expires": "0001-01-01T00:00:00Z",
         "created": "2020-03-11T18:07:45Z",
-        "updated": "2020-06-04T21:37:04Z",
+        "updated": "2020-07-06T15:21:15Z",
         "updatedBy": "admin",
         "createdBy": "admin",
-        "version": 8,
+        "version": 9,
         "hasAcl": false,
         "isFolder": false,
         "folderId": 50,
@@ -47,6 +47,12 @@
                 "dashLength": 10,
                 "dashes": false,
                 "datasource": null,
+                "fieldConfig": {
+                    "defaults": {
+                        "custom": {}
+                    },
+                    "overrides": []
+                },
                 "fill": 1,
                 "fillGradient": 0,
                 "gridPos": {
@@ -134,6 +140,12 @@
                 "dashLength": 10,
                 "dashes": false,
                 "datasource": null,
+                "fieldConfig": {
+                    "defaults": {
+                        "custom": {}
+                    },
+                    "overrides": []
+                },
                 "fill": 1,
                 "fillGradient": 0,
                 "gridPos": {
@@ -222,6 +234,12 @@
                 "dashes": false,
                 "datasource": null,
                 "description": "",
+                "fieldConfig": {
+                    "defaults": {
+                        "custom": {}
+                    },
+                    "overrides": []
+                },
                 "fill": 1,
                 "fillGradient": 0,
                 "gridPos": {
@@ -309,6 +327,12 @@
                 "dashLength": 10,
                 "dashes": false,
                 "datasource": null,
+                "fieldConfig": {
+                    "defaults": {
+                        "custom": {}
+                    },
+                    "overrides": []
+                },
                 "fill": 1,
                 "fillGradient": 0,
                 "gridPos": {
@@ -397,6 +421,12 @@
                 "dashLength": 10,
                 "dashes": false,
                 "datasource": null,
+                "fieldConfig": {
+                    "defaults": {
+                        "custom": {}
+                    },
+                    "overrides": []
+                },
                 "fill": 1,
                 "fillGradient": 0,
                 "gridPos": {
@@ -432,7 +462,8 @@
                 "steppedLine": false,
                 "targets": [
                     {
-                        "expr": "sum(irate(cloudflared_tunnel_response_code_per_tunnel[10m])) by (status_code)",
+                        "expr": "sum(increase(cloudflared_tunnel_response_code_per_tunnel[10m])) by (status_code)",
+                        "interval": "",
                         "legendFormat": "{{status_code}}",
                         "refId": "A"
                     }
@@ -485,6 +516,12 @@
                 "dashLength": 10,
                 "dashes": false,
                 "datasource": null,
+                "fieldConfig": {
+                    "defaults": {
+                        "custom": {}
+                    },
+                    "overrides": []
+                },
                 "fill": 1,
                 "fillGradient": 0,
                 "gridPos": {
@@ -575,6 +612,12 @@
                 "dashLength": 10,
                 "dashes": false,
                 "datasource": null,
+                "fieldConfig": {
+                    "defaults": {
+                        "custom": {}
+                    },
+                    "overrides": []
+                },
                 "fill": 1,
                 "fillGradient": 0,
                 "gridPos": {
@@ -672,6 +715,12 @@
                 "dashLength": 10,
                 "dashes": false,
                 "datasource": null,
+                "fieldConfig": {
+                    "defaults": {
+                        "custom": {}
+                    },
+                    "overrides": []
+                },
                 "fill": 1,
                 "fillGradient": 0,
                 "gridPos": {
@@ -760,6 +809,12 @@
                 "dashes": false,
                 "datasource": null,
                 "description": "",
+                "fieldConfig": {
+                    "defaults": {
+                        "custom": {}
+                    },
+                    "overrides": []
+                },
                 "fill": 1,
                 "fillGradient": 0,
                 "gridPos": {
@@ -849,6 +904,12 @@
                 "dashLength": 10,
                 "dashes": false,
                 "datasource": null,
+                "fieldConfig": {
+                    "defaults": {
+                        "custom": {}
+                    },
+                    "overrides": []
+                },
                 "fill": 0,
                 "fillGradient": 0,
                 "gridPos": {
@@ -937,6 +998,12 @@
                 "dashLength": 10,
                 "dashes": false,
                 "datasource": null,
+                "fieldConfig": {
+                    "defaults": {
+                        "custom": {}
+                    },
+                    "overrides": []
+                },
                 "fill": 0,
                 "fillGradient": 0,
                 "gridPos": {
@@ -1021,7 +1088,7 @@
                 }
             }
         ],
-        "schemaVersion": 22,
+        "schemaVersion": 25,
         "style": "dark",
         "tags": [],
         "templating": {
@@ -1035,6 +1102,6 @@
         "timezone": "",
         "title": "Cloudflared",
         "uid": "eIn8GHWgk",
-        "version": 8
+        "version": 9
     }
 }

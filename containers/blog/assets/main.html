@@ -15,9 +15,8 @@
     <p>{{range $Tag := .Tags}} <a href="/tag/{{$Tag}}" >{{$Tag}}</a> {{end}}<p>
   </center>
   {{range $Post := .Posts}}
-    <h3 id="{{$Post.Name}}"><a href="/posts/{{$Post.Name}}">{{$Post.Title}}</a></h3>
+    <h3 id="{{$Post.Name}}"><a href="/posts/{{$Post.Name}}">{{$Post.RawTitle}}</a></h3>
     <p>{{$Post.Content}}</p>
-    <br>
   {{end}}
   <center class="hero">
     <br><small>{{.PrevPage}} / {{.ActualPage}} / {{.NextPage}}</small>

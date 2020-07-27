@@ -1,0 +1,145 @@
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+    <meta charset="UTF-8">
+    <title>Cuando el DNS miente: <br>La censura en Internet y cómo detectarla.</title>
+    <link rel='stylesheet' href='/classless.css'>
+    <style> main {  max-width: 1200px; } img { display: block; margin-left: auto; margin-right: auto; }</style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.0.3/styles/tomorrow.min.css">
+    <style> .hljs { background: #F6F8FA; } </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.0.3/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+  </head>
+  <body>
+    <main>
+      <center class="hero">
+        <h1><a href="/">Tidy Bits</a></h1>
+        <h3 id="tagline">The blog where I tell my geek adventures</h3>
+      </center>
+      <center><h1>Cuando el DNS miente: <br>La censura en Internet y cómo detectarla.</h1></center><br>
+      <p>Hoy vamos a hablar de uno de los métodos más sencillos que usan algunos estados para censurar páginas web en Internet. Se trata del DNS Hijacking o bloqueo DNS, pero para entenderlo primero vamos a contar un poco qué es eso del DNS y por qué es tan importante para nuestra experiencia en Internet.</p>
+
+<h2 id="dns">DNS</h2>
+
+<p>Cuando queremos acceder a una web, por ejemplo <a href="www.google.com" target="_blank">google.com</a>, nuestro ordenador pregunta a unos servidores de Internet llamados Servidores de Nombres de Dominio (Domain Name Servers o DNS) por la dirección de esa página web. Una vez la ha conseguido, nuestro ordenador realiza una petición a esa dirección IP para obtener la página web que buscábamos.</p>
+
+<p><img src="dns.png" alt="DNS_Process" /></p>
+
+<p>¿Cómo sabemos qué servidores DNS usar? Lo más común es que cuando nos conectemos a nuestro router de casa, éste nos sugiera un par de direciones de servidores DNS que suelen ser por defecto los DNS gestionados por nuestro proveedor de servicio<sup class="footnote-ref" id="fnref:1"><a href="#fn:1">1</a></sup>. Por ejemplo, si tenéis Movistar en casa, el router os habrá sugerido <code>80.58.61.250</code> y <code>80.58.61.250</code> como DNS.</p>
+
+<p>Como os podéis imaginar, los DNS son una parte fundamental de nuestra experiencia en Internet ya que sin ellos somos incapaces de saber la dirección real de las páginas a las que accedemos. Son básicamente el listín telefónico de Internet y en su ausencia estaríamos totalmente a oscuras y no sabríamos cómo llegar a los sitios web que frecuentamos día tras día. Algunos estados se aprovechan de esta dependencia tan crítica para censurar webs obligando a los ISPs a que no nos contesten cuando preguntamos por esas páginas bloqueadas o para que nos respondan con direcciones erróneas.</p>
+
+<p>Este método es sencillo de aplicar puesto que sólo es necesario convencer a los ISPs para que modifiquen las entradas en sus servidores DNS, pero en contraposición es efectivo <strong>sólo</strong> para los clientes que hacen uso de esos servidores. Algunos usuarios más experimentados cambian los DNS que se configuran por defecto por servidores de otros proveedores menos proclives a ser modificados como <a href="https://developers.google.com/speed/public-dns" target="_blank">Google</a>, <a href="https://developers.cloudflare.com/1.1.1.1/" target="_blank">Cloudflare</a> o <a href="https://www.opendns.com/setupguide/" target="_blank">OpenDNS</a>.</p>
+
+<p>Existen diversas maneras de detectar este tipo de bloqueos. Al ser herramientas en uso por entidades gubernamentales, muchos estados ofrecen formularios online donde puedes revisar si tu dominio ha sido bloqueado. <a href="https://internet2.btk.gov.tr/sitesorgu/" target="_blank">Ésta web</a>, por ejemplo, permite comprobar si el gobierno turco ha bloqueado tu dominio.</p>
+
+<p>También existen organizaciones como el <a href="https://ooni.org/nettest/" target="_blank">Open Observatory of Network Interference</a>, la <a href="https://www.eff.org/es/testyourisp" target="_blank">Electronic Frontier Foundation</a> o <a href="https://netblocks.org/" target="_blank">NetBlocks</a>que ofrecen consejos o directamente aplicaciones para detectar técnicas de censura digital. Una práctica común para descubrir el bloqueo DNS consiste en realizar peticiones a distintos servidores y comprobar si todos devuelven las mismas direcciones. Si muchos de ellos muestran direcciones distintas es probable que esa página web haya sido censurada.</p>
+
+<h2 id="detectando-dns-hijacking">Detectando DNS Hijacking</h2>
+
+<p>En la actualidad esta técnica de detección suele funcionar sólo cuando se realiza dentro del país donde se quiere comprobar la censura. <a href="http://tools.ietf.org/html/rfc5358" target="_blank">No se recomienda</a> permitir que clientes de otras redes externas a un servidor DNS puedan realizar resoluciones de nombres para evitar un tipo específico de DDoS llamados reflection attacks<sup class="footnote-ref" id="fnref:5"><a href="#fn:5">2</a></sup> por lo que muchos de ellos filtran las peticiones entrantes y sólo contestan aquellas que provienen de redes autorizadas.</p>
+
+<p>Lo primero que tenemos que hacer es conseguir una lista de servidores DNS por país. Hay varias opciones para obtenerla, una de ellas puede ser <a href="https://github.com/robertdavidgraham/masscan" target="_blank">escanear todo el espacio de direcciones de internet</a> en busca de equipos que respondan en el puerto 53 pero nosotros vamos a elegir una opción menos invasiva. Usaremos la base de datos de nuestro RIR<sup class="footnote-ref" id="fnref:3"><a href="#fn:3">3</a></sup>. Los RIRs registran traducciones de IP a dominio (Reverse delegations), y en esos <a href="https://www.ripe.net/manage-ips-and-asns/db/support/documentation/ripe-database-documentation/rpsl-object-types/4-2-descriptions-of-primary-objects/4-2-2-description-of-the-domain-object" target="_blank">registros</a> también guardan direcciones de servidores DNS, normalmente servidores que pertenecen a las entidades administradoras de los distintos Sistemas Autónomos.</p>
+
+<p>Descargarse todos los objetos <code>domain</code> del RIPE es <a href="https://ftp.ripe.net/ripe/dbase/split/" target="_blank">sencillo</a>. Una vez con esa información en nuestro poder extraemos de ella una lista de servidores DNS, y cotejamos sus direcciones IP con la <a href="https://dev.maxmind.com/geoip/geoip2/geolite2/" target="_blank">base de datos de MaxMind</a> para descubrir dónde se encuentran geográficamente. El resultado de este proceso es un archivo con objetos json como el siguiente:</p>
+
+<pre><code>{
+  &quot;as_num&quot;: 13182,
+  &quot;as_org&quot;: &quot;Made Network Srl&quot;,
+  &quot;as_descr&quot;: &quot;Rimini, Italy&quot;,
+  &quot;domain&quot;: &quot;authns1.xtsystem.it&quot;,
+  &quot;addr&quot;: &quot;213.152.201.100&quot;,
+  &quot;continent&quot;: &quot;Europe&quot;,
+  &quot;country_name&quot;: &quot;Italy&quot;,
+  &quot;reg_country_name&quot;: &quot;Italy&quot;,
+  &quot;country_iso&quot;: &quot;IT&quot;,
+  &quot;reg_country_iso&quot;: &quot;IT&quot;,
+  &quot;city&quot;: &quot;Rimini&quot;,
+  &quot;postal_code&quot;: &quot;47923&quot;,
+  &quot;lat&quot;: 44.0575,
+  &quot;lon&quot;: 12.5653,
+  &quot;time_zone&quot;: &quot;Europe/Rome&quot;,
+}
+</code></pre>
+
+<p>Para comprobar de forma sencilla si somos capaces de detectar que una web tiene un comportamiento extraño dentro de un país hemos escrito un pequeño script que realiza resoluciones DNS de los servidores de la lista que hemos extraído por país: <a href="geo-dig.py" target="_blank">geo-dig</a>. Comprobemos los resultados de una web bloqueada en Turquía como puede ser <a href="www.pornhub.com" target="_blank">pornhub</a>, con una web que <a href="https://wikimediafoundation.org/news/2020/01/15/access-to-Wikipedia-restored-in-turkey-after-more-than-two-and-a-half-years/" target="_blank"><em>actualmente</em></a> no está bloqueada como es <a href="www.Wikipedia.org" target="_blank">Wikipedia</a>.</p>
+
+<pre><code>$ ./geo-dig.py --country &quot;TR&quot; --target pornhub.com
+931 servers found at TR
+
+30 servers returned the following addresses
+	66.254.114.41
+21 servers returned the following addresses
+	195.175.254.2
+2 servers returned the following addresses
+	208.91.112.55
+2 servers returned the following addresses
+	185.50.70.10
+2 servers returned the following addresses
+	185.152.91.1
+	185.152.91.2
+874 servers did not answer
+
+$ ./geo-dig.py --country &quot;TR&quot; --target Wikipedia.org
+931 servers found at TR
+
+2 servers returned the following addresses
+	208.91.112.55
+2 servers returned the following addresses
+	185.152.91.1
+	185.152.91.2
+53 servers returned the following addresses
+	91.198.174.192
+2 servers returned the following addresses
+	185.50.70.10
+872 servers did not answer
+</code></pre>
+
+<p>A simple vista nuestra herramienta no parece arrojarnos un resultado categórico para juzgar si una web u otra está bloqueada. Como hemos comentado anteriormente, el estado se ocupará especialmente de que los grandes proveedores de Internet de su país modifiquen sus entradas DNS, pero no perderá tiempo con pequeños proveedores o empresas particulares. Sin embargo, si nos fijamos con más atención vemos que mientras que en el caso de Wikipedia parece haber un consenso mayoritario en torno a la dirección <code>91.198.174.192</code>, con pornhub<sup class="footnote-ref" id="fnref:4"><a href="#fn:4">4</a></sup> hay discrepancias en torno a dos direcciones IPs: <code>66.254.114.41</code> y <code>195.175.254.2</code>.</p>
+
+<p>¿Cómo saber cuál es la página web real y cuál no? Una manera es comprobar que puedan finalizar una conexión TLS. Las entidades certificadoras sólo habrán extendido un certificado utilizable a la verdadera web y no al servidor que está secuestrando el dominio. Si probamos con la primera dirección podemos verificar que cuenta con un certificado expedido para el dominio y todos sus subdominios mientras que la segunda dirección no consigue finalizar la negociación:</p>
+
+<pre><code>$ openssl s_client -connect 66.254.114.41:443 -servername pornhub.com 2&gt;&amp;1 | grep &quot;^subject&quot;
+subject=C = CY, L = Dali, O = MG FREESITES II LTD, CN = *.pornhub.com
+
+$ openssl s_client -connect 195.175.254.2:443 -servername pornhub.com 
+CONNECTED(00000003)
+</code></pre>
+
+<p>Si queremos más pruebas podemos cargar la página en texto plano en vez de en https. El título del documento que nos devuelve es &ldquo;Autoridad de Tecnologías de la Información y Comunicación&rdquo;, claramente no el que nos esperaríamos de la web a la que estábamos intentando acceder.</p>
+
+<pre><code>$ curl --silent --header &quot;Host: pornhub.com&quot; http://195.175.254.2 | grep &quot;title&quot;
+	&lt;title&gt;Bilgi Teknolojileri ve İletişim Kurumu&lt;/title&gt;
+</code></pre>
+
+<h2 id="referencias">Referencias</h2>
+
+<ul>
+<li><p><a href="https://labs.ripe.net/Members/stephane_bortzmeyer/dns-censorship-dns-lies-seen-by-atlas-probes" target="_blank">DNS Censorship (DNS Lies) As Seen By RIPE Atlas</a></p></li>
+
+<li><p><a href="https://protonmail.com/blog/turkey-online-censorship-bypass/" target="_blank">ProtonMail is being blocked in Turkey. Here’s how to bypass Turkey’s online censorship.</a></p></li>
+</ul>
+
+<div class="footnotes">
+
+<hr>
+
+<ol>
+<li id="fn:1">Un Proveedor de Servicio o ISP es la empresa que te ofrece la conexión a Internet. Movistar, Orange o Virgin Media son ISPs.</li>
+
+<li id="fn:5">Un ataque de reflexión o <a href="https://blog.cloudflare.com/reflections-on-reflections/" target="_blank">reflection attack</a> es un tipo de ataque de denegación de servicio en el que un usuario malicioso envía una petición modificada a un servicio externo de tal forma que la respuesta no le llegue a él si no que sea enviada al equipo que se desea atacar.</li>
+
+<li id="fn:3">Un RIR (Regional Internet Registry) se ocupa de asignar y registrar los recursos de Internet (Direcciones IP, etc) dentro de una región específica.</li>
+
+<li id="fn:4">Elegir pornhub para este ejemplo era una apuesta segura ya que la pornografía es una de las temáticas censuradas en Turquía junto con el juego, las drogas o las ofensas a Atatürk entre otras por medio de la ley 5651.</li>
+</ol>
+
+</div>
+
+      <footer>
+        <p>&copy; 2020 &middot; <a href="https://github.com/maesoser" target="_blank">Maesoser</a></p>
+      </footer>
+    </main>
+  </body>
+</html>

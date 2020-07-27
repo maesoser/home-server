@@ -1,6 +1,5 @@
 FROM golang:alpine as builder
 
-# Download and install dependencies
 RUN apk update && apk add --no-cache git && go get github.com/prometheus/client_golang/prometheus && go get gopkg.in/tucnak/telebot.v2
 
 # Copy the code from the host

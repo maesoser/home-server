@@ -6,20 +6,20 @@
         "canAdmin": false,
         "canStar": true,
         "slug": "internet-madrid",
-        "url": "/d/YX9iXrkgk/internet-madrid",
+        "url": "/d/4YoBU3RRk/internet-madrid",
         "expires": "0001-01-01T00:00:00Z",
-        "created": "2020-05-27T16:41:57Z",
-        "updated": "2020-05-18T01:00:20Z",
-        "updatedBy": "Anonymous",
-        "createdBy": "Anonymous",
-        "version": 18,
+        "created": "2020-07-10T09:19:50Z",
+        "updated": "2020-07-19T21:59:24Z",
+        "updatedBy": "admin",
+        "createdBy": "admin",
+        "version": 3,
         "hasAcl": false,
         "isFolder": false,
         "folderId": 0,
         "folderTitle": "General",
         "folderUrl": "",
-        "provisioned": true,
-        "provisionedExternalId": "Internet.json"
+        "provisioned": false,
+        "provisionedExternalId": ""
     },
     "dashboard": {
         "annotations": {
@@ -38,7 +38,7 @@
         "editable": true,
         "gnetId": null,
         "graphTooltip": 0,
-        "id": 48,
+        "id": 54,
         "links": [],
         "panels": [
             {
@@ -61,6 +61,12 @@
                 "dashLength": 10,
                 "dashes": false,
                 "datasource": null,
+                "fieldConfig": {
+                    "defaults": {
+                        "custom": {}
+                    },
+                    "overrides": []
+                },
                 "fill": 1,
                 "fillGradient": 0,
                 "gridPos": {
@@ -165,6 +171,12 @@
                 "dashLength": 10,
                 "dashes": false,
                 "datasource": null,
+                "fieldConfig": {
+                    "defaults": {
+                        "custom": {}
+                    },
+                    "overrides": []
+                },
                 "fill": 0,
                 "fillGradient": 0,
                 "gridPos": {
@@ -204,7 +216,7 @@
                 "steppedLine": false,
                 "targets": [
                     {
-                        "expr": "avg_over_time(crisipo_tplink_lan_lease_seconds[5m])",
+                        "expr": "sum by (name) (avg_over_time(crisipo_tplink_lan_lease_seconds[5m]))",
                         "format": "time_series",
                         "interval": "",
                         "intervalFactor": 1,
@@ -233,6 +245,7 @@
                 },
                 "yaxes": [
                     {
+                        "$$hashKey": "object:141",
                         "format": "s",
                         "label": null,
                         "logBase": 1,
@@ -241,6 +254,7 @@
                         "show": true
                     },
                     {
+                        "$$hashKey": "object:142",
                         "format": "short",
                         "label": null,
                         "logBase": 1,
@@ -260,6 +274,12 @@
                 "dashLength": 10,
                 "dashes": false,
                 "datasource": null,
+                "fieldConfig": {
+                    "defaults": {
+                        "custom": {}
+                    },
+                    "overrides": []
+                },
                 "fill": 1,
                 "fillGradient": 0,
                 "gridPos": {
@@ -333,6 +353,7 @@
                 },
                 "yaxes": [
                     {
+                        "$$hashKey": "object:93",
                         "decimals": null,
                         "format": "Kbits",
                         "label": null,
@@ -342,6 +363,7 @@
                         "show": true
                     },
                     {
+                        "$$hashKey": "object:94",
                         "format": "short",
                         "label": null,
                         "logBase": 1,
@@ -375,6 +397,12 @@
                 "dashLength": 10,
                 "dashes": false,
                 "datasource": null,
+                "fieldConfig": {
+                    "defaults": {
+                        "custom": {}
+                    },
+                    "overrides": []
+                },
                 "fill": 1,
                 "fillGradient": 0,
                 "gridPos": {
@@ -499,6 +527,12 @@
                 "dashLength": 10,
                 "dashes": false,
                 "datasource": null,
+                "fieldConfig": {
+                    "defaults": {
+                        "custom": {}
+                    },
+                    "overrides": []
+                },
                 "fill": 1,
                 "fillGradient": 0,
                 "gridPos": {
@@ -597,38 +631,32 @@
                 }
             }
         ],
-        "refresh": false,
-        "schemaVersion": 22,
+        "schemaVersion": 25,
         "style": "dark",
         "tags": [],
         "templating": {
             "list": []
         },
         "time": {
-            "from": "now-24h",
+            "from": "now-6h",
             "to": "now"
         },
         "timepicker": {
             "refresh_intervals": [
+                "10s",
                 "30s",
                 "1m",
                 "5m",
                 "15m",
-                "30m"
-            ],
-            "time_options": [
+                "30m",
                 "1h",
-                "6h",
-                "12h",
-                "24h",
-                "2d",
-                "7d",
-                "30d"
+                "2h",
+                "1d"
             ]
         },
         "timezone": "",
-        "title": "Internet (Madrid)",
-        "uid": "YX9iXrkgk",
-        "version": 18
+        "title": "Internet - Madrid",
+        "uid": "4YoBU3RRk",
+        "version": 3
     }
 }

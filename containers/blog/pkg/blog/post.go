@@ -27,6 +27,10 @@ type Post struct {
 	Blog    *Blog
 }
 
+func (p *Post) RawTitle() string {
+  return strings.Replace(p.Title, "<br>","",-1)
+}
+
 func (p *Post) ReadMarkdown() (string, string, error) {
 	bytes, err := ioutil.ReadFile(p.Path + "/" + p.MDFile)
 	if err != nil {

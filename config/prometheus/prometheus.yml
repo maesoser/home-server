@@ -7,6 +7,13 @@
       # - "second.rules"
 
     scrape_configs:
+
+      - job_name: cloudflare_exporter
+        scrape_interval: 10m
+        scrape_timeout: 15s
+        static_configs:
+          - targets: ['cf_exporter:2112']
+          
       - job_name: promrelay
         scrape_interval: 10s
         scrape_timeout: 5s
@@ -72,7 +79,7 @@
         scrape_interval: 60s
         static_configs:
           - targets: ['pihole_exporter:9333']
-
+          
       - job_name: 'teledoor'
         scrape_interval: 60s
         static_configs:

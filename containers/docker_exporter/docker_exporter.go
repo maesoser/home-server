@@ -31,11 +31,11 @@ func main() {
 
 	PromPort := flag.String("port",
 		GetEnvStr("DOCKER_EXPORTER_PORT","9134"),
-		"Prometheus Port"
+		"Prometheus Port",
 	)
 	DockerEndPoint := flag.String("endpoint",
 		GetEnvStr("DOCKER_EXPORTER_SOCKET","/var/run/docker.sock"),
-		"Docker Endpoint"
+		"Docker Endpoint",
 	)
 	flag.Parse()
 

@@ -12,7 +12,7 @@
         "updated": "2019-11-29T15:48:42Z",
         "updatedBy": "Anonymous",
         "createdBy": "Anonymous",
-        "version": 18,
+        "version": 34,
         "hasAcl": false,
         "isFolder": false,
         "folderId": 0,
@@ -378,6 +378,6 @@
         "timezone": "",
         "title": "Weather",
         "uid": "GLFLP6WRz",
-        "version": 18
+        "version": 34
     }
 }

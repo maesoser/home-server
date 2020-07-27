@@ -12,7 +12,7 @@
         "updated": "2019-08-21T19:40:49Z",
         "updatedBy": "Anonymous",
         "createdBy": "admin",
-        "version": 20,
+        "version": 36,
         "hasAcl": false,
         "isFolder": false,
         "folderId": 0,
@@ -248,6 +248,6 @@
         "timezone": "",
         "title": "Home",
         "uid": "DyYacIigz",
-        "version": 20
+        "version": 36
     }
 }
